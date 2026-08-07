@@ -1,0 +1,131 @@
+<!-- ============================================================
+     Section group 1: Header / Hero / Name-scroll ticker / Mission
+     Anchors used here: #site-header (header), #hero, #name-scroll, #about
+     Anchors linked to (built elsewhere): #attach-yourself, #tethered-timeline,
+     #cap-story, #art-impact, #mandate-wall, #social-media, #press-media
+     ============================================================ -->
+
+<header id="site-header" class="header-bar">
+  <div class="header-inner container">
+    <a class="header-brand" href="#hero" aria-label="The Tethered Cap Mandate — home">
+      <span class="header-wordmark">
+        THE TETHERED cap mandate
+        <img class="header-logo" src="assets/images/header-logo.png" alt="" width="56" height="21">
+      </span>
+    </a>
+
+    <button type="button" class="header-toggle" data-nav-toggle aria-expanded="false" aria-controls="site-nav-overlay" aria-label="Toggle navigation menu">
+      <span class="header-toggle-bar"></span>
+      <span class="header-toggle-bar"></span>
+      <span class="header-toggle-bar"></span>
+    </button>
+  </div>
+
+  <div class="header-scrim" data-nav-scrim aria-hidden="true"></div>
+
+  <nav id="site-nav-overlay" class="header-overlay" data-nav-overlay aria-label="Mobile">
+    <ul class="header-overlay-list">
+      <li><a href="#about" data-nav-link>About</a></li>
+      <li><a href="#attach-yourself" data-nav-link>Attach Yourself</a></li>
+      <li><a href="#tethered-timeline" data-nav-link>Tethered Timeline</a></li>
+      <li><a href="#cap-story" data-nav-link>The Cap Story</a></li>
+      <li><a href="#art-impact" data-nav-link>Art &amp; Impact</a></li>
+      <li><a href="#mandate-wall" data-nav-link>The Mandate Wall</a></li>
+      <li><a href="#social-media" data-nav-link>Social Media</a></li>
+      <li><a href="#press-media" data-nav-link>Press &amp; Media</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section id="hero" class="hero">
+  <div class="hero-bg" style="background-image:url('assets/images/hero-bg.png');" role="img" aria-label="Bottle caps scattered as pollution"></div>
+  <div class="hero-scrim" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-headline">Help end bottle cap pollution.<br>Welcome to the Tethered Cap Mandate.</h1>
+    <img class="hero-portrait" src="assets/images/hero-portrait.png" alt="A bottle with its cap tethered in place" width="352" height="756">
+  </div>
+
+  <div class="hero-social" aria-label="Greener Earth Foundation on social media">
+    <a class="hero-social__link" href="#" aria-label="Instagram">
+      <img src="assets/images/social-instagram.png" alt="" width="45" height="45">
+    </a>
+    <a class="hero-social__link" href="#" aria-label="Facebook">
+      <img src="assets/images/social-facebook.png" alt="" width="45" height="45">
+    </a>
+    <a class="hero-social__link" href="#" aria-label="X (Twitter)">
+      <img src="assets/images/social-x.png" alt="" width="45" height="45">
+    </a>
+    <a class="hero-social__link" href="#" aria-label="WhatsApp">
+      <img src="assets/images/social-whatsapp.png" alt="" width="45" height="45">
+    </a>
+  </div>
+</section>
+
+<section id="name-scroll" class="ticker" aria-label="Live sign-up activity">
+  <div class="ticker-inner container">
+    <div class="ticker-counter">
+      <span class="ticker-dot" aria-hidden="true"></span>
+      <div class="ticker-counter-text">
+        <span class="ticker-count" data-live-counter data-base-count="10456">10,456</span>
+        <span class="ticker-count-label">People Attached to The Mandate</span>
+      </div>
+    </div>
+
+    <span class="ticker-divider" aria-hidden="true"></span>
+
+    <div class="ticker-track-wrap">
+      <ul class="ticker-track" data-ticker-track>
+        <li class="ticker-item">
+          <span class="ticker-name">Priya Sharma</span>
+          <span class="ticker-meta">Mumbai | 2 mins ago</span>
+        </li>
+        <li class="ticker-item">
+          <span class="ticker-name">Priya Sharma</span>
+          <span class="ticker-meta">Mumbai | 2 mins ago</span>
+        </li>
+        <li class="ticker-item">
+          <span class="ticker-name">Priya Sharma</span>
+          <span class="ticker-meta">Mumbai | 2 mins ago</span>
+        </li>
+        <li class="ticker-item">
+          <span class="ticker-name">Priya Sharma</span>
+          <span class="ticker-meta">Mumbai | 2 mins ago</span>
+        </li>
+        <!-- duplicate set for seamless marquee loop -->
+        <li class="ticker-item" aria-hidden="true">
+          <span class="ticker-name">Priya Sharma</span>
+          <span class="ticker-meta">Mumbai | 2 mins ago</span>
+        </li>
+        <li class="ticker-item" aria-hidden="true">
+          <span class="ticker-name">Priya Sharma</span>
+          <span class="ticker-meta">Mumbai | 2 mins ago</span>
+        </li>
+        <li class="ticker-item" aria-hidden="true">
+          <span class="ticker-name">Priya Sharma</span>
+          <span class="ticker-meta">Mumbai | 2 mins ago</span>
+        </li>
+        <li class="ticker-item" aria-hidden="true">
+          <span class="ticker-name">Priya Sharma</span>
+          <span class="ticker-meta">Mumbai | 2 mins ago</span>
+        </li>
+      </ul>
+    </div>
+
+    <a class="ticker-cta" href="#attach-yourself">Attach Yourself</a>
+  </div>
+</section>
+
+<section id="about" class="mission">
+  <div class="mission-inner container">
+    <h2 class="mission-heading">
+      the tethered cap mandate
+      <img class="mission-heading__arrow" src="assets/images/mission-arrow.png" alt="" width="71" height="74">
+    </h2>
+    <div class="mission-copy">
+      <p>A policy-led design intervention to eliminate <strong>plastic cap leakage</strong> by keeping every cap attached to its bottle from manufacturing to recycling.</p>
+      <p><strong>It&rsquo;s already an EU regulation.</strong> `We are now campaigning to make it one in India too. We need your help though. Just like caps need to stay attached to bottles, we need you to attach your name to the mandate - so the government makes it a national priority. Let&rsquo;s together make tethered caps a design mandate for all plastic bottles in India.</p>
+      <p class="mission-copy__highlight">And end bottle cap pollution for good.</p>
+    </div>
+  </div>
+</section>

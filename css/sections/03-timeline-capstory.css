@@ -1,0 +1,340 @@
+/* ==========================================================================
+   Section: The Tethered Timeline (#tethered-timeline) + The Cap Story (#cap-story)
+   Classes prefixed "timeline-" and "capstory-" to avoid collisions.
+   Design reference: Paper file "Patient beacon", 1920px design width.
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------
+   THE TETHERED TIMELINE
+   ------------------------------------------------------------------------- */
+
+.timeline-section {
+  position: relative;
+  background: var(--color-white);
+  overflow: hidden;
+}
+
+/* Colour band with the gradient photo strip behind the intro line */
+.timeline-band {
+  position: relative;
+  background-color: var(--color-placeholder);
+  background-image: url("../../assets/images/timeline-gradient-band.png");
+  background-size: cover;
+  background-position: center;
+  padding: clamp(70px, calc(160 / 1920 * 100vw), 160px) 0 clamp(60px, calc(140 / 1920 * 100vw), 140px);
+}
+
+.timeline-band__heading {
+  display: block;
+  height: clamp(32px, calc(88 / 1920 * 100vw), 88px);
+  width: auto;
+  margin: 0 auto clamp(18px, calc(28 / 1920 * 100vw), 28px);
+}
+
+.timeline-intro {
+  max-width: 46ch;
+  margin: 0 auto;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(16px, calc(25 / 1920 * 100vw), 25px);
+  line-height: 1.4;
+  color: var(--color-white);
+}
+
+.timeline-heading-wrap {
+  text-align: center;
+  padding-top: clamp(36px, calc(80 / 1920 * 100vw), 80px);
+  padding-bottom: clamp(28px, calc(60 / 1920 * 100vw), 60px);
+}
+
+.timeline-heading {
+  display: block;
+  margin: 0 auto;
+  height: clamp(38px, calc(85 / 1920 * 100vw), 85px);
+  width: auto;
+}
+
+.timeline-citation {
+  margin: clamp(10px, calc(24 / 1920 * 100vw), 24px) auto 0;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(11px, calc(20 / 1920 * 100vw), 20px);
+  line-height: 1.4;
+  color: var(--color-dark);
+}
+
+@media (max-width: 640px) {
+  .timeline-citation {
+    white-space: normal;
+    max-width: 42ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Hearing-history spine */
+.timeline-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: clamp(50px, calc(90 / 1920 * 100vw), 90px);
+  scrollbar-width: thin;
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: repeat(7, clamp(160px, calc(230 / 1920 * 100vw), 230px));
+  column-gap: clamp(16px, calc(30 / 1920 * 100vw), 30px);
+  width: max-content;
+  min-width: 100%;
+}
+
+.timeline-row--cards {
+  align-items: stretch;
+}
+
+.timeline-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-card {
+  background-color: var(--color-sage-light);
+  padding: clamp(16px, calc(24 / 1920 * 100vw), 24px);
+  border-radius: 4px;
+}
+
+.timeline-card p {
+  margin: 0;
+  text-align: left;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(13px, calc(17 / 1920 * 100vw), 17px);
+  line-height: 1.4;
+  color: var(--color-dark);
+}
+
+.timeline-card p strong {
+  font-weight: 700;
+}
+
+.timeline-photo {
+  flex: 1 1 auto;
+  min-height: clamp(80px, calc(180 / 1920 * 100vw), 180px);
+  background-color: var(--color-placeholder);
+  border-radius: 4px;
+  margin-top: clamp(6px, calc(10 / 1920 * 100vw), 10px);
+}
+
+.timeline-row--dots {
+  position: relative;
+  align-items: center;
+  height: clamp(28px, calc(45 / 1920 * 100vw), 45px);
+  margin: clamp(24px, calc(40 / 1920 * 100vw), 40px) 0;
+}
+
+.timeline-row--dots::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--color-sage-dark);
+  opacity: 0.4;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.timeline-dot {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  width: clamp(24px, calc(45 / 1920 * 100vw), 45px);
+  height: clamp(24px, calc(45 / 1920 * 100vw), 45px);
+  border-radius: 50%;
+  background: var(--color-white);
+  border: 3px solid var(--color-sage-dark);
+}
+
+.timeline-dot--filled {
+  background: var(--color-sage-dark);
+}
+
+.timeline-date {
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-align: center;
+  font-size: clamp(14px, calc(20 / 1920 * 100vw), 20px);
+  letter-spacing: 0.01em;
+  color: var(--color-sage-dark);
+}
+
+/* -------------------------------------------------------------------------
+   THE CAP STORY
+   ------------------------------------------------------------------------- */
+
+.capstory-section {
+  background: var(--color-white);
+  overflow: hidden;
+}
+
+.capstory-inner {
+  padding-top: clamp(56px, calc(120 / 1920 * 100vw), 120px);
+  padding-bottom: clamp(56px, calc(120 / 1920 * 100vw), 120px);
+}
+
+.capstory-heading {
+  display: block;
+  height: clamp(34px, calc(80 / 1920 * 100vw), 80px);
+  width: auto;
+  margin: 0 0 clamp(20px, calc(32 / 1920 * 100vw), 32px);
+}
+
+.capstory-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+}
+
+.capstory-photo {
+  position: relative;
+}
+
+.capstory-photo__placeholder {
+  width: 100%;
+  aspect-ratio: 902 / 813;
+  background-color: var(--color-placeholder);
+  border-radius: 4px;
+}
+
+.capstory-carousel {
+  display: flex;
+  gap: clamp(10px, calc(16 / 1920 * 100vw), 16px);
+  margin-top: clamp(14px, calc(20 / 1920 * 100vw), 20px);
+}
+
+.capstory-carousel__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(38px, calc(52 / 1920 * 100vw), 52px);
+  height: clamp(38px, calc(52 / 1920 * 100vw), 52px);
+  border: none;
+  border-radius: 50%;
+  background: var(--color-dark);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.capstory-carousel__btn svg {
+  width: 45%;
+  height: 45%;
+}
+
+.capstory-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, calc(32 / 1920 * 100vw), 32px);
+}
+
+.capstory-bio {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(16px, calc(24 / 1920 * 100vw), 24px);
+  line-height: 1.5;
+  color: var(--color-black);
+}
+
+.capstory-bio__lead {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+@media (max-width: 900px) {
+  .capstory-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Strategic partnerships strip */
+.capstory-partners {
+  background: var(--color-sage-light);
+}
+
+.capstory-partners__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(24px, calc(44 / 1920 * 100vw), 44px);
+  padding-top: clamp(36px, calc(72 / 1920 * 100vw), 72px);
+  padding-bottom: clamp(36px, calc(72 / 1920 * 100vw), 72px);
+}
+
+.capstory-partners__heading {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(24px, calc(44 / 1920 * 100vw), 44px);
+  line-height: 1.15;
+  color: var(--color-dark);
+}
+
+.capstory-partners__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+  gap: 0;
+  border-top: 1px solid rgba(44, 44, 44, 0.7);
+  border-bottom: 1px solid rgba(44, 44, 44, 0.7);
+}
+
+.capstory-partner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0;
+  padding: clamp(16px, 2.5vw, 28px) clamp(12px, 1.5vw, 24px);
+  border-left: 1px solid rgba(44, 44, 44, 0.7);
+}
+
+.capstory-partner:last-child {
+  border-right: 1px solid rgba(44, 44, 44, 0.7);
+}
+
+.capstory-partner svg {
+  width: clamp(72px, calc(172 / 1920 * 100vw), 172px);
+  height: auto;
+  fill: var(--color-dark);
+}
+
+.capstory-partner--img img {
+  width: clamp(64px, calc(155 / 1920 * 100vw), 155px);
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 700px) {
+  .capstory-partner {
+    flex: 1 1 40%;
+    padding: 8px 16px;
+  }
+
+  /* At 2-per-row, every right-hand cell needs its own closing edge —
+     :last-child alone (the single-row desktop assumption) only closes
+     the final row. */
+  .capstory-partner:nth-child(2n) {
+    border-right: 1px solid rgba(44, 44, 44, 0.7);
+  }
+}

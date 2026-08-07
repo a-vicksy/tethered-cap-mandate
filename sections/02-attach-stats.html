@@ -1,0 +1,270 @@
+<!-- ==========================================================================
+     Attach Yourself (marquee + hero form) + Art & Impact (stats)
+     Depends on: css/tokens.css, css/sections/02-attach-stats.css
+     ========================================================================== -->
+
+<section id="attach-yourself" class="attach-section">
+
+  <!-- Scrolling "ATTACH YOURSELF" divider banner -->
+  <div class="attach-marquee">
+    <div class="attach-marquee__track">
+      <!-- repeated twice back-to-back (identical) for a seamless CSS loop -->
+      <div class="attach-marquee__group">
+        <span class="attach-marquee__item">
+          <img class="attach-marquee__label" src="assets/images/attach-marquee-label.png" alt="Attach Yourself">
+        </span>
+        <span class="attach-marquee__item">
+          <img class="attach-marquee__label" src="assets/images/attach-marquee-label.png" alt="Attach Yourself">
+        </span>
+        <span class="attach-marquee__item">
+          <img class="attach-marquee__label" src="assets/images/attach-marquee-label.png" alt="Attach Yourself">
+        </span>
+        <span class="attach-marquee__item">
+          <img class="attach-marquee__label" src="assets/images/attach-marquee-label.png" alt="Attach Yourself">
+        </span>
+      </div>
+      <div class="attach-marquee__group" aria-hidden="true">
+        <span class="attach-marquee__item">
+          <img class="attach-marquee__label" src="assets/images/attach-marquee-label.png" alt="Attach Yourself">
+        </span>
+        <span class="attach-marquee__item">
+          <img class="attach-marquee__label" src="assets/images/attach-marquee-label.png" alt="Attach Yourself">
+        </span>
+        <span class="attach-marquee__item">
+          <img class="attach-marquee__label" src="assets/images/attach-marquee-label.png" alt="Attach Yourself">
+        </span>
+        <span class="attach-marquee__item">
+          <img class="attach-marquee__label" src="assets/images/attach-marquee-label.png" alt="Attach Yourself">
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero: photo backdrop + live-preview badge form -->
+  <div class="attach-hero">
+    <div class="attach-hero__bg" role="img" aria-label="Bubbles floating in clear turquoise sea water"></div>
+
+    <div class="container attach-hero__inner">
+      <div class="attach-hero__left">
+        <h3 class="attach-hero__heading">Your turn to commit.</h3>
+        <p class="attach-hero__intro">
+          Attach yourself to the mandate. Your name will stand behind the case at the NGT. Simply attach your name, for your planet. It's in your hands.
+        </p>
+
+        <form class="attach-form" id="attach-form" novalidate>
+          <p class="attach-form__statement">
+            I, <span class="attach-form__fill" id="attach-name" contenteditable="true" role="textbox" aria-label="Your name" data-placeholder="your name"></span><br>
+            from <span class="attach-form__fill" id="attach-city" contenteditable="true" role="textbox" aria-label="Your city" data-placeholder="your city"></span><br>
+            am attached.
+          </p>
+
+          <div class="attach-form__fields">
+            <button type="button" class="attach-form__optional-toggle" id="attach-optional-toggle" aria-expanded="false" aria-controls="attach-optional-row">
+              <svg class="attach-form__optional-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l10-5.5-10-5.5Z" fill="currentColor"/></svg>
+              Add a photo, email, number(optional)
+            </button>
+
+            <div class="attach-form__optional-row" id="attach-optional-row" hidden>
+              <label class="attach-file-label" for="attach-photo">
+                Choose photo
+                <input type="file" id="attach-photo" name="photo" accept="image/*">
+              </label>
+              <label class="visually-hidden" for="attach-contact">Email or phone number</label>
+              <input class="attach-input" type="text" id="attach-contact" name="contact" placeholder="Email or phone number">
+            </div>
+          </div>
+
+          <button type="submit" class="attach-btn-submit">Attach Yourself</button>
+          <p class="attach-form__confirm" id="attach-confirm" role="status" hidden>Thanks for attaching yourself!</p>
+        </form>
+      </div>
+
+      <div class="attach-hero__right">
+        <div class="attach-cards-wrap">
+          <div class="attach-cards" id="attach-cards">
+            <img class="attach-card attach-card--back" data-color="blue" src="assets/images/attach-card-back.png" alt="Blue badge design">
+            <img class="attach-card attach-card--mid" data-color="cream" src="assets/images/attach-card-mid.png" alt="Cream badge design">
+            <img class="attach-card attach-card--front" data-color="green" src="assets/images/attach-card-front.png" alt="Green badge design — currently selected: I'm Attached, The Tethered Cap Mandate 2026">
+            <div class="attach-card-photo" id="attach-card-photo" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <!-- Sibling of .attach-cards-wrap (not nested inside it) — the two
+             are independent flex items in .attach-hero__right, which is
+             what actually lets the dots/Download/Share sit beside the
+             cards instead of stacking under them. -->
+        <div class="attach-side-controls">
+          <div class="attach-dots" id="attach-dots" role="radiogroup" aria-label="Badge colour">
+            <button type="button" class="attach-dot attach-dot--blue" data-color="blue" role="radio" aria-checked="false" aria-label="Blue"></button>
+            <button type="button" class="attach-dot attach-dot--cream" data-color="cream" role="radio" aria-checked="false" aria-label="Cream"></button>
+            <button type="button" class="attach-dot attach-dot--green attach-dot--active" data-color="green" role="radio" aria-checked="true" aria-label="Green"></button>
+          </div>
+          <div class="attach-actions">
+            <button type="button" class="attach-btn-ghost attach-btn-download">Download</button>
+            <button type="button" class="attach-btn-ghost attach-btn-share">Share</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="art-impact" class="stats-section">
+  <div class="container stats-grid">
+
+    <div class="stats-col">
+      <p class="stats-number">25B+</p>
+      <p class="stats-label">Bottles each year</p>
+      <p class="stats-desc">Greener Earth Foundation estimates that India produces more than 25 billion plastic bottles annually, each typically paired with a loose cap.</p>
+    </div>
+
+    <div class="stats-col">
+      <p class="stats-number">2Gs</p>
+      <p class="stats-label">Per Loose Cap</p>
+      <p class="stats-desc">One tiny object multiplied billions of times becomes a significant source of plastic leakage.</p>
+    </div>
+
+    <div class="stats-col">
+      <p class="stats-number">50k</p>
+      <p class="stats-label">Plastic tonnes a year</p>
+      <p class="stats-desc">The estimated plastic waste generated from bottle caps alone, with potential to break down into microplastics.</p>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    var form = document.getElementById('attach-form');
+    if (!form) return;
+
+    var confirmMsg = document.getElementById('attach-confirm');
+    var photoInput = document.getElementById('attach-photo');
+    var fileLabel = photoInput ? photoInput.closest('.attach-file-label') : null;
+
+    // "your name" / "your city" are contenteditable spans inline in the
+    // sentence itself — the faded placeholder text IS the click target,
+    // there's no separate boxed input anymore.
+    document.querySelectorAll('.attach-form__fill').forEach(function (el) {
+      el.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') event.preventDefault(); // single line only
+      });
+      el.addEventListener('paste', function (event) {
+        event.preventDefault();
+        var text = (event.clipboardData || window.clipboardData).getData('text/plain');
+        document.execCommand('insertText', false, text);
+      });
+    });
+
+    // "Add a photo, email, number(optional)" is collapsed by default — the
+    // photo/contact row only appears once this is clicked.
+    var optionalToggle = document.getElementById('attach-optional-toggle');
+    var optionalRow = document.getElementById('attach-optional-row');
+    if (optionalToggle && optionalRow) {
+      optionalToggle.addEventListener('click', function () {
+        var isOpen = optionalRow.hidden;
+        optionalRow.hidden = !isOpen;
+        optionalToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    if (photoInput && fileLabel) {
+      // iPhone/Mac photos are often .HEIC by default, which almost no
+      // browser can decode as an <img>/background-image — the file read
+      // itself "succeeds" so nothing errors, it just silently renders
+      // nothing. Detect it and convert to JPEG first (heic2any, loaded
+      // from CDN only when actually needed) before previewing.
+      function isHeic(file) {
+        var name = (file.name || '').toLowerCase();
+        var type = (file.type || '').toLowerCase();
+        return type === 'image/heic' || type === 'image/heif' ||
+          name.endsWith('.heic') || name.endsWith('.heif');
+      }
+
+      function loadHeic2Any() {
+        if (window.heic2any) return Promise.resolve();
+        return new Promise(function (resolve, reject) {
+          var script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/heic2any/dist/heic2any.min.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      function previewBlob(cardPhoto, blob) {
+        var reader = new FileReader();
+        reader.onload = function () {
+          cardPhoto.style.backgroundImage = 'url(' + reader.result + ')';
+        };
+        reader.readAsDataURL(blob);
+      }
+
+      photoInput.addEventListener('change', function () {
+        var file = photoInput.files && photoInput.files[0] ? photoInput.files[0] : null;
+        fileLabel.firstChild.textContent = file ? file.name : 'Choose photo';
+
+        var cardPhoto = document.getElementById('attach-card-photo');
+        if (!cardPhoto || !file) return;
+
+        if (isHeic(file)) {
+          fileLabel.firstChild.textContent = 'Converting photo…';
+          loadHeic2Any()
+            .then(function () {
+              return window.heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 });
+            })
+            .then(function (converted) {
+              previewBlob(cardPhoto, Array.isArray(converted) ? converted[0] : converted);
+              fileLabel.firstChild.textContent = file.name;
+            })
+            .catch(function (err) {
+              console.error('HEIC conversion failed:', err);
+              fileLabel.firstChild.textContent = file.name + ' (preview unsupported)';
+            });
+        } else {
+          previewBlob(cardPhoto, file);
+        }
+      });
+    }
+
+    // Colour dots pick which badge design sits on top of the stack.
+    var cardsWrap = document.getElementById('attach-cards');
+    var dots = document.querySelectorAll('#attach-dots .attach-dot');
+    if (cardsWrap && dots.length) {
+      var positionClasses = ['attach-card--back', 'attach-card--mid', 'attach-card--front'];
+      var stackOrder = Array.prototype.map.call(
+        cardsWrap.querySelectorAll('.attach-card'),
+        function (el) { return el.dataset.color; }
+      ); // back, mid, front — matches markup order
+
+      function applyStack() {
+        stackOrder.forEach(function (color, i) {
+          var card = cardsWrap.querySelector('[data-color="' + color + '"]');
+          positionClasses.forEach(function (c) { card.classList.remove(c); });
+          card.classList.add(positionClasses[i]);
+        });
+      }
+
+      dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          var color = dot.dataset.color;
+          stackOrder = stackOrder.filter(function (c) { return c !== color; });
+          stackOrder.push(color); // selected colour becomes the front card
+          applyStack();
+          dots.forEach(function (d) {
+            var active = d === dot;
+            d.classList.toggle('attach-dot--active', active);
+            d.setAttribute('aria-checked', String(active));
+          });
+        });
+      });
+    }
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      // Static placeholder — no backend wired up yet.
+      confirmMsg.hidden = false;
+      confirmMsg.textContent = 'Thanks for attaching yourself!';
+    });
+  })();
+</script>

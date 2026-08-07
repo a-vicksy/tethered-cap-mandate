@@ -1,0 +1,607 @@
+/* ============================================================
+   Section group 1: Header / Hero / Name-scroll ticker / Mission
+   Class prefixes: header- / hero- / ticker- / mission-
+   ============================================================ */
+
+:root {
+  /* Shared so the hero can size itself to exactly fill the remaining
+     viewport (100vh minus these two fixed bars) with nothing clipped. */
+  --header-h: clamp(64px, 8vw, 92px);
+  --ticker-h: clamp(56px, 7vw, 68px);
+}
+
+/* ---------- Header ---------- */
+
+.header-bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--color-white);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0);
+  transition: box-shadow 0.25s ease, transform 0.3s ease;
+}
+
+/* Slides fully out of view on scroll-down, back in on scroll-up (see
+   main.js) — never while the mobile nav panel is open. */
+.header-bar.is-hidden {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-bar {
+    transition: box-shadow 0.25s ease;
+  }
+}
+
+.header-bar.is-scrolled {
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: var(--header-h);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-wordmark {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  font-size: clamp(18px, 2vw, 28px);
+  color: var(--color-sage-light);
+  white-space: nowrap;
+}
+
+/* Positioned to match the source lockup: the brush-and-line mark sits above
+   the wordmark, overlapping its cap-height, starting roughly mid-way across
+   "TETHERED". Percentages are relative to the wordmark's own rendered width
+   (icon left/width) and em to its font-size (icon top), so the lockup holds
+   its proportions at any header size. */
+.header-logo {
+  position: absolute;
+  left: 53.5%;
+  top: -0.46em;
+  width: 18.5%;
+  height: auto;
+}
+
+/* Navigation lives only behind the hamburger overlay — no inline desktop
+   nav and no persistent hero rail, so the header stays a plain brand bar
+   with a menu toggle at every screen size. */
+.header-inner {
+  justify-content: space-between;
+}
+
+.header-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.header-toggle-bar {
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-sage-light);
+  transition: transform 0.25s ease, opacity 0.25s ease, width 0.25s ease;
+}
+
+.header-toggle-bar:nth-child(2) {
+  width: 70%;
+}
+
+.nav-open .header-toggle-bar:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+  width: 100%;
+}
+.nav-open .header-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+.nav-open .header-toggle-bar:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+  width: 100%;
+}
+
+/* Dimmed backdrop behind the panel, over whatever the page has scrolled to —
+   click it to close, same as the reference's partial slide-in menu. */
+.header-scrim {
+  position: fixed;
+  inset: 0;
+  top: var(--header-h);
+  background: rgba(20, 24, 20, 0.4);
+  z-index: 98;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.nav-open .header-scrim {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Opens PARTIALLY — a fixed-width panel pinned to the right edge, not a
+   full-bleed takeover — so the page stays visible (dimmed) behind it. */
+.header-overlay {
+  position: fixed;
+  top: var(--header-h);
+  right: 0;
+  bottom: 0;
+  left: auto;
+  width: min(420px, 86vw);
+  background: var(--color-white);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 99;
+  overflow-y: auto;
+  box-shadow: -16px 0 48px rgba(0, 0, 0, 0.16);
+}
+
+.nav-open .header-overlay,
+.header-overlay.nav-open {
+  transform: translateX(0);
+}
+
+.header-overlay-list {
+  /* The header's own hamburger↔X toggle stays visible above this panel
+     (it isn't covered, since the panel starts below the header) and is
+     the only close control — no second "Close" button needed in here. */
+  list-style: none;
+  margin: 0;
+  padding: 40px var(--container-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.header-overlay-list li {
+  border-bottom: 1px solid var(--color-placeholder);
+}
+
+.header-overlay-list a {
+  display: block;
+  padding: 16px 4px;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 4vw, 26px);
+  letter-spacing: 0.02em;
+  color: var(--color-dark);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  /* Fills exactly what's left of the viewport once the sticky header and
+     the fixed bottom ticker bar are accounted for, so the whole hero —
+     headline and bottle mark included — lands fully in view on load with
+     nothing hidden behind either bar. */
+  min-height: calc(100vh - var(--header-h) - var(--ticker-h));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  /* At "cover" the hero's width is always the binding dimension (it's much
+     wider than tall once the header/ticker are subtracted), so the photo's
+     full width shows edge-to-edge with zero horizontal crop room — panning
+     background-position left/right did nothing. Sizing width to 130% (height
+     "auto" keeps the photo's own aspect ratio) creates real slack on both
+     axes so position can actually recenter the composition: the source
+     photo is bright, detailed surf on the left against a big flat empty
+     sand slab on the right, which read as right-heavy when centered. */
+  background-size: 132% auto;
+  background-position: 32% 66%;
+  background-repeat: no-repeat;
+}
+
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 35%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vh, 40px);
+  height: 100%;
+  padding: clamp(16px, 3vh, 40px) var(--container-padding);
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.hero-headline {
+  /* Visually below the bottle mark (order:2) while staying first in the
+     markup, so screen readers still meet the heading before the image. */
+  order: 2;
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(13px, 1.15vw, 16px);
+  line-height: 1.5;
+}
+
+.hero-portrait {
+  order: 1;
+  /* The bottle mark is the hero's main focal point — sized big off viewport
+     height (not just width) and capped, so it always fits inside the hero
+     with its bottom edge intact, even on short/laptop viewports, instead
+     of being cropped by .hero. */
+  width: auto;
+  height: clamp(220px, 60vh, 620px);
+  max-width: 72vw;
+  /* Nudged right — its own glyph reads visually off-center within the
+     centered headline/column otherwise. */
+  transform: translateX(clamp(6px, 1.4vw, 18px));
+}
+
+.hero-social {
+  position: absolute;
+  z-index: 2;
+  /* Same right offset as .container's padding, so this column's right edge
+     lines up exactly with the header brand/hamburger above it. */
+  right: var(--container-padding);
+  /* Anchored off the bottom of the hero (not vertical-centered) so the
+     icons sit in the lower portion of the frame, clear of the bottle mark,
+     at a consistent distance above the fixed ticker bar. */
+  bottom: clamp(64px, 14vh, 160px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 16px);
+}
+
+/* Icons are the real brand-supplied badges (already circular, own
+   background baked in) — just size and space them, no drawn ring. */
+.hero-social__link {
+  display: flex;
+  width: clamp(22px, 1.8vw, 30px);
+  height: clamp(22px, 1.8vw, 30px);
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hero-social__link img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hero-social__link:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+@media (max-width: 640px) {
+  .hero-social {
+    display: none;
+  }
+}
+
+/* ---------- Name-scroll ticker (fixed bottom bar) ---------- */
+
+.ticker {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  height: var(--ticker-h);
+  background: var(--color-white);
+  border-top: 2px solid var(--color-cream);
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.ticker-inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: clamp(14px, 2vw, 32px);
+}
+
+.ticker-counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* "Live" indicator — a short-interval radar-style pulse ring expanding out
+   from the dot and fading, looping continuously. */
+.ticker-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: #15ae4e;
+}
+
+.ticker-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #15ae4e;
+  animation: ticker-dot-pulse 1.4s cubic-bezier(0.3, 0, 0.4, 1) infinite;
+}
+
+@keyframes ticker-dot-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-dot::after {
+    animation: none;
+  }
+}
+
+.ticker-counter-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* Odometer-style counter (YouTube-live-sub-count look) — each digit is its
+   own reel of 0-9 that rolls vertically to the new value; built/updated by
+   main.js (buildReels / setCounterValue). */
+.ticker-count {
+  display: inline-flex;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.15;
+  color: var(--color-sage-light);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ticker-digit {
+  /* Height/width here MUST stay in sync with main.js's translateY(-Nem) —
+     each reel step is exactly 1em so digit N sits at -N em with no
+     cumulative drift at higher digits. */
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  height: 1em;
+  width: 0.62em;
+}
+
+.ticker-digit-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ticker-digit-num {
+  height: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticker-digit-sep {
+  display: inline-block;
+  width: 0.3em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-digit-strip {
+    transition: none;
+  }
+}
+
+.ticker-count-label {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.15;
+  color: var(--color-dark);
+  white-space: nowrap;
+}
+
+.ticker-divider {
+  width: 2px;
+  align-self: stretch;
+  background: var(--color-placeholder);
+  flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+  .ticker-divider {
+    display: none;
+  }
+}
+
+.ticker-track-wrap {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+}
+
+.ticker-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: ticker-scroll 22s linear infinite;
+}
+
+.ticker:hover .ticker-track,
+.ticker-track-wrap:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+.ticker-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 0 clamp(14px, 1.8vw, 28px);
+  border-right: 2px solid var(--color-placeholder);
+  white-space: nowrap;
+}
+
+.ticker-name {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-dark);
+}
+
+.ticker-meta {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--color-dark);
+  opacity: 0.65;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-sage-light);
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.ticker-cta:hover {
+  background: var(--color-sage-dark);
+  color: var(--color-white);
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+}
+
+/* ---------- Mission statement ---------- */
+
+.mission {
+  background: var(--color-white);
+  padding: clamp(56px, 8vw, 140px) 0;
+}
+
+.mission-inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 3.5vw, 52px);
+}
+
+/* Gap/arrow-height/alignment below are measured off the reference asset
+   (assets/images/mission-heading.png), then hand-tuned: the browser's font
+   ascent metrics push the rendered glyph top below the line-box top (unlike
+   the flattened PNG), so the arrow needs a small extra nudge down + left
+   versus the raw pixel measurement to actually line up with the letters.
+   The 120px max matches the site's other big section headings. */
+.mission-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.02em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: clamp(40px, 8vw, 120px);
+  line-height: 1;
+  color: var(--color-sage-light);
+  text-align: left;
+}
+
+.mission-heading__arrow {
+  flex-shrink: 0;
+  width: auto;
+  height: 0.62em;
+  margin-top: 0.09em;
+}
+
+.mission-copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 3.5vw, 52px);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(18px, 2vw, 29px);
+  line-height: 1.5;
+  color: var(--color-black);
+  max-width: 1250px;
+}
+
+.mission-copy p {
+  margin: 0;
+}
+
+.mission-copy strong {
+  font-weight: 700;
+}
+
+.mission-copy__highlight {
+  color: var(--color-sage-light);
+  font-weight: 700;
+}

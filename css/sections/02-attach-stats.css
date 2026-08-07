@@ -1,0 +1,571 @@
+/* ==========================================================================
+   Section: Attach Yourself (#attach-yourself) + Art & Impact stats (#art-impact)
+   Classes prefixed "attach-" and "stats-" to avoid collisions.
+   Design reference: Paper file "Patient beacon", 1920px design width.
+   ========================================================================== */
+
+/* ---- shared fluid-scale helper values -----------------------------------
+   Elements below use clamp(min, calc(designPx / 1920 * 100vw), designPx)
+   to track the Figma proportions on large screens while staying readable
+   on small ones (see --design-width in tokens.css).
+   -------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+   Marquee banner — "ATTACH YOURSELF" ticker
+   ------------------------------------------------------------------------- */
+.attach-marquee {
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--color-sage-light);
+  padding: clamp(14px, calc(26 / 1920 * 100vw), 26px) 0;
+}
+
+.attach-marquee__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: attach-marquee-scroll 26s linear infinite;
+}
+
+.attach-marquee__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.attach-marquee:hover .attach-marquee__track {
+  animation-play-state: paused;
+}
+
+.attach-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 clamp(20px, calc(40 / 1920 * 100vw), 40px);
+}
+
+/* The whole "ATTACH YOURSELF ↗" lockup as one flattened asset (assets/
+   images/attach-marquee-label.png) — same approach as .mission-heading__
+   image, sidesteps hand-tuning text/arrow gap and alignment entirely since
+   the source design's exact spacing is baked into the file. Sized off the
+   same 1920px reference width the rest of this section's clamp()s use. */
+.attach-marquee__label {
+  width: auto;
+  height: clamp(58px, calc(230 / 1920 * 100vw), 230px);
+}
+
+@keyframes attach-marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .attach-marquee__track {
+    animation: none;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Hero / form area
+   ------------------------------------------------------------------------- */
+.attach-hero {
+  position: relative;
+  background-color: var(--color-placeholder);
+  padding: clamp(56px, calc(140 / 1920 * 100vw), 140px) 0 clamp(56px, calc(160 / 1920 * 100vw), 160px);
+  overflow: hidden;
+}
+
+.attach-hero__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("../../assets/images/attach-hero-bg.png");
+  background-size: cover;
+  background-position: center;
+  filter: brightness(60%) contrast(105%);
+  z-index: 0;
+}
+
+.attach-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+  /* Reserves enough height for the LEFT column's fully expanded state (the
+     photo/email row open) up front, so toggling it never changes this
+     grid's height — that height change was what made .attach-hero__bg's
+     background-size:cover re-zoom on toggle. Cards are the shorter column
+     either way, so this also fixes the two columns feeling mismatched.
+     Measured against the actual expanded height at 1920px (~762px content,
+     981→1062px total before this fix) with margin to spare. */
+  min-height: clamp(700px, 55vw, 820px);
+}
+
+.attach-hero__heading {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(28px, calc(52 / 1920 * 100vw), 52px);
+  line-height: 1.15;
+  color: var(--color-white);
+  margin: 0 0 clamp(8px, calc(14 / 1920 * 100vw), 14px);
+}
+
+.attach-hero__intro {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(16px, calc(22 / 1920 * 100vw), 22px);
+  line-height: 1.5;
+  color: var(--color-white);
+  max-width: 46ch;
+  margin: 0 0 clamp(24px, calc(64 / 1920 * 100vw), 64px);
+}
+
+/* -------------------------------------------------------------------------
+   Live-preview form
+   ------------------------------------------------------------------------- */
+.attach-form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, calc(36 / 1920 * 100vw), 36px);
+}
+
+.attach-form__statement {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(28px, calc(65 / 1920 * 100vw), 65px);
+  line-height: 1.2;
+  color: var(--color-white);
+  margin: 0;
+  word-break: break-word;
+}
+
+/* These ARE the inputs — contenteditable spans sitting inline in the
+   sentence. The faded colour is the whole affordance while empty; a dashed
+   underline hints they're clickable, filling in with real text (full
+   opacity, no dashes) once typed. */
+.attach-form__fill {
+  display: inline-block;
+  min-width: 0.6em;
+  color: var(--color-white);
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
+  outline: none;
+  cursor: text;
+}
+
+.attach-form__fill:empty {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.attach-form__fill:empty::before {
+  content: attr(data-placeholder);
+}
+
+.attach-form__fill:focus {
+  border-bottom-style: solid;
+  border-bottom-color: var(--color-sage-light);
+}
+
+.attach-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 480px;
+}
+
+.attach-input {
+  flex: 1 1 200px;
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-dark);
+  background: var(--color-white);
+  border: none;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.attach-input::placeholder {
+  color: #8a8a8a;
+}
+
+/* Real <button> now (was a <label>) — it toggles .attach-form__optional-row
+   open/closed instead of just pointing focus at the contact field. */
+.attach-form__optional-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(14px, calc(20 / 1920 * 100vw), 20px);
+  color: var(--color-white);
+  background: none;
+  border: none;
+  padding: 8px 0 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.attach-form__optional-icon {
+  flex-shrink: 0;
+  width: 0.6em;
+  height: 0.6em;
+  color: var(--color-white);
+  transition: transform 0.2s ease;
+}
+
+.attach-form__optional-toggle[aria-expanded="true"] .attach-form__optional-icon {
+  transform: rotate(90deg);
+}
+
+.attach-form__optional-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.attach-form__optional-row[hidden] {
+  display: none;
+}
+
+.attach-file-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-white);
+  border: 2px solid var(--color-cream);
+  border-radius: 26px;
+  padding: 10px 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.attach-file-label input[type="file"] {
+  display: none;
+}
+
+.attach-btn-submit {
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(18px, calc(35 / 1920 * 100vw), 35px);
+  color: var(--color-white);
+  background-color: var(--color-sage-light);
+  border: none;
+  border-radius: 64px;
+  padding: clamp(16px, calc(22 / 1920 * 100vw), 22px) clamp(28px, calc(46 / 1920 * 100vw), 46px);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.attach-btn-submit:hover {
+  background-color: var(--color-sage-dark);
+  transform: translateY(-2px);
+}
+
+.attach-form__confirm {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--color-sage-light);
+  margin: 0;
+}
+
+.attach-form__confirm[hidden] {
+  display: none;
+}
+
+/* -------------------------------------------------------------------------
+   Right column — card stack + download/share
+   ------------------------------------------------------------------------- */
+.attach-hero__right {
+  display: flex;
+  flex-wrap: nowrap;
+  /* flex-start (not center) — centering the combined cards+cluster block
+     pushed the cards themselves close to the column's right edge, leaving
+     the dots/Download/Share cramped into whatever sliver was left. Left-
+     aligning the pair keeps the cards anchored by the gap from the text
+     column, so the cluster always has proper room to their right.
+     align-items: flex-end — bottoms of the two independent groups line up:
+     the dots/Download/Share cluster's bottom matches the cards' bottom. */
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+/* Real badge-preview mockups (assets/images/attach-card-{back,mid,front}.png)
+   in place of the hand-built card — same stacked/fanned layout, now exact
+   pixels from the source design instead of a CSS approximation. */
+.attach-cards-wrap {
+  --card-w: min(300px, 68vw);
+  position: relative;
+  flex-shrink: 0;
+  /* Small fixed gap to .attach-side-controls, which sits to the right —
+     the fanned .attach-card--back visually oversteps this a little (its
+     painted bounding box isn't part of layout, transforms don't reserve
+     space) and can graze the dots, matching the source design closely. */
+  padding-right: clamp(20px, 3vw, 40px);
+}
+
+.attach-cards {
+  position: relative;
+  width: var(--card-w);
+  aspect-ratio: 461 / 576;
+}
+
+.attach-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 17px;
+  filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.25));
+  transition: transform 0.3s ease;
+}
+
+/* Tighter fan than the original 24%/-14%/25.66deg — that spread the back
+   card into a wide, clearly-separate card; the source design only shows
+   a thin sliver of each card behind the front one. */
+.attach-card--back {
+  transform: translate(13%, -9%) rotate(16deg);
+  z-index: 1;
+}
+
+.attach-card--mid {
+  transform: translate(7%, -5%) rotate(8deg);
+  z-index: 2;
+}
+
+.attach-card--front {
+  transform: translate(0, 0) rotate(0deg);
+  z-index: 3;
+}
+
+/* Uploaded photo preview — pixel-measured against attach-card-front.png's
+   own inner ring (center at 50%/32.7% of the card box, ring hole ≈36.2% of
+   the card's width) so it drops in exactly where the ring's cutout is.
+   Transparent (no background) until a file is chosen, see main.js/page
+   script; sits above every card (z-index 3 max) so it always shows on
+   whichever colour is currently front. */
+.attach-card-photo {
+  position: absolute;
+  left: 50%;
+  top: 32.7%;
+  width: 36.2%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Colour dots + Download/Share — a normal flex sibling of .attach-cards-wrap
+   now (not absolutely positioned), so it can only wrap or shrink within
+   .attach-hero__right and can never escape the viewport. The reserved
+   padding-right on .attach-cards-wrap above is what keeps it clear of the
+   fanned-out back card. */
+.attach-side-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+/* Real buttons — clicking a colour brings that badge design to the front
+   of the stack (see the click handler in the page script). */
+.attach-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attach-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+.attach-dot--blue { background: #bed3eb; }
+.attach-dot--cream { background: var(--color-cream); }
+.attach-dot--green { background: var(--color-sage-light); }
+
+.attach-dot:hover {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+.attach-dot--active {
+  opacity: 1;
+  border-color: var(--color-white);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+}
+
+.attach-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.attach-btn-ghost {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--color-white);
+  background: transparent;
+  border: 2px solid var(--color-cream);
+  border-radius: 26px;
+  padding: 9px 22px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.attach-btn-ghost:hover {
+  background-color: var(--color-cream);
+  color: var(--color-dark);
+}
+
+/* -------------------------------------------------------------------------
+   Art & Impact — stats
+   ------------------------------------------------------------------------- */
+.stats-section {
+  background-color: var(--color-white);
+  padding: clamp(56px, calc(160 / 1920 * 100vw), 160px) 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(32px, 4vw, 80px);
+}
+
+.stats-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 clamp(24px, 3vw, 48px);
+}
+
+.stats-col:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.stats-number {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(64px, calc(235 / 1920 * 100vw), 235px);
+  line-height: 1.05;
+  color: var(--color-sage-light);
+  margin: 0;
+}
+
+.stats-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(18px, calc(33 / 1920 * 100vw), 33px);
+  line-height: 1.2;
+  color: var(--color-black);
+  margin: 8px 0 20px;
+}
+
+.stats-desc {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--color-black);
+  max-width: 32ch;
+  margin: 0;
+  text-align: center;
+}
+
+/* -------------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .attach-hero__inner {
+    grid-template-columns: 1fr;
+    /* Stacked single-column now — the min-height above exists purely to
+       keep the two side-by-side columns from fighting, moot once they're
+       not side by side. */
+    min-height: 0;
+  }
+
+  .attach-hero__right {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .attach-cards-wrap {
+    --card-w: min(320px, 70vw);
+  }
+}
+
+@media (max-width: 560px) {
+  /* Cards + side controls no longer reliably fit on one row once the
+     column itself is this narrow — wrap instead of clipping/overflowing. */
+  .attach-hero__right {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .stats-col {
+    align-items: center;
+    text-align: center;
+    padding-right: 0;
+    padding-bottom: 32px;
+  }
+
+  .stats-col:not(:last-child)::after {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    width: 60%;
+    height: 1px;
+    transform: translateX(-50%);
+  }
+
+  .stats-desc {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .attach-form__optional-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .attach-form__statement {
+    font-size: clamp(26px, 9vw, 40px);
+  }
+}
