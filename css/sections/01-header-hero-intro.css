@@ -197,7 +197,11 @@
   /* Fills exactly what's left of the viewport once the sticky header and
      the fixed bottom ticker bar are accounted for, so the whole hero —
      headline and bottle mark included — lands fully in view on load with
-     nothing hidden behind either bar. */
+     nothing hidden behind either bar. Unchanged from before; .hero-bg and
+     .hero-scrim below bleed past this box's own edges instead (absolutely
+     positioned children don't affect their container's size), so the
+     video/scrim reach true viewport-edge-to-edge without growing .hero
+     itself and disturbing the rest of the page's flow. */
   min-height: calc(100vh - var(--header-h) - var(--ticker-h));
   display: flex;
   align-items: center;
@@ -205,26 +209,26 @@
   color: var(--color-white);
 }
 
+/* Base (settled) state: flush with .hero's own box — this is what's active
+   permanently for prefers-reduced-motion users (no bar entrance animation,
+   so no gap ever opens up), and what everyone else settles into once the
+   entrance sequence below finishes. */
 .hero-bg {
   position: absolute;
   inset: 0;
-  /* At "cover" the hero's width is always the binding dimension (it's much
-     wider than tall once the header/ticker are subtracted), so the photo's
-     full width shows edge-to-edge with zero horizontal crop room — panning
-     background-position left/right did nothing. Sizing width to 130% (height
-     "auto" keeps the photo's own aspect ratio) creates real slack on both
-     axes so position can actually recenter the composition: the source
-     photo is bright, detailed surf on the left against a big flat empty
-     sand slab on the right, which read as right-heavy when centered. */
-  background-size: 132% auto;
-  background-position: 32% 66%;
-  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .hero-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 35%, rgba(0, 0, 0, 0.45) 100%);
+  /* The video (bright sand + white foam) needs more darkening than the old
+     photo did to keep the white headline/bottle/social icons legible —
+     heavier throughout, darkest at the bottom where the social column sits. */
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.32) 40%, rgba(0, 0, 0, 0.4) 65%, rgba(0, 0, 0, 0.62) 100%);
 }
 
 .hero-content {
@@ -267,6 +271,119 @@
   transform: translateX(clamp(6px, 1.4vw, 18px));
 }
 
+/* Bottle + headline hold off-screen until ~1.6s into the bg video, right
+   after its wave washes over the cap — reads as the wave "revealing" them,
+   rather than a generic on-load fade. animation-fill-mode "both" keeps them
+   hidden pre-delay and holds the final frame once the one-shot animation
+   ends (it never repeats on the video's later loops).
+
+   The bottle "surfaces" rather than just fading — it rises further, scales
+   up from smaller, and sharpens out of a heavy blur, like it's coming into
+   focus out of the water. Slower/dreamier than a plain fade+scale. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-portrait {
+    animation: hero-portrait-reveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) 1.6s both;
+  }
+
+  .hero-headline {
+    animation: hero-headline-reveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 2.6s both;
+  }
+
+  /* Bars stay off-canvas (reusing the header's own scroll-hide transform,
+     and the same translateY approach for the ticker) until the bottle has
+     had time to land, then slide in from their own edges. */
+  .header-bar {
+    animation: header-bar-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 3.2s both;
+  }
+
+  .ticker {
+    animation: ticker-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 3.35s both;
+  }
+
+  /* While the bars above are off-canvas, .hero-bg/.hero-scrim bleed past
+     .hero's own (shorter) box by exactly the bar heights, so the gap each
+     bar would otherwise leave reads as more video rather than "a white bar
+     is already there, waiting for its text". The bleed can't stay
+     permanent, though — it's normal document flow, so once the page is
+     scrolled it would drift away from the (fixed/sticky, viewport-anchored)
+     bars meant to sit over it and show up as a stray strip of video on top
+     of whatever content follows. So it settles back to flush with .hero
+     (matching the base rules above) right after both bars finish revealing
+     — invisible, since they're fully opaque over that exact area by then. */
+  .hero-bg {
+    top: calc(-1 * var(--header-h));
+    height: calc(100% + var(--header-h) + var(--ticker-h));
+    animation: hero-bg-settle 0.3s linear 4.3s forwards;
+  }
+
+  .hero-scrim {
+    top: calc(-1 * var(--header-h));
+    bottom: calc(-1 * var(--ticker-h));
+    animation: hero-scrim-settle 0.3s linear 4.3s forwards;
+  }
+}
+
+@keyframes hero-bg-settle {
+  to {
+    top: 0;
+    height: 100%;
+  }
+}
+
+@keyframes hero-scrim-settle {
+  to {
+    top: 0;
+    bottom: 0;
+  }
+}
+
+@keyframes hero-portrait-reveal {
+  0% {
+    opacity: 0;
+    filter: blur(18px);
+    transform: translateX(clamp(6px, 1.4vw, 18px)) translateY(52px) scale(0.86);
+  }
+  55% {
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(clamp(6px, 1.4vw, 18px)) translateY(0) scale(1);
+  }
+}
+
+@keyframes hero-headline-reveal {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes header-bar-reveal {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes ticker-reveal {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 .hero-social {
   position: absolute;
   z-index: 2;
@@ -291,6 +408,35 @@
   height: clamp(22px, 1.8vw, 30px);
   opacity: 0.85;
   transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Same surfacing treatment as the bottle/headline, in miniature — each icon
+   rises and sharpens in on its own beat rather than all four popping at
+   once. Starts as the headline's own reveal is finishing, cascades through
+   while the header/ticker bars are sliding in, so the whole hero settles
+   together instead of the icons feeling like an afterthought. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-social__link {
+    animation: hero-social-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-social__link:nth-child(1) { animation-delay: 2.9s; }
+  .hero-social__link:nth-child(2) { animation-delay: 3.05s; }
+  .hero-social__link:nth-child(3) { animation-delay: 3.2s; }
+  .hero-social__link:nth-child(4) { animation-delay: 3.35s; }
+}
+
+@keyframes hero-social-reveal {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(16px) scale(0.8);
+  }
+  to {
+    opacity: 0.85;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
 }
 
 .hero-social__link img {

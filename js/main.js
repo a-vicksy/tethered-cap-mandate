@@ -1,4 +1,39 @@
 (function () {
+  // Lock scroll until the hero's one-shot entrance sequence (see
+  // 01-header-hero-intro.css's hero-*-reveal animations — bottle, headline,
+  // social icons, header/ticker bars, then the bg/scrim settle) has fully
+  // played out, so scrolling away can't cut the reveal off partway
+  // through. The timeout matches that sequence's last-finishing piece (the
+  // bg/scrim settle, ending at 4.6s) plus a small buffer. Skipped entirely
+  // for prefers-reduced-motion — those visitors get no entrance sequence
+  // (CSS never starts it), so there's nothing to wait for.
+  if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    var docEl = document.documentElement;
+    docEl.classList.add('intro-locked');
+
+    var blockedKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+    var preventScrollKey = function (event) {
+      if (blockedKeys.indexOf(event.key) !== -1) event.preventDefault();
+    };
+    var preventScroll = function (event) {
+      event.preventDefault();
+    };
+
+    // `overflow: hidden` (added via the class above) already blocks scroll
+    // on most browsers; these are a defensive backstop for the mobile
+    // Safari rubber-band cases where that alone doesn't fully hold.
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    document.addEventListener('keydown', preventScrollKey);
+
+    setTimeout(function () {
+      docEl.classList.remove('intro-locked');
+      window.removeEventListener('wheel', preventScroll);
+      window.removeEventListener('touchmove', preventScroll);
+      document.removeEventListener('keydown', preventScrollKey);
+    }, 4700);
+  }
+
   var header = document.getElementById('site-header');
   if (!header) return;
 

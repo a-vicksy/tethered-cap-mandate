@@ -17,11 +17,20 @@
 /* Colour band with the gradient photo strip behind the intro line */
 .timeline-band {
   position: relative;
+  display: block;
   background-color: var(--color-placeholder);
   background-image: url("../../assets/images/timeline-gradient-band.png");
   background-size: cover;
   background-position: center;
   padding: clamp(70px, calc(160 / 1920 * 100vw), 160px) 0 clamp(60px, calc(140 / 1920 * 100vw), 140px);
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.timeline-band:hover,
+.timeline-band:focus-visible {
+  opacity: 0.92;
 }
 
 .timeline-band__heading {
@@ -187,6 +196,7 @@
 
 .capstory-heading {
   display: block;
+  align-self: flex-start;
   height: clamp(34px, calc(80 / 1920 * 100vw), 80px);
   width: auto;
   margin: 0 0 clamp(20px, calc(32 / 1920 * 100vw), 32px);

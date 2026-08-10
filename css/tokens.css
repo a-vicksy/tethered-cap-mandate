@@ -38,6 +38,17 @@ body {
   overflow-x: hidden;
 }
 
+/* Scroll lock while the hero's one-shot entrance sequence plays (toggled
+   by main.js) — keeps a fast scroll from cutting the reveal off partway
+   through. main.js never adds this for prefers-reduced-motion, since
+   those visitors get no entrance sequence to wait for in the first
+   place. */
+html.intro-locked,
+html.intro-locked body {
+  overflow: hidden;
+  height: 100%;
+}
+
 img {
   max-width: 100%;
   display: block;
