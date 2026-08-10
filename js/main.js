@@ -115,6 +115,143 @@
     document.fonts.ready.then(alignHeroSocial);
   }
 
+  // Art & Impact photo carousel: crossfades through capstory-photo__img
+  // elements, prev/next buttons plus autoplay (paused on hover/focus,
+  // skipped entirely for prefers-reduced-motion, same pattern as the
+  // Press & Media gallery below).
+  var capstoryPhoto = document.querySelector('.capstory-photo');
+  if (capstoryPhoto) {
+    var capstoryImgs = Array.prototype.slice.call(capstoryPhoto.querySelectorAll('.capstory-photo__img'));
+    var capstoryPrev = capstoryPhoto.querySelector('.capstory-carousel__btn--prev');
+    var capstoryNext = capstoryPhoto.querySelector('.capstory-carousel__btn--next');
+    var capstoryIndex = 0;
+    var capstoryTimer = null;
+    var capstoryMotionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+    var capstoryShow = function (i) {
+      if (i >= capstoryImgs.length) i = 0;
+      else if (i < 0) i = capstoryImgs.length - 1;
+      capstoryImgs[capstoryIndex].classList.remove('is-active');
+      capstoryIndex = i;
+      capstoryImgs[capstoryIndex].classList.add('is-active');
+    };
+
+    var capstoryNextSlide = function () { capstoryShow(capstoryIndex + 1); };
+    var capstoryPrevSlide = function () { capstoryShow(capstoryIndex - 1); };
+
+    var capstoryStop = function () {
+      if (capstoryTimer) clearInterval(capstoryTimer);
+      capstoryTimer = null;
+    };
+    var capstoryStart = function () {
+      if (!capstoryMotionOK || capstoryImgs.length < 2) return;
+      capstoryStop();
+      capstoryTimer = setInterval(capstoryNextSlide, 2200);
+    };
+
+    if (capstoryNext) capstoryNext.addEventListener('click', function () { capstoryNextSlide(); capstoryStart(); });
+    if (capstoryPrev) capstoryPrev.addEventListener('click', function () { capstoryPrevSlide(); capstoryStart(); });
+    capstoryPhoto.addEventListener('mouseenter', capstoryStop);
+    capstoryPhoto.addEventListener('mouseleave', capstoryStart);
+    capstoryPhoto.addEventListener('focusin', capstoryStop);
+    capstoryPhoto.addEventListener('focusout', capstoryStart);
+
+    capstoryStart();
+  }
+
+  // The Mandate Wall: renders a static roster of fictional "attachers"
+  // (name + city, mixed photo/initials avatars) into the empty
+  // .wall-grid markup, then staggers them in on scroll and periodically
+  // pulses a random avatar — so a static dataset still reads as a live,
+  // growing wall. Swap WALL_PEOPLE for a real backend feed later; the
+  // render/animation logic below can stay as-is.
+  var wallGrid = document.querySelector('.wall-grid');
+  if (wallGrid) {
+    var WALL_PEOPLE = [
+      ['Priya Sharma', 'Mumbai'], ['Rahul Verma', 'Delhi'], ['Ananya Iyer', 'Chennai'],
+      ['Karan Mehta', 'Ahmedabad'], ['Sneha Reddy', 'Hyderabad'], ['Arjun Nair', 'Kochi'],
+      ['Divya Pillai', 'Bengaluru'], ['Vikram Singh', 'Jaipur'], ['Neha Gupta', 'Lucknow'],
+      ['Aditya Rao', 'Pune'], ['Meera Joshi', 'Nagpur'], ['Rohan Kapoor', 'Chandigarh'],
+      ['Kavya Menon', 'Thiruvananthapuram'], ['Siddharth Bose', 'Kolkata'], ['Ishita Malhotra', 'Gurugram'],
+      ['Aarav Chatterjee', 'Kolkata'], ['Pooja Desai', 'Surat'], ['Vivaan Khanna', 'Delhi'],
+      ['Riya Agarwal', 'Indore'], ['Aman Bhatt', 'Vadodara'], ['Tanvi Shah', 'Ahmedabad'],
+      ['Kabir Chauhan', 'Jodhpur'], ['Sanya Kulkarni', 'Pune'], ['Dev Patel', 'Rajkot'],
+      ['Anika Ghosh', 'Kolkata'], ['Yash Trivedi', 'Bhopal'], ['Simran Kaur', 'Amritsar'],
+      ['Nikhil Pandey', 'Varanasi'], ['Aisha Sheikh', 'Hyderabad'], ['Raj Malhotra', 'Delhi'],
+      ['Sara Fernandes', 'Goa'], ['Manav Oberoi', 'Chandigarh'], ['Nandini Rao', 'Visakhapatnam'],
+      ['Aryan Bansal', 'Kanpur'], ['Zara Khan', 'Lucknow'], ['Harsh Vora', 'Surat'],
+      ['Aditi Menon', 'Kochi'], ['Ritvik Saxena', 'Kanpur'], ['Diya Krishnan', 'Coimbatore'],
+      ['Om Prakash', 'Patna'], ['Lavanya Iyer', 'Madurai'], ['Kunal Bhatia', 'Ludhiana'],
+      ['Anushka Rathi', 'Jaipur'], ['Suresh Naidu', 'Visakhapatnam'], ['Ira Sen', 'Kolkata'],
+      ['Vihaan Choudhary', 'Jodhpur'], ['Tanya Aggarwal', 'Delhi'], ['Rohit Dubey', 'Bhopal'],
+      ['Anjali Nambiar', 'Kozhikode'], ['Gautam Mishra', 'Lucknow'], ['Kritika Bhatt', 'Dehradun'],
+      ['Naveen Kumar', 'Bengaluru'], ['Shreya Basu', 'Kolkata'], ['Aarush Jain', 'Jaipur'],
+      ['Pallavi Rao', 'Hyderabad'], ['Devansh Tiwari', 'Kanpur'], ['Ritika Chopra', 'Delhi'],
+      ['Sameer Ansari', 'Lucknow'], ['Nisha Varma', 'Indore'], ['Arnav Sethi', 'Chandigarh']
+    ];
+    var WALL_PHOTO_COUNT = 30;
+
+    var wallFrag = document.createDocumentFragment();
+    WALL_PEOPLE.forEach(function (person, i) {
+      var name = person[0];
+      var city = person[1];
+      var initials = name.split(' ').map(function (w) { return w[0]; }).join('').toUpperCase();
+
+      var li = document.createElement('li');
+      li.className = 'wall-avatar';
+      li.title = name + ' — ' + city;
+
+      if (i % 3 !== 0) {
+        var photoNum = (i % WALL_PHOTO_COUNT) + 1;
+        var photoId = (photoNum < 10 ? '0' : '') + photoNum;
+        var img = document.createElement('img');
+        img.className = 'wall-avatar__photo';
+        img.src = 'assets/images/wall/attacher-' + photoId + '.jpg';
+        img.alt = '';
+        img.loading = 'lazy';
+        li.appendChild(img);
+      } else {
+        li.classList.add('wall-avatar--named');
+        var span = document.createElement('span');
+        span.className = 'wall-avatar__initials';
+        span.textContent = initials;
+        li.appendChild(span);
+      }
+
+      wallFrag.appendChild(li);
+    });
+    wallGrid.appendChild(wallFrag);
+
+    var wallAvatarEls = Array.prototype.slice.call(wallGrid.children);
+    var wallMotionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+    if (wallMotionOK && wallAvatarEls.length) {
+      wallAvatarEls.forEach(function (el) { el.classList.add('wall-avatar--pre'); });
+
+      var wallObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          wallAvatarEls.forEach(function (el, i) {
+            setTimeout(function () {
+              el.classList.remove('wall-avatar--pre');
+              el.classList.add('wall-avatar--in');
+            }, i * 12);
+          });
+          wallObserver.disconnect();
+        });
+      }, { threshold: 0.1 });
+      wallObserver.observe(wallGrid);
+
+      setInterval(function () {
+        var el = wallAvatarEls[Math.floor(Math.random() * wallAvatarEls.length)];
+        el.classList.remove('wall-avatar--pulse');
+        // eslint-disable-next-line no-unused-expressions
+        el.offsetWidth;
+        el.classList.add('wall-avatar--pulse');
+      }, 2600);
+    }
+  }
+
   // Live-looking "people attached" counter — dummy client-side ticker for
   // now (random small increments on a random interval). Swap scheduleTick/
   // tick for a real backend feed (poll/SSE/websocket) later; the odometer

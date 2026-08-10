@@ -71,17 +71,22 @@
 }
 
 .wall-avatar {
+  position: relative;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   background-color: var(--color-cream);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 /* Scattered mix of filled (sage) circles among the cream ones — three
    different moduli (coprime) so the pattern doesn't read as a repeating
-   grid the way a single nth-child rule would. */
+   grid the way a single nth-child rule would. Only applies to avatars
+   left without a photo (initials or blank). */
 .wall-avatar:nth-child(5n+1),
 .wall-avatar:nth-child(7n+3),
 .wall-avatar:nth-child(11n+6) {
@@ -98,6 +103,47 @@
   font-size: clamp(14px, calc(1.9vw), 34px);
   letter-spacing: 0.02em;
   color: var(--color-white);
+}
+
+.wall-avatar__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wall-avatar:hover {
+  transform: scale(1.14);
+  box-shadow: 0 8px 20px rgba(44, 44, 44, 0.28);
+  z-index: 2;
+}
+
+/* Staggered scroll-in entrance (main.js adds/swaps these classes; skipped
+   entirely for prefers-reduced-motion — avatars just render in place). */
+.wall-avatar--pre {
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+.wall-avatar--in {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.wall-avatar--in:hover {
+  transform: scale(1.14);
+}
+
+/* Periodic "someone just attached" pulse on a random avatar, so the wall
+   keeps reading as live rather than a static grid. */
+.wall-avatar--pulse {
+  animation: wall-pulse 1.6s ease-out;
+}
+
+@keyframes wall-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(67, 117, 67, 0.55); }
+  70% { box-shadow: 0 0 0 16px rgba(67, 117, 67, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(67, 117, 67, 0); }
 }
 
 @media (max-width: 768px) {
@@ -327,17 +373,79 @@
   height: clamp(22px, calc(46 / 1920 * 100vw), 46px);
 }
 
-.pressgallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(20px, calc(64 / 1920 * 100vw), 64px);
+.pressgallery-viewport {
   width: 100%;
+  overflow: hidden;
 }
 
-.pressgallery-photo {
-  background-color: var(--color-placeholder);
-  border-radius: 4px;
-  aspect-ratio: 760 / 340;
+.pressgallery-track {
+  display: flex;
+  gap: clamp(16px, calc(32 / 1920 * 100vw), 32px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pressgallery-track {
+    transition: none;
+  }
+}
+
+.pressgallery-card {
+  flex: 0 0 auto;
+  width: clamp(220px, 24vw, 300px);
+}
+
+.pressgallery-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(20px, 2vw, 28px);
+  background-color: var(--color-cream);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pressgallery-card__link:hover,
+.pressgallery-card__link:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+.pressgallery-card__logo {
+  height: clamp(32px, 3vw, 44px);
+  width: auto;
+  max-width: 70%;
+  object-fit: contain;
+  object-position: left center;
+  margin-bottom: clamp(16px, 1.6vw, 22px);
+}
+
+.pressgallery-card__headline {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.4;
+  color: var(--color-dark);
+  margin-bottom: clamp(14px, 1.4vw, 20px);
+}
+
+.pressgallery-card__source {
+  margin-top: auto;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-sage-dark);
 }
 
 .pressgallery-controls {
@@ -380,8 +488,8 @@
 }
 
 @media (max-width: 700px) {
-  .pressgallery-grid {
-    grid-template-columns: 1fr;
+  .pressgallery-card {
+    width: clamp(200px, 78vw, 320px);
   }
 }
 

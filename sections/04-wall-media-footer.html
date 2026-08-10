@@ -42,82 +42,10 @@
     <p class="wall-desc">Thank you for attaching yourself. Find yourself and more Attachers on our wall. Each cap has a name attached.<br><strong>The more this wall grows, the less caps will pollute our planet.</strong></p>
 
     <ul class="wall-grid" role="list" aria-label="Wall of people who have attached themselves to the mandate">
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar wall-avatar--named"><span class="wall-avatar__initials">KT</span></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar wall-avatar--named"><span class="wall-avatar__initials">SG</span></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar wall-avatar--named"><span class="wall-avatar__initials">SP</span></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar wall-avatar--named"><span class="wall-avatar__initials">JP</span></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar wall-avatar--named"><span class="wall-avatar__initials">SC</span></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
-      <li class="wall-avatar" aria-hidden="true"></li>
+      <!-- Populated at runtime by main.js from a static WALL_PEOPLE dataset:
+           mixed photo/initials avatars, staggered entrance animation on
+           scroll into view, and a periodic pulse on a random avatar so the
+           wall reads as live and growing rather than a fixed grid. -->
     </ul>
   </div>
 </section>
@@ -161,24 +89,231 @@
       </svg>
     </h2>
 
-    <div class="pressgallery-grid">
-      <div class="pressgallery-photo" role="img" aria-label="Press coverage photo placeholder"></div>
-      <div class="pressgallery-photo" role="img" aria-label="Press coverage photo placeholder"></div>
-      <div class="pressgallery-photo" role="img" aria-label="Press coverage photo placeholder"></div>
-      <div class="pressgallery-photo" role="img" aria-label="Press coverage photo placeholder"></div>
+    <div class="pressgallery-viewport">
+      <ul class="pressgallery-track" id="pressgallery-track">
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.downtoearth.org.in/environment/daily-court-digest-major-environment-orders-february-20-2026" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/downtoearth.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">Daily Court Digest: Major Environment Orders — February 20, 2026</span>
+            <span class="pressgallery-card__source">Down To Earth</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://timesofindia.indiatimes.com/city/delhi/ngt-accepts-plea-on-need-to-recycle-pet-bottle-caps/articleshow/128753707.cms" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/toi.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT accepts plea on need to recycle PET bottle caps</span>
+            <span class="pressgallery-card__source">The Times of India</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://lawstreet.co/environment/ngt-issues-notice-to-cpcb-over-environmental-pollution-caused-by-detachable-plastic-bottle-caps" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/lawstreet.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT issues notice to CPCB over environmental pollution caused by detachable plastic bottle caps</span>
+            <span class="pressgallery-card__source">LawStreet Journal</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://aninews.in/news/national/general-news/ngt-examines-plastic-pollution-from-bottle-caps-seeks-responses-from-authorities20260224180330/" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/ani.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT examines plastic pollution from bottle caps, seeks responses from authorities</span>
+            <span class="pressgallery-card__source">ANI News</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://thecsrjournal.in/national-green-tribunal-examines-plastic-pollution-from-bottle-caps-issues-notices-to-authorities/" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/csrjournal.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">National Green Tribunal examines plastic pollution from bottle caps, issues notices to authorities</span>
+            <span class="pressgallery-card__source">The CSR Journal</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.etvbharat.com/en/bharat/ngt-takes-note-of-plastic-pollution-from-use-of-plastic-bottle-caps-enn26022304055" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/etvbharat.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT takes note of plastic pollution from use of plastic bottle caps</span>
+            <span class="pressgallery-card__source">ETV Bharat</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://thenewsmill.com/2026/02/ngt-seeks-responses-on-plastic-pollution-from-bottle-caps/" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/newsmill.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT seeks responses on plastic pollution from bottle caps</span>
+            <span class="pressgallery-card__source">The News Mill</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.newkerala.com/news/a/ngt-examines-plastic-pollution-from-bottle-caps-seeks-241.htm" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/newkerala.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT examines plastic pollution from bottle caps, seeks responses</span>
+            <span class="pressgallery-card__source">New Kerala</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://newsable.asianetnews.com/india/ngt-addresses-environmental-pollution-caused-by-loose-plastic-bottle-caps-articleshow-3obcrr9" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/newsable.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT addresses environmental pollution caused by loose plastic bottle caps</span>
+            <span class="pressgallery-card__source">Newsable</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://inshorts.com/en/amp_news/ngt-addresses-plastic-pollution-from-bottle-caps--seeks-replies-1771941944533" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/inshorts.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT addresses plastic pollution from bottle caps, seeks replies</span>
+            <span class="pressgallery-card__source">Inshorts</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.prameyanews.com/ngt-examines-plastic-pollution-from-bottle-caps-seeks-responses-from-authorities" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/prameya.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT examines plastic pollution from bottle caps, seeks responses from authorities</span>
+            <span class="pressgallery-card__source">Prameya News</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.latestly.com/agency-news/india-news-ngt-examines-plastic-pollution-from-bottle-caps-seeks-responses-from-authorities-7327274.html/amp" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/latestly.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT examines plastic pollution from bottle caps, seeks responses from authorities</span>
+            <span class="pressgallery-card__source">LatestLY</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.packaginginsights.com/news/ngt-investigates-pet-bottle-lids-pollution.html" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/packaginginsights.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">NGT investigates PET bottle lids pollution</span>
+            <span class="pressgallery-card__source">Packaging Insights</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.etvbharat.com/en/bharat/producers-failing-to-meet-compliance-target-for-hard-plastic-disposal-cpcb-to-ngt-enn26052104312" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/etvbharat.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">Producers failing to meet compliance target for hard plastic disposal: CPCB to NGT</span>
+            <span class="pressgallery-card__source">ETV Bharat</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.etvbharat.com/en/bharat/environmentalists-bat-for-use-of-tethered-caps-in-packaged-drinking-water-beverage-bottles-enn26071505446" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/etvbharat.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">Environmentalists bat for use of tethered caps in packaged drinking water, beverage bottles</span>
+            <span class="pressgallery-card__source">ETV Bharat</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.telegraphindia.com/india/cpcb-flags-poor-plastic-recycling-compliance-as-producers-miss-epr-targets-prnt/cid/2162222" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/telegraph.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">CPCB flags poor plastic recycling compliance as producers miss EPR targets</span>
+            <span class="pressgallery-card__source">The Telegraph</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://blog.chemcogroup.com/news/india-examines-the-environmental-impact-of-pet-bottle-caps/" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/chemco.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">India examines the environmental impact of PET bottle caps</span>
+            <span class="pressgallery-card__source">Chemco Group</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.sustainabilitymea.com/indias-environmental-court-probes-impact-of-single-use-bottle-caps/" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/sustainabilitymea.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">India&rsquo;s environmental court probes impact of single-use bottle caps</span>
+            <span class="pressgallery-card__source">Sustainability ME</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://m.dailyhunt.in/news/india/english/the+telegraph-epaper-thtlgrph/producers+fail+to+meet+hard+plastic+recycle+goal+under+indias+epr+rules-newsid-n713510076" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/dailyhunt.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">Producers fail to meet hard plastic recycle goal under India&rsquo;s EPR rules</span>
+            <span class="pressgallery-card__source">Dailyhunt</span>
+          </a>
+        </li>
+        <li class="pressgallery-card">
+          <a class="pressgallery-card__link" href="https://www.plas.com/news/details/1577" target="_blank" rel="noopener noreferrer">
+            <img class="pressgallery-card__logo" src="assets/images/press/plas.png" alt="" loading="lazy">
+            <span class="pressgallery-card__headline">Next Step: Tethered Caps? India&rsquo;s EPR Target for Rigid Plastic Packaging Achieves 76%</span>
+            <span class="pressgallery-card__source">PLAS.com</span>
+          </a>
+        </li>
+      </ul>
     </div>
 
     <div class="pressgallery-controls">
-      <button type="button" class="pressgallery-arrow pressgallery-arrow--prev" aria-label="Previous">
+      <button type="button" class="pressgallery-arrow pressgallery-arrow--prev" id="pressgallery-prev" aria-label="Previous articles">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
       <span class="pressgallery-controls__line" aria-hidden="true"></span>
-      <button type="button" class="pressgallery-arrow pressgallery-arrow--next" aria-label="Next">
+      <button type="button" class="pressgallery-arrow pressgallery-arrow--next" id="pressgallery-next" aria-label="Next articles">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
     </div>
   </div>
 </section>
+
+<script>
+  (function () {
+    var viewport = document.querySelector('.pressgallery-viewport');
+    var track = document.getElementById('pressgallery-track');
+    if (!viewport || !track) return;
+
+    var cards = Array.prototype.slice.call(track.children);
+    var prevBtn = document.getElementById('pressgallery-prev');
+    var nextBtn = document.getElementById('pressgallery-next');
+    var index = 0;
+    var timer = null;
+    var autoplayMs = 2200;
+    var motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+    function step() {
+      var rect = cards[0].getBoundingClientRect();
+      var trackStyle = getComputedStyle(track);
+      var gap = parseFloat(trackStyle.columnGap || trackStyle.gap || '0');
+      return rect.width + gap;
+    }
+
+    function maxIndex() {
+      var visible = Math.max(1, Math.round(viewport.clientWidth / step()));
+      return Math.max(0, cards.length - visible);
+    }
+
+    function render() {
+      track.style.transform = 'translateX(-' + (index * step()) + 'px)';
+    }
+
+    function goTo(i) {
+      var max = maxIndex();
+      if (i > max) i = 0;
+      else if (i < 0) i = max;
+      index = i;
+      render();
+    }
+
+    function next() { goTo(index + 1); }
+    function prev() { goTo(index - 1); }
+
+    function startAutoplay() {
+      if (!motionOK) return;
+      stopAutoplay();
+      timer = setInterval(next, autoplayMs);
+    }
+
+    function stopAutoplay() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    nextBtn.addEventListener('click', function () { next(); startAutoplay(); });
+    prevBtn.addEventListener('click', function () { prev(); startAutoplay(); });
+
+    viewport.addEventListener('mouseenter', stopAutoplay);
+    viewport.addEventListener('mouseleave', startAutoplay);
+    viewport.addEventListener('focusin', stopAutoplay);
+    viewport.addEventListener('focusout', startAutoplay);
+
+    window.addEventListener('resize', function () {
+      goTo(index); // clamps to the new maxIndex and re-renders at the current position
+    });
+
+    render();
+    startAutoplay();
+  })();
+</script>
 
 <!-- ==================== FOOTER ==================== -->
 <footer id="site-footer" class="footer-section">
