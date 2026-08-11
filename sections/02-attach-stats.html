@@ -293,12 +293,23 @@
         var frontCard = cardsWrap && cardsWrap.querySelector('.attach-card--front');
         if (!frontCard) { reject(new Error('No card selected')); return; }
 
+        // The source badge art is only 461x576px (sized for on-screen
+        // display) — exporting at that same resolution squeezed the user's
+        // own photo (usually several megapixels) down into a ~167px circle,
+        // which then looked pixelated the moment it was viewed at any real
+        // size. Exporting at 3x gives the photo a ~500px circle to actually
+        // use, and high-quality smoothing keeps the upscaled badge art from
+        // looking blocky.
+        var EXPORT_SCALE = 3;
+
         var badgeImg = new Image();
         badgeImg.onload = function () {
           var canvas = document.createElement('canvas');
-          canvas.width = badgeImg.naturalWidth;
-          canvas.height = badgeImg.naturalHeight;
+          canvas.width = badgeImg.naturalWidth * EXPORT_SCALE;
+          canvas.height = badgeImg.naturalHeight * EXPORT_SCALE;
           var ctx = canvas.getContext('2d');
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
           ctx.drawImage(badgeImg, 0, 0, canvas.width, canvas.height);
 
           var cardPhoto = document.getElementById('attach-card-photo');
@@ -321,7 +332,9 @@
             ctx.closePath();
             ctx.clip();
 
-            // object-fit: cover behaviour into the circular ring
+            // object-fit: cover behaviour into the circular ring — the
+            // photo is drawn at its own full resolution scaled down (not
+            // up) into the now much larger circle, so it stays sharp.
             var scale = Math.max((r * 2) / photoImg.naturalWidth, (r * 2) / photoImg.naturalHeight);
             var dw = photoImg.naturalWidth * scale;
             var dh = photoImg.naturalHeight * scale;
