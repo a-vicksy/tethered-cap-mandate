@@ -1,7 +1,7 @@
 (function () {
   // Lock scroll until the hero's one-shot entrance sequence (see
   // 01-header-hero-intro.css's hero-*-reveal animations — bottle, headline,
-  // social icons, header/ticker bars, then the bg/scrim settle) has fully
+  // header/ticker bars, then the bg/scrim settle) has fully
   // played out, so scrolling away can't cut the reveal off partway
   // through. The timeout matches that sequence's last-finishing piece (the
   // bg/scrim settle, ending at 4.6s) plus a small buffer. Skipped entirely
@@ -38,16 +38,23 @@
   if (!header) return;
 
   var toggle = header.querySelector('[data-nav-toggle]');
-  var overlay = header.querySelector('[data-nav-overlay]');
-  var scrim = header.querySelector('[data-nav-scrim]');
+  // The overlay/scrim are siblings of <header>, not descendants (see the
+  // HTML comment above them) — .header-bar's own transform would otherwise
+  // make it their position:fixed containing block instead of the viewport.
+  // The 'nav-open' class lives on <body> for the same reason: it needs to
+  // be a real ancestor of both header (for the toggle-bar animation) and
+  // the overlay/scrim.
+  var overlay = document.querySelector('[data-nav-overlay]');
+  var scrim = document.querySelector('[data-nav-scrim]');
+  var body = document.body;
 
   function closeNav() {
-    header.classList.remove('nav-open');
+    body.classList.remove('nav-open');
     if (toggle) toggle.setAttribute('aria-expanded', 'false');
   }
 
   function toggleNav() {
-    var isOpen = header.classList.toggle('nav-open');
+    var isOpen = body.classList.toggle('nav-open');
     if (toggle) toggle.setAttribute('aria-expanded', String(isOpen));
   }
 
@@ -78,7 +85,7 @@
     var currentY = window.scrollY;
     header.classList.toggle('is-scrolled', currentY > scrollThreshold);
 
-    if (!header.classList.contains('nav-open')) {
+    if (!body.classList.contains('nav-open')) {
       var headerHeight = header.offsetHeight;
       var delta = currentY - lastScrollY;
       if (currentY > headerHeight && delta > 4) {
@@ -92,28 +99,6 @@
   }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
-
-  // Pin the hero's social icon rail so its bottom edge matches the exact
-  // bottom of the headline text. The headline's position shifts with
-  // viewport size (responsive font, two-line wrapping), so this is measured
-  // live rather than guessed with a fixed CSS offset.
-  var heroSection = document.getElementById('hero');
-  var heroSocial = heroSection ? heroSection.querySelector('.hero-social') : null;
-  var heroHeadline = heroSection ? heroSection.querySelector('.hero-headline') : null;
-
-  function alignHeroSocial() {
-    if (!heroSection || !heroSocial || !heroHeadline) return;
-    var heroRect = heroSection.getBoundingClientRect();
-    var headlineRect = heroHeadline.getBoundingClientRect();
-    heroSocial.style.bottom = (heroRect.bottom - headlineRect.bottom) + 'px';
-  }
-
-  alignHeroSocial();
-  window.addEventListener('resize', alignHeroSocial);
-  window.addEventListener('load', alignHeroSocial);
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(alignHeroSocial);
-  }
 
   // Art & Impact photo carousel: crossfades through capstory-photo__img
   // elements, prev/next buttons plus autoplay (paused on hover/focus,

@@ -7,12 +7,24 @@
 
 <header id="site-header" class="header-bar">
   <div class="header-inner container">
-    <a class="header-brand" href="#hero" aria-label="The Tethered Cap Mandate — home">
+    <a class="header-brand" href="#hero" aria-label="Tethered Cap Mandate - India — home">
       <span class="header-wordmark">
         THE TETHERED cap mandate
         <img class="header-logo" src="assets/images/header-logo.png" alt="" width="56" height="21">
       </span>
     </a>
+
+    <div class="header-social" aria-label="Greener Earth Foundation on social media">
+      <a class="header-social__link" href="https://www.instagram.com/greenerearthorg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.15" fill="currentColor"/></svg>
+      </a>
+      <a class="header-social__link" href="https://x.com/greenerearthorg" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 4.5 10.6 12.2 5.2 19.5h2.1l4.4-5.9 3.6 5.9H20l-5.9-8.1L18.9 4.5h-2.1l-4 5.4-3.3-5.4H5Z" fill="currentColor"/></svg>
+      </a>
+      <a class="header-social__link" href="https://www.facebook.com/greenerearthorg" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 8.5h2.2V4.9h-2.6C11.9 4.9 10.5 6.5 10.5 9v2.3H8.2v3.6h2.3V21h3.7v-6.1h2.5l.5-3.6h-3V9.3c0-.6.3-.8 1-.8Z" fill="currentColor"/></svg>
+      </a>
+    </div>
 
     <button type="button" class="header-toggle" data-nav-toggle aria-expanded="false" aria-controls="site-nav-overlay" aria-label="Toggle navigation menu">
       <span class="header-toggle-bar"></span>
@@ -20,22 +32,26 @@
       <span class="header-toggle-bar"></span>
     </button>
   </div>
-
-  <div class="header-scrim" data-nav-scrim aria-hidden="true"></div>
-
-  <nav id="site-nav-overlay" class="header-overlay" data-nav-overlay aria-label="Mobile">
-    <ul class="header-overlay-list">
-      <li><a href="#about" data-nav-link>About</a></li>
-      <li><a href="#attach-yourself" data-nav-link>Attach Yourself</a></li>
-      <li><a href="#tethered-timeline" data-nav-link>Tethered Timeline</a></li>
-      <li><a href="#cap-story" data-nav-link>The Cap Story</a></li>
-      <li><a href="#art-impact" data-nav-link>Art &amp; Impact</a></li>
-      <li><a href="#mandate-wall" data-nav-link>The Mandate Wall</a></li>
-      <li><a href="#social-media" data-nav-link>Social Media</a></li>
-      <li><a href="#press-media" data-nav-link>Press &amp; Media</a></li>
-    </ul>
-  </nav>
 </header>
+
+<!-- Siblings of <header>, not children — .header-bar carries a CSS
+     transform for its entrance animation, and a transformed ancestor
+     becomes the containing block for position:fixed descendants. Nested
+     inside header, that collapsed this scrim/overlay to zero height. -->
+<div class="header-scrim" data-nav-scrim aria-hidden="true"></div>
+
+<nav id="site-nav-overlay" class="header-overlay" data-nav-overlay aria-label="Mobile">
+  <ul class="header-overlay-list">
+    <li><a href="#about" data-nav-link>About</a></li>
+    <li><a href="#attach-yourself" data-nav-link>Attach Yourself</a></li>
+    <li><a href="#tethered-timeline" data-nav-link>Tethered Timeline</a></li>
+    <li><a href="#cap-story" data-nav-link>The Cap Story</a></li>
+    <li><a href="#art-impact" data-nav-link>Art &amp; Impact</a></li>
+    <li><a href="#mandate-wall" data-nav-link>The Mandate Wall</a></li>
+    <li><a href="#social-media" data-nav-link>Social Media</a></li>
+    <li><a href="#press-media" data-nav-link>Press &amp; Media</a></li>
+  </ul>
+</nav>
 
 <section id="hero" class="hero">
   <video class="hero-bg" autoplay muted loop playsinline poster="assets/images/hero-bg.png" aria-label="A bottle cap being washed by ocean waves on sand">
@@ -44,23 +60,8 @@
   <div class="hero-scrim" aria-hidden="true"></div>
 
   <div class="hero-content">
-    <h1 class="hero-headline">Help end bottle cap pollution.<br>Welcome to the Tethered Cap Mandate.</h1>
+    <h1 class="hero-headline">Help end bottle cap pollution.<br>Sign the pledge to Mandate Tethered Cap.</h1>
     <img class="hero-portrait" src="assets/images/hero-portrait.png" alt="A bottle with its cap tethered in place" width="352" height="756">
-  </div>
-
-  <div class="hero-social" aria-label="Greener Earth Foundation on social media">
-    <a class="hero-social__link" href="#" aria-label="Instagram">
-      <img src="assets/images/social-instagram.png" alt="" width="45" height="45">
-    </a>
-    <a class="hero-social__link" href="#" aria-label="Facebook">
-      <img src="assets/images/social-facebook.png" alt="" width="45" height="45">
-    </a>
-    <a class="hero-social__link" href="#" aria-label="X (Twitter)">
-      <img src="assets/images/social-x.png" alt="" width="45" height="45">
-    </a>
-    <a class="hero-social__link" href="#" aria-label="WhatsApp">
-      <img src="assets/images/social-whatsapp.png" alt="" width="45" height="45">
-    </a>
   </div>
 </section>
 
@@ -126,7 +127,7 @@
     </h2>
     <div class="mission-copy">
       <p>A policy-led design intervention to eliminate <strong>plastic cap leakage</strong> by keeping every cap attached to its bottle from manufacturing to recycling.</p>
-      <p><strong>It&rsquo;s already an EU regulation.</strong> `We are now campaigning to make it one in India too. We need your help though. Just like caps need to stay attached to bottles, we need you to attach your name to the mandate - so the government makes it a national priority. Let&rsquo;s together make tethered caps a design mandate for all plastic bottles in India.</p>
+      <p><strong>It&rsquo;s already an EU regulation.</strong> We are now campaigning to make it one in India too. We need your help though. Just like caps need to stay attached to bottles, we need you to attach your name to the mandate - so the government makes it a national priority. Let&rsquo;s together make tethered caps a design mandate for all plastic bottles in India.</p>
       <p class="mission-copy__highlight">And end bottle cap pollution for good.</p>
     </div>
   </div>

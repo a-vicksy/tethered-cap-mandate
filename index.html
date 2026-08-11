@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Tethered Cap Mandate — Greener Earth Foundation</title>
+  <title>Tethered Cap Mandate - India</title>
   <meta name="description" content="Help end bottle cap pollution. Join the campaign for a Tethered Cap Mandate in India — attach your name to the NGT case and the movement to keep every cap attached to its bottle.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧢</text></svg>">
+  <meta name="apple-mobile-web-app-title" content="Tethered Cap Mandate - India">
+  <link rel="icon" href="assets/images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/favicon-192.png">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,12 +33,24 @@
 
 <header id="site-header" class="header-bar">
   <div class="header-inner container">
-    <a class="header-brand" href="#hero" aria-label="The Tethered Cap Mandate — home">
+    <a class="header-brand" href="#hero" aria-label="Tethered Cap Mandate - India — home">
       <span class="header-wordmark">
         THE TETHERED cap mandate
         <img class="header-logo" src="assets/images/header-logo.png" alt="" width="56" height="21">
       </span>
     </a>
+
+    <div class="header-social" aria-label="Greener Earth Foundation on social media">
+      <a class="header-social__link" href="https://www.instagram.com/greenerearthorg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.15" fill="currentColor"/></svg>
+      </a>
+      <a class="header-social__link" href="https://x.com/greenerearthorg" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 4.5 10.6 12.2 5.2 19.5h2.1l4.4-5.9 3.6 5.9H20l-5.9-8.1L18.9 4.5h-2.1l-4 5.4-3.3-5.4H5Z" fill="currentColor"/></svg>
+      </a>
+      <a class="header-social__link" href="https://www.facebook.com/greenerearthorg" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 8.5h2.2V4.9h-2.6C11.9 4.9 10.5 6.5 10.5 9v2.3H8.2v3.6h2.3V21h3.7v-6.1h2.5l.5-3.6h-3V9.3c0-.6.3-.8 1-.8Z" fill="currentColor"/></svg>
+      </a>
+    </div>
 
     <button type="button" class="header-toggle" data-nav-toggle aria-expanded="false" aria-controls="site-nav-overlay" aria-label="Toggle navigation menu">
       <span class="header-toggle-bar"></span>
@@ -41,22 +58,26 @@
       <span class="header-toggle-bar"></span>
     </button>
   </div>
-
-  <div class="header-scrim" data-nav-scrim aria-hidden="true"></div>
-
-  <nav id="site-nav-overlay" class="header-overlay" data-nav-overlay aria-label="Mobile">
-    <ul class="header-overlay-list">
-      <li><a href="#about" data-nav-link>About</a></li>
-      <li><a href="#attach-yourself" data-nav-link>Attach Yourself</a></li>
-      <li><a href="#tethered-timeline" data-nav-link>Tethered Timeline</a></li>
-      <li><a href="#cap-story" data-nav-link>The Cap Story</a></li>
-      <li><a href="#art-impact" data-nav-link>Art &amp; Impact</a></li>
-      <li><a href="#mandate-wall" data-nav-link>The Mandate Wall</a></li>
-      <li><a href="#social-media" data-nav-link>Social Media</a></li>
-      <li><a href="#press-media" data-nav-link>Press &amp; Media</a></li>
-    </ul>
-  </nav>
 </header>
+
+<!-- Siblings of <header>, not children — .header-bar carries a CSS
+     transform for its entrance animation, and a transformed ancestor
+     becomes the containing block for position:fixed descendants. Nested
+     inside header, that collapsed this scrim/overlay to zero height. -->
+<div class="header-scrim" data-nav-scrim aria-hidden="true"></div>
+
+<nav id="site-nav-overlay" class="header-overlay" data-nav-overlay aria-label="Mobile">
+  <ul class="header-overlay-list">
+    <li><a href="#about" data-nav-link>About</a></li>
+    <li><a href="#attach-yourself" data-nav-link>Attach Yourself</a></li>
+    <li><a href="#tethered-timeline" data-nav-link>Tethered Timeline</a></li>
+    <li><a href="#cap-story" data-nav-link>The Cap Story</a></li>
+    <li><a href="#art-impact" data-nav-link>Art &amp; Impact</a></li>
+    <li><a href="#mandate-wall" data-nav-link>The Mandate Wall</a></li>
+    <li><a href="#social-media" data-nav-link>Social Media</a></li>
+    <li><a href="#press-media" data-nav-link>Press &amp; Media</a></li>
+  </ul>
+</nav>
 
 <section id="hero" class="hero">
   <video class="hero-bg" autoplay muted loop playsinline poster="assets/images/hero-bg.png" aria-label="A bottle cap being washed by ocean waves on sand">
@@ -65,23 +86,8 @@
   <div class="hero-scrim" aria-hidden="true"></div>
 
   <div class="hero-content">
-    <h1 class="hero-headline">Help end bottle cap pollution.<br>Welcome to the Tethered Cap Mandate.</h1>
+    <h1 class="hero-headline">Help end bottle cap pollution.<br>Sign the pledge to Mandate Tethered Cap.</h1>
     <img class="hero-portrait" src="assets/images/hero-portrait.png" alt="A bottle with its cap tethered in place" width="352" height="756">
-  </div>
-
-  <div class="hero-social" aria-label="Greener Earth Foundation on social media">
-    <a class="hero-social__link" href="#" aria-label="Instagram">
-      <img src="assets/images/social-instagram.png" alt="" width="45" height="45">
-    </a>
-    <a class="hero-social__link" href="#" aria-label="Facebook">
-      <img src="assets/images/social-facebook.png" alt="" width="45" height="45">
-    </a>
-    <a class="hero-social__link" href="#" aria-label="X (Twitter)">
-      <img src="assets/images/social-x.png" alt="" width="45" height="45">
-    </a>
-    <a class="hero-social__link" href="#" aria-label="WhatsApp">
-      <img src="assets/images/social-whatsapp.png" alt="" width="45" height="45">
-    </a>
   </div>
 </section>
 
@@ -147,7 +153,7 @@
     </h2>
     <div class="mission-copy">
       <p>A policy-led design intervention to eliminate <strong>plastic cap leakage</strong> by keeping every cap attached to its bottle from manufacturing to recycling.</p>
-      <p><strong>It&rsquo;s already an EU regulation.</strong> `We are now campaigning to make it one in India too. We need your help though. Just like caps need to stay attached to bottles, we need you to attach your name to the mandate - so the government makes it a national priority. Let&rsquo;s together make tethered caps a design mandate for all plastic bottles in India.</p>
+      <p><strong>It&rsquo;s already an EU regulation.</strong> We are now campaigning to make it one in India too. We need your help though. Just like caps need to stay attached to bottles, we need you to attach your name to the mandate - so the government makes it a national priority. Let&rsquo;s together make tethered caps a design mandate for all plastic bottles in India.</p>
       <p class="mission-copy__highlight">And end bottle cap pollution for good.</p>
     </div>
   </div>
@@ -258,6 +264,7 @@
             <button type="button" class="attach-btn-ghost attach-btn-download">Download</button>
             <button type="button" class="attach-btn-ghost attach-btn-share">Share</button>
           </div>
+          <p class="attach-share-status" id="attach-share-status" role="status" aria-live="polite" hidden></p>
         </div>
       </div>
     </div>
@@ -421,6 +428,155 @@
       confirmMsg.hidden = false;
       confirmMsg.textContent = 'Thanks for attaching yourself!';
     });
+
+    // Download / Share: composite the currently-front badge PNG with the
+    // uploaded photo (if any) onto a canvas, matching the same ring
+    // position .attach-card-photo is CSS-positioned at (50%/32.7%, 36.2%
+    // of the card's width) — then either save it as a file or hand it to
+    // the OS share sheet.
+    var downloadBtn = document.querySelector('.attach-btn-download');
+    var shareBtn = document.querySelector('.attach-btn-share');
+    var shareStatus = document.getElementById('attach-share-status');
+    var statusTimer = null;
+
+    function setStatus(message) {
+      if (!shareStatus) return;
+      clearTimeout(statusTimer);
+      shareStatus.textContent = message;
+      shareStatus.hidden = !message;
+      if (message) {
+        statusTimer = setTimeout(function () { shareStatus.hidden = true; }, 4000);
+      }
+    }
+
+    function buildCardCanvas() {
+      return new Promise(function (resolve, reject) {
+        var frontCard = cardsWrap && cardsWrap.querySelector('.attach-card--front');
+        if (!frontCard) { reject(new Error('No card selected')); return; }
+
+        var badgeImg = new Image();
+        badgeImg.onload = function () {
+          var canvas = document.createElement('canvas');
+          canvas.width = badgeImg.naturalWidth;
+          canvas.height = badgeImg.naturalHeight;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(badgeImg, 0, 0, canvas.width, canvas.height);
+
+          var cardPhoto = document.getElementById('attach-card-photo');
+          var bgImage = cardPhoto ? cardPhoto.style.backgroundImage : '';
+          var photoUrl = bgImage && bgImage !== 'none'
+            ? bgImage.replace(/^url\((['"]?)(.*)\1\)$/, '$2')
+            : null;
+
+          if (!photoUrl) { resolve(canvas); return; }
+
+          var photoImg = new Image();
+          photoImg.onload = function () {
+            var cx = canvas.width * 0.5;
+            var cy = canvas.height * 0.327;
+            var r = (canvas.width * 0.362) / 2;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+
+            // object-fit: cover behaviour into the circular ring
+            var scale = Math.max((r * 2) / photoImg.naturalWidth, (r * 2) / photoImg.naturalHeight);
+            var dw = photoImg.naturalWidth * scale;
+            var dh = photoImg.naturalHeight * scale;
+            ctx.drawImage(photoImg, cx - dw / 2, cy - dh / 2, dw, dh);
+            ctx.restore();
+
+            resolve(canvas);
+          };
+          photoImg.onerror = function () { resolve(canvas); }; // fall back to badge-only
+          photoImg.src = photoUrl;
+        };
+        badgeImg.onerror = reject;
+        badgeImg.src = frontCard.src;
+      });
+    }
+
+    function canvasToBlob(canvas) {
+      return new Promise(function (resolve) {
+        canvas.toBlob(function (blob) { resolve(blob); }, 'image/png');
+      });
+    }
+
+    function downloadBlob(blob) {
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = 'tethered-cap-mandate.png';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    }
+
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', function () {
+        downloadBtn.disabled = true;
+        setStatus('Preparing image…');
+        buildCardCanvas()
+          .then(canvasToBlob)
+          .then(function (blob) {
+            downloadBlob(blob);
+            setStatus('Downloaded!');
+          })
+          .catch(function () {
+            setStatus('Could not prepare the image — please try again.');
+          })
+          .then(function () { downloadBtn.disabled = false; });
+      });
+    }
+
+    if (shareBtn) {
+      shareBtn.addEventListener('click', function () {
+        shareBtn.disabled = true;
+        setStatus('Preparing…');
+        var shareText = "I'm Attached. Join me in mandating tethered bottle caps in India.";
+
+        buildCardCanvas()
+          .then(canvasToBlob)
+          .then(function (blob) {
+            var file = new File([blob], 'tethered-cap-mandate.png', { type: 'image/png' });
+
+            // Native OS share sheet (WhatsApp, Instagram, Messages, etc.) —
+            // supported on most mobile browsers and recent desktop Chrome.
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              return navigator.share({ files: [file], title: 'The Tethered Cap Mandate', text: shareText })
+                .then(function () { setStatus('Shared!'); });
+            }
+            if (navigator.share) {
+              return navigator.share({ title: 'The Tethered Cap Mandate', text: shareText, url: window.location.href })
+                .then(function () { setStatus('Shared!'); });
+            }
+
+            // No Web Share API (most desktop browsers): download the badge
+            // so it's ready to attach anywhere, and copy a caption+link so
+            // it can be pasted alongside it. The download already
+            // succeeded by this point — a clipboard permission failure
+            // (browser/OS dependent) is a soft-fail, not a reason to tell
+            // the user sharing failed outright.
+            downloadBlob(blob);
+            var shareMessage = shareText + ' ' + window.location.href;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              return navigator.clipboard.writeText(shareMessage)
+                .then(function () { setStatus('Image downloaded and caption copied — paste it anywhere!'); })
+                .catch(function () { setStatus('Image downloaded — share it anywhere!'); });
+            }
+            setStatus('Image downloaded — share it anywhere!');
+          })
+          .catch(function (err) {
+            if (err && err.name === 'AbortError') { setStatus(''); return; } // user closed the share sheet
+            setStatus('Could not share — please try again.');
+          })
+          .then(function () { shareBtn.disabled = false; });
+      });
+    }
   })();
 </script>
 
@@ -603,10 +759,25 @@
     <div class="capstory-columns">
       <div class="capstory-photo">
         <div class="capstory-photo__frame">
-          <img class="capstory-photo__img is-active" src="assets/images/capstory-photo-01.jpg" alt="Aakash Ranison crouched amid scattered waste at a mountain landfill site">
-          <img class="capstory-photo__img" src="assets/images/capstory-photo-02.jpg" alt="Aakash Ranison pointing out discarded cement and plaster sacks dumped at a mountain landfill">
+          <!-- Order is deliberately shuffled (not sequential by filename) so
+               the carousel doesn't play as "landfill photos, then event
+               photos" in two visible blocks. -->
+          <img class="capstory-photo__img is-active" src="assets/images/capstory-photo-09.jpg" alt="A volunteer arranging blue and green bottle caps during the mural's installation">
           <img class="capstory-photo__img" src="assets/images/capstory-photo-03.jpg" alt="Sorting through a large pile of plastic waste at an indoor recycling facility">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-14.jpg" alt="A child reaching out to touch the bottle-cap wave mural">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-01.jpg" alt="Aakash Ranison crouched amid scattered waste at a mountain landfill site">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-11.jpg" alt="A volunteer drilling bottle caps into the wave mural">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-06.jpg" alt="A child touching the colourful bottle-cap wave mural">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-16.jpg" alt="A woman crouching with a laughing child in front of the wave mural">
           <img class="capstory-photo__img" src="assets/images/capstory-photo-04.jpg" alt="Silhouette carrying sacks of collected waste across a beach at dusk">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-07.jpg" alt="Two visitors posing in front of the bottle-cap wave mural">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-12.jpg" alt="Two visitors in conversation in front of the bottle-cap mural">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-02.jpg" alt="Aakash Ranison pointing out discarded cement and plaster sacks dumped at a mountain landfill">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-15.jpg" alt="A volunteer in a saree drilling bottle caps into the mural">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-05.jpg" alt="A family posing together in front of the bottle-cap wave mural">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-10.jpg" alt="Volunteers drilling bottle caps into the mural outdoors">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-13.jpg" alt="Two visitors posing together in front of the bottle-cap wave mural">
+          <img class="capstory-photo__img" src="assets/images/capstory-photo-08.jpg" alt="Three visitors posing together in front of the bottle-cap wave mural">
         </div>
 
         <div class="capstory-carousel">
@@ -973,17 +1144,14 @@
     </nav>
 
     <div class="footer-social" aria-label="Social media links">
-      <a class="footer-social__link" href="#" aria-label="Instagram">
+      <a class="footer-social__link" href="https://www.instagram.com/greenerearthorg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.15" fill="currentColor"/></svg>
       </a>
-      <a class="footer-social__link" href="#" aria-label="Facebook">
+      <a class="footer-social__link" href="https://www.facebook.com/greenerearthorg" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 8.5h2.2V4.9h-2.6C11.9 4.9 10.5 6.5 10.5 9v2.3H8.2v3.6h2.3V21h3.7v-6.1h2.5l.5-3.6h-3V9.3c0-.6.3-.8 1-.8Z" fill="currentColor"/></svg>
       </a>
-      <a class="footer-social__link" href="#" aria-label="X (Twitter)">
+      <a class="footer-social__link" href="https://x.com/greenerearthorg" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 4.5 10.6 12.2 5.2 19.5h2.1l4.4-5.9 3.6 5.9H20l-5.9-8.1L18.9 4.5h-2.1l-4 5.4-3.3-5.4H5Z" fill="currentColor"/></svg>
-      </a>
-      <a class="footer-social__link" href="#" aria-label="WhatsApp">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3.5a8.4 8.4 0 0 0-7.2 12.7L3.5 20.5l4.5-1.2A8.4 8.4 0 1 0 12 3.5Zm0 1.8a6.6 6.6 0 1 1-3.4 12.2l-.3-.2-2.6.7.7-2.5-.2-.3A6.6 6.6 0 0 1 12 5.3Zm-2.6 2.9c-.2 0-.5 0-.6.3-.2.3-.7.8-.7 1.9s.7 2.2.8 2.3c.1.2 1.5 2.4 3.7 3.2 1.8.7 2.2.6 2.6.5.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.2-.5-.3-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1-.2.3-.6.8-.7.9-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2.1-1.3-.8-.7-1.3-1.5-1.4-1.8-.2-.3 0-.4.1-.6l.4-.4c.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2-.2-.5-.4-.4-.5-.4Z" fill="currentColor"/></svg>
       </a>
     </div>
 

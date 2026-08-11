@@ -140,16 +140,22 @@
 }
 
 /* These ARE the inputs — contenteditable spans sitting inline in the
-   sentence. The faded colour is the whole affordance while empty; a dashed
-   underline hints they're clickable, filling in with real text (full
-   opacity, no dashes) once typed. */
+   sentence. The faded colour + dashed underline hint they're fillable, a
+   blinking caret (mimicking a real text cursor) makes "click and type
+   here" unambiguous while empty, and a hover highlight backs that up
+   before the user even clicks. All three go away once real text is
+   typed (:empty stops matching; a real caret takes over). */
 .attach-form__fill {
   display: inline-block;
   min-width: 0.6em;
+  padding: 0 0.08em;
+  margin: 0 -0.08em;
+  border-radius: 4px;
   color: var(--color-white);
   border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
   outline: none;
   cursor: text;
+  transition: background-color 0.2s ease, border-bottom-color 0.2s ease;
 }
 
 .attach-form__fill:empty {
@@ -158,6 +164,32 @@
 
 .attach-form__fill:empty::before {
   content: attr(data-placeholder);
+}
+
+.attach-form__fill:empty::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 0.85em;
+  margin-left: 0.12em;
+  vertical-align: -0.1em;
+  background: currentColor;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .attach-form__fill:empty::after {
+    animation: attach-caret-blink 1s step-end infinite;
+  }
+}
+
+@keyframes attach-caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.attach-form__fill:hover:empty {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-bottom-color: rgba(255, 255, 255, 0.8);
 }
 
 .attach-form__fill:focus {
@@ -436,6 +468,21 @@
 .attach-btn-ghost:hover {
   background-color: var(--color-cream);
   color: var(--color-dark);
+}
+
+.attach-btn-ghost:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.attach-share-status {
+  margin: 0;
+  max-width: 180px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-cream);
 }
 
 /* -------------------------------------------------------------------------

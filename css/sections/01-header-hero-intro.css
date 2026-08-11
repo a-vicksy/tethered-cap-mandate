@@ -97,7 +97,6 @@
   background: transparent;
   cursor: pointer;
   flex-shrink: 0;
-  margin-left: auto;
 }
 
 .header-toggle-bar {
@@ -384,74 +383,36 @@
   }
 }
 
-.hero-social {
-  position: absolute;
-  z-index: 2;
-  /* Same right offset as .container's padding, so this column's right edge
-     lines up exactly with the header brand/hamburger above it. */
-  right: var(--container-padding);
-  /* Anchored off the bottom of the hero (not vertical-centered) so the
-     icons sit in the lower portion of the frame, clear of the bottle mark,
-     at a consistent distance above the fixed ticker bar. */
-  bottom: clamp(64px, 14vh, 160px);
+/* ---------- Header social icons ---------- */
+/* Lives in .header-inner, right after the brand and before the hamburger —
+   its own margin-left:auto pushes both itself and the toggle after it flush
+   to the right edge, so the two form one right-aligned group. */
+.header-social {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: clamp(10px, 1.4vw, 16px);
+  gap: clamp(12px, 1.4vw, 18px);
+  margin-left: auto;
 }
 
-/* Icons are the real brand-supplied badges (already circular, own
-   background baked in) — just size and space them, no drawn ring. */
-.hero-social__link {
+.header-social__link {
   display: flex;
-  width: clamp(22px, 1.8vw, 30px);
-  height: clamp(22px, 1.8vw, 30px);
-  opacity: 0.85;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  color: var(--color-sage-light);
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-/* Same surfacing treatment as the bottle/headline, in miniature — each icon
-   rises and sharpens in on its own beat rather than all four popping at
-   once. Starts as the headline's own reveal is finishing, cascades through
-   while the header/ticker bars are sliding in, so the whole hero settles
-   together instead of the icons feeling like an afterthought. */
-@media (prefers-reduced-motion: no-preference) {
-  .hero-social__link {
-    animation: hero-social-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .hero-social__link:nth-child(1) { animation-delay: 2.9s; }
-  .hero-social__link:nth-child(2) { animation-delay: 3.05s; }
-  .hero-social__link:nth-child(3) { animation-delay: 3.2s; }
-  .hero-social__link:nth-child(4) { animation-delay: 3.35s; }
+.header-social__link svg {
+  width: clamp(16px, 1.4vw, 20px);
+  height: clamp(16px, 1.4vw, 20px);
 }
 
-@keyframes hero-social-reveal {
-  from {
-    opacity: 0;
-    filter: blur(6px);
-    transform: translateY(16px) scale(0.8);
-  }
-  to {
-    opacity: 0.85;
-    filter: blur(0);
-    transform: translateY(0) scale(1);
-  }
+.header-social__link:hover,
+.header-social__link:focus-visible {
+  color: var(--color-sage-dark);
+  transform: scale(1.12);
 }
 
-.hero-social__link img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.hero-social__link:hover {
-  opacity: 1;
-  transform: scale(1.08);
-}
-
-@media (max-width: 640px) {
-  .hero-social {
+@media (max-width: 560px) {
+  .header-social {
     display: none;
   }
 }
