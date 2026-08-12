@@ -283,6 +283,13 @@
   box-shadow: 0 14px 28px rgba(44, 44, 44, 0.14);
 }
 
+/* Bar-chart cards (desktop) aren't wrapped in .timeline-item like the
+   vertical-list variant, so they need their own direct hover trigger. */
+.timeline-bars__cards .timeline-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 28px rgba(44, 44, 44, 0.14);
+}
+
 .timeline-card p {
   margin: 0;
   text-align: left;

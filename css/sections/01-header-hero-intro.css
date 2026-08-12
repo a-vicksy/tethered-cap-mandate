@@ -284,6 +284,13 @@
     animation: ticker-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 3.35s both;
   }
 
+  /* Icons used to be visible from first paint, appearing well before the
+     bottle/headline/bars finished their choreographed entrance. Synced to
+     land alongside the header bar + ticker instead. */
+  .hero-social {
+    animation: hero-social-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 3.2s both;
+  }
+
   /* While the bars above are off-canvas, .hero-bg/.hero-scrim bleed past
      .hero's own (shorter) box by exactly the bar heights, so the gap each
      bar would otherwise leave reads as more video rather than "a white bar
@@ -368,15 +375,28 @@
   }
 }
 
+@keyframes hero-social-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---------- Hero social icons ---------- */
 /* Vertical rail pinned to the hero's bottom-right corner, over the video —
    faded white so it reads against the photo/video background without
-   competing with the headline. */
+   competing with the headline. Bottom offset tuned (measured at the 1920px
+   reference width) so the column's own bottom edge lines up with the
+   bottom of the headline's last line ("Sign the pledge..."). */
 .hero-social {
   position: absolute;
   z-index: 2;
   right: var(--container-padding);
-  bottom: clamp(64px, 14vh, 160px);
+  bottom: clamp(48px, 10.3vh, 115px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -398,12 +418,6 @@
 .hero-social__link:focus-visible {
   color: rgba(255, 255, 255, 1);
   transform: scale(1.12);
-}
-
-@media (max-width: 480px) {
-  .hero-social {
-    bottom: clamp(48px, 10vh, 100px);
-  }
 }
 
 /* ---------- Name-scroll ticker (fixed bottom bar) ---------- */

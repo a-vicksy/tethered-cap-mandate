@@ -187,10 +187,20 @@
 
 .social-card {
   flex-shrink: 0;
+  display: block;
   background-color: var(--color-placeholder);
   border: 10px solid var(--color-white);
   border-radius: 4px;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.social-card__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .social-card--a,
