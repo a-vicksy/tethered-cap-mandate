@@ -12,6 +12,14 @@
   position: relative;
   background: var(--color-white);
   overflow: hidden;
+  /* Shared by both the .timeline-bars (desktop) and .timeline-list
+     (mobile) markups — defining it here instead of on .timeline-list
+     means .timeline-bars__spine .timeline-dot actually inherits it (it's
+     a separate DOM subtree, not nested inside .timeline-list, so it never
+     saw the variable when it lived there — the dots were rendering at
+     width/height:auto, i.e. tiny). */
+  --timeline-marker-w: clamp(24px, calc(45 / 1920 * 100vw), 45px);
+  --timeline-gap: clamp(28px, calc(48 / 1920 * 100vw), 48px);
 }
 
 /* Colour band with the gradient photo strip behind the intro line */
@@ -83,12 +91,82 @@
   }
 }
 
+/* Hearing-history spine — two markups swap at the 1024px breakpoint (see
+   bottom of this section), never both visible at once:
+   - .timeline-bars: desktop "step chart" — 7 flexible columns (no fixed
+     min-width, so it shrinks to fit and never needs horizontal scroll),
+     cards bottom-aligned to a shared line so their natural heights (driven
+     by how much each one has to say) read as a bar-chart rhythm.
+   - .timeline-list: single vertical column, for widths too narrow for 7
+     legible side-by-side columns. */
+.timeline-bars {
+  display: none;
+  padding-bottom: clamp(40px, calc(80 / 1920 * 100vw), 80px);
+}
+
+.timeline-bars__cards {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  column-gap: clamp(14px, 1.6vw, 28px);
+  align-items: end;
+}
+
+.timeline-bars__spine {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  column-gap: clamp(14px, 1.6vw, 28px);
+  align-items: center;
+  height: clamp(28px, calc(45 / 1920 * 100vw), 45px);
+  margin: clamp(20px, calc(32 / 1920 * 100vw), 32px) 0;
+}
+
+.timeline-bars__spine::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--color-sage-dark);
+  opacity: 0.35;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.timeline-bars__spine .timeline-dot {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+}
+
+.timeline-bars__dates {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  column-gap: clamp(14px, 1.6vw, 28px);
+  text-align: center;
+}
+
+.timeline-bars__dates .timeline-item__tag {
+  display: block;
+  width: fit-content;
+  margin: 0.3em auto 0;
+}
+
+@media (min-width: 1025px) {
+  .timeline-bars {
+    display: block;
+  }
+
+  .timeline-list-wrap {
+    display: none;
+  }
+}
+
 /* Hearing-history spine: a single vertical column at every viewport
    width (never scrolls horizontally) — a dot-and-line spine down the
    left with the date + card stacked beside each stop. */
 .timeline-list {
-  --timeline-marker-w: clamp(24px, calc(45 / 1920 * 100vw), 45px);
-  --timeline-gap: clamp(28px, calc(48 / 1920 * 100vw), 48px);
   max-width: 820px;
   margin: 0 auto;
   list-style: none;

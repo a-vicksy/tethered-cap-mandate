@@ -510,28 +510,36 @@
   gap: clamp(28px, calc(48 / 1920 * 100vw), 48px);
 }
 
+/* 2x2 grid: logo + nav on the top row, tagline + social icons below —
+   brand/tagline anchored left, nav/social anchored right, matching the
+   source design's two-column layout instead of one long centered stack. */
 .footer-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: clamp(20px, calc(40 / 1920 * 100vw), 40px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "brand nav"
+    "tagline social";
+  column-gap: clamp(24px, 5vw, 80px);
+  row-gap: clamp(20px, calc(36 / 1920 * 100vw), 36px);
   padding-bottom: clamp(20px, calc(36 / 1920 * 100vw), 36px);
   border-bottom: 1px solid rgba(44, 44, 44, 0.15);
 }
 
 .footer-brand {
+  grid-area: brand;
   display: flex;
   align-items: center;
 }
 
-.footer-brand__wordmark {
+.footer-brand__lockup {
   display: block;
-  height: clamp(28px, calc(52 / 1920 * 100vw), 52px);
+  height: clamp(56px, calc(100 / 1920 * 100vw), 100px);
   width: auto;
 }
 
 .footer-tagline {
+  grid-area: tagline;
+  align-self: end;
   margin: 0;
   max-width: 30ch;
   font-family: var(--font-body);
@@ -542,12 +550,16 @@
 }
 
 .footer-nav {
+  grid-area: nav;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  align-content: flex-start;
   gap: clamp(6px, calc(14 / 1920 * 100vw), 14px);
-  text-align: center;
+  max-width: 46ch;
+  text-align: right;
+  justify-self: end;
 }
 
 .footer-nav__link {
@@ -572,33 +584,35 @@
 }
 
 .footer-social {
+  grid-area: social;
+  align-self: end;
+  justify-self: end;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: clamp(14px, calc(22 / 1920 * 100vw), 22px);
+  justify-content: flex-end;
+  gap: clamp(10px, 1.6vw, 16px);
 }
 
+/* Real branded badge PNGs (already circular, colour baked in) — just size
+   and space them, same treatment as the original hero-social icons. */
 .footer-social__link {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(34px, calc(44 / 1920 * 100vw), 44px);
-  height: clamp(34px, calc(44 / 1920 * 100vw), 44px);
-  border-radius: 50%;
-  border: 1px solid var(--color-sage-dark);
-  color: var(--color-sage-dark);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  width: clamp(30px, calc(38 / 1920 * 100vw), 38px);
+  height: clamp(30px, calc(38 / 1920 * 100vw), 38px);
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.footer-social__link svg {
-  width: 55%;
-  height: 55%;
+.footer-social__link img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .footer-social__link:hover,
 .footer-social__link:focus-visible {
-  background-color: var(--color-sage-dark);
-  color: var(--color-white);
+  opacity: 1;
+  transform: scale(1.08);
 }
 
 .footer-legal {
@@ -608,13 +622,42 @@
   font-size: clamp(11px, calc(14 / 1920 * 100vw), 14px);
   line-height: 1.6;
   color: rgba(44, 44, 44, 0.7);
-  text-align: center;
+  text-align: left;
+}
+
+.footer-legal__link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s ease;
+}
+
+.footer-legal__link:hover,
+.footer-legal__link:focus-visible {
+  opacity: 0.65;
 }
 
 @media (max-width: 640px) {
   .footer-top {
-    flex-direction: column;
-    align-items: flex-start;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "brand"
+      "tagline"
+      "nav"
+      "social";
+  }
+
+  .footer-nav {
+    justify-content: flex-start;
+    text-align: left;
+    justify-self: start;
+    max-width: none;
+  }
+
+  .footer-social {
+    justify-content: flex-start;
+    justify-self: start;
+    align-self: auto;
   }
 
   .media-logos li {

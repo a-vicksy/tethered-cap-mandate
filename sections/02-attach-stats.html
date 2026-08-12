@@ -82,10 +82,14 @@
       <div class="attach-hero__right">
         <div class="attach-cards-wrap">
           <div class="attach-cards" id="attach-cards">
-            <img class="attach-card attach-card--back" data-color="blue" src="assets/images/attach-card-back.png" alt="Blue badge design">
-            <img class="attach-card attach-card--mid" data-color="cream" src="assets/images/attach-card-mid.png" alt="Cream badge design">
-            <img class="attach-card attach-card--front" data-color="green" src="assets/images/attach-card-front.png" alt="Green badge design — currently selected: I'm Attached, The Tethered Cap Mandate 2026">
-            <div class="attach-card-photo" id="attach-card-photo" aria-hidden="true"></div>
+            <img class="attach-card attach-card--back" data-color="blue" src="assets/images/attach-card-back-v2.png" alt="Blue badge design">
+            <img class="attach-card attach-card--mid" data-color="cream" src="assets/images/attach-card-mid-v2.png" alt="Cream badge design">
+            <img class="attach-card attach-card--front" data-color="green" src="assets/images/attach-card-front-v2.png" alt="Green badge design — currently selected: I'm Attached">
+            <div class="attach-card-photo" id="attach-card-photo" aria-hidden="true">
+              <div class="attach-card-photo__fill" id="attach-card-photo-fill"></div>
+            </div>
+            <span class="attach-card-text attach-card-text--name" id="attach-card-name" aria-hidden="true">Your Name</span>
+            <span class="attach-card-text attach-card-text--city" id="attach-card-city" aria-hidden="true">Your City</span>
           </div>
         </div>
 
@@ -157,6 +161,29 @@
       });
     });
 
+    // Mirror the typed name/city onto the badge card's own "Your Name" /
+    // "Your City" spot in real time — those two lines sit on an opaque,
+    // colour-matched cover (see .attach-card-text in the CSS) so the real
+    // text fully replaces the placeholder baked into the card art itself,
+    // and falls back to that same placeholder copy (just muted) once empty.
+    var nameInput = document.getElementById('attach-name');
+    var cityInput = document.getElementById('attach-city');
+    var cardName = document.getElementById('attach-card-name');
+    var cardCity = document.getElementById('attach-card-city');
+
+    function mirrorToCard(inputEl, cardEl, placeholder) {
+      if (!inputEl || !cardEl) return;
+      function sync() {
+        var text = inputEl.textContent.trim();
+        cardEl.textContent = text || placeholder;
+        cardEl.classList.toggle('attach-card-text--is-placeholder', !text);
+      }
+      inputEl.addEventListener('input', sync);
+      sync();
+    }
+    mirrorToCard(nameInput, cardName, 'Your Name');
+    mirrorToCard(cityInput, cardCity, 'Your City');
+
     // "Add a photo, email, number(optional)" is collapsed by default — the
     // photo/contact row only appears once this is clicked.
     var optionalToggle = document.getElementById('attach-optional-toggle');
@@ -193,10 +220,17 @@
         });
       }
 
-      function previewBlob(cardPhoto, blob) {
+      function previewBlob(cardPhotoFill, blob) {
         var reader = new FileReader();
         reader.onload = function () {
-          cardPhoto.style.backgroundImage = 'url(' + reader.result + ')';
+          cardPhotoFill.style.backgroundImage = 'url(' + reader.result + ')';
+          // "Drops into" the frame rather than just appearing — same beat
+          // as the colour-swap fade, so uploading a photo for the first
+          // time reads as the same kind of "settling into the card" motion.
+          cardPhotoFill.classList.remove('attach-card-photo__fill--pop');
+          // eslint-disable-next-line no-unused-expressions
+          cardPhotoFill.offsetWidth;
+          cardPhotoFill.classList.add('attach-card-photo__fill--pop');
         };
         reader.readAsDataURL(blob);
       }
@@ -205,8 +239,8 @@
         var file = photoInput.files && photoInput.files[0] ? photoInput.files[0] : null;
         fileLabel.firstChild.textContent = file ? file.name : 'Choose photo';
 
-        var cardPhoto = document.getElementById('attach-card-photo');
-        if (!cardPhoto || !file) return;
+        var cardPhotoFill = document.getElementById('attach-card-photo-fill');
+        if (!cardPhotoFill || !file) return;
 
         if (isHeic(file)) {
           fileLabel.firstChild.textContent = 'Converting photo…';
@@ -215,7 +249,7 @@
               return window.heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 });
             })
             .then(function (converted) {
-              previewBlob(cardPhoto, Array.isArray(converted) ? converted[0] : converted);
+              previewBlob(cardPhotoFill, Array.isArray(converted) ? converted[0] : converted);
               fileLabel.firstChild.textContent = file.name;
             })
             .catch(function (err) {
@@ -223,7 +257,7 @@
               fileLabel.firstChild.textContent = file.name + ' (preview unsupported)';
             });
         } else {
-          previewBlob(cardPhoto, file);
+          previewBlob(cardPhotoFill, file);
         }
       });
     }
@@ -233,6 +267,10 @@
     var dots = document.querySelectorAll('#attach-dots .attach-dot');
     if (cardsWrap && dots.length) {
       var positionClasses = ['attach-card--back', 'attach-card--mid', 'attach-card--front'];
+      // Matches the .attach-dot--* background colours in the CSS — kept in
+      // sync so .attach-card-text's cover always matches whichever badge
+      // is actually on top.
+      var CARD_COLORS = { blue: '#bed3eb', cream: 'var(--color-cream)', green: 'var(--color-sage-light)' };
       var stackOrder = Array.prototype.map.call(
         cardsWrap.querySelectorAll('.attach-card'),
         function (el) { return el.dataset.color; }
@@ -244,19 +282,42 @@
           positionClasses.forEach(function (c) { card.classList.remove(c); });
           card.classList.add(positionClasses[i]);
         });
+        var frontColor = stackOrder[stackOrder.length - 1];
+        cardsWrap.style.setProperty('--card-color', CARD_COLORS[frontColor] || CARD_COLORS.green);
       }
+
+      var motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
 
       dots.forEach(function (dot) {
         dot.addEventListener('click', function () {
           var color = dot.dataset.color;
-          stackOrder = stackOrder.filter(function (c) { return c !== color; });
-          stackOrder.push(color); // selected colour becomes the front card
-          applyStack();
-          dots.forEach(function (d) {
-            var active = d === dot;
-            d.classList.toggle('attach-dot--active', active);
-            d.setAttribute('aria-checked', String(active));
-          });
+          if (color === stackOrder[stackOrder.length - 1]) return; // already front
+
+          function swapNow() {
+            stackOrder = stackOrder.filter(function (c) { return c !== color; });
+            stackOrder.push(color); // selected colour becomes the front card
+            applyStack();
+            dots.forEach(function (d) {
+              var active = d === dot;
+              d.classList.toggle('attach-dot--active', active);
+              d.setAttribute('aria-checked', String(active));
+            });
+          }
+
+          if (!motionOK) { swapNow(); return; }
+
+          // Fade the photo/name/city out, let the cards shuffle underneath
+          // (their own 0.3s transform transition, see .attach-card), then
+          // fade back in already landed on the new front card — so the
+          // photo reads as part of whichever card is on top rather than a
+          // separate layer floating over the shuffle.
+          cardsWrap.classList.add('is-swapping');
+          setTimeout(function () {
+            swapNow();
+            setTimeout(function () {
+              cardsWrap.classList.remove('is-swapping');
+            }, 300);
+          }, 200);
         });
       });
     }
@@ -288,16 +349,31 @@
       }
     }
 
+    // Resolved hex values for the three badge colours — mirrors
+    // tokens.css/the .attach-dot--* backgrounds, but canvas fillStyle can't
+    // read CSS var()/custom-property strings, so these are spelled out.
+    var CANVAS_CARD_COLORS = { blue: '#bed3eb', cream: '#EEE7DC', green: '#B1D8B9' };
+
+    function roundRectPath(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
     function buildCardCanvas() {
       return new Promise(function (resolve, reject) {
         var frontCard = cardsWrap && cardsWrap.querySelector('.attach-card--front');
         if (!frontCard) { reject(new Error('No card selected')); return; }
 
-        // The source badge art is only 461x576px (sized for on-screen
+        // The source badge art is only ~480x600px (sized for on-screen
         // display) — exporting at that same resolution squeezed the user's
-        // own photo (usually several megapixels) down into a ~167px circle,
+        // own photo (usually several megapixels) down into a small frame,
         // which then looked pixelated the moment it was viewed at any real
-        // size. Exporting at 3x gives the photo a ~500px circle to actually
+        // size. Exporting at 3x gives the photo far more room to actually
         // use, and high-quality smoothing keeps the upscaled badge art from
         // looking blocky.
         var EXPORT_SCALE = 3;
@@ -312,38 +388,66 @@
           ctx.imageSmoothingQuality = 'high';
           ctx.drawImage(badgeImg, 0, 0, canvas.width, canvas.height);
 
-          var cardPhoto = document.getElementById('attach-card-photo');
-          var bgImage = cardPhoto ? cardPhoto.style.backgroundImage : '';
+          function drawNameCity() {
+            var color = CANVAS_CARD_COLORS[frontCard.dataset.color] || CANVAS_CARD_COLORS.green;
+            var boxLeft = canvas.width * 0.0564;
+            var boxWidth = canvas.width * 0.46;
+            var fontSize = canvas.width * 0.0433;
+
+            [
+              { top: 0.893, text: cardName ? cardName.textContent : 'Your Name', muted: cardName && cardName.classList.contains('attach-card-text--is-placeholder') },
+              { top: 0.933, text: cardCity ? cardCity.textContent : 'Your City', muted: true }
+            ].forEach(function (line) {
+              var boxTop = canvas.height * line.top;
+              var boxHeight = canvas.height * 0.04;
+              ctx.fillStyle = color;
+              ctx.fillRect(boxLeft, boxTop, boxWidth, boxHeight);
+              ctx.fillStyle = line.muted ? 'rgba(44,44,44,0.55)' : 'rgba(44,44,44,0.92)';
+              ctx.font = '500 ' + fontSize + 'px ' + getComputedStyle(document.body).fontFamily;
+              ctx.textBaseline = 'middle';
+              ctx.fillText(line.text || '', boxLeft, boxTop + boxHeight / 2, boxWidth);
+            });
+          }
+
+          var cardPhotoFill = document.getElementById('attach-card-photo-fill');
+          var bgImage = cardPhotoFill ? cardPhotoFill.style.backgroundImage : '';
           var photoUrl = bgImage && bgImage !== 'none'
             ? bgImage.replace(/^url\((['"]?)(.*)\1\)$/, '$2')
             : null;
 
-          if (!photoUrl) { resolve(canvas); return; }
+          if (!photoUrl) { drawNameCity(); resolve(canvas); return; }
+
+          // Matches .attach-card-photo__fill's CSS transform: scale(1.25) —
+          // the same deliberate overscan, so a border/margin baked into the
+          // uploaded photo gets cropped out of the download/share image
+          // exactly as it is in the live preview.
+          var PHOTO_OVERSCAN = 1.25;
 
           var photoImg = new Image();
           photoImg.onload = function () {
-            var cx = canvas.width * 0.5;
-            var cy = canvas.height * 0.327;
-            var r = (canvas.width * 0.362) / 2;
+            var x = canvas.width * 0.0501;
+            var y = canvas.height * 0.0384;
+            var w = canvas.width * 0.9061;
+            var h = canvas.height * 0.6260;
+            var r = canvas.width * 0.04;
 
             ctx.save();
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, Math.PI * 2);
-            ctx.closePath();
+            roundRectPath(ctx, x, y, w, h, r);
             ctx.clip();
 
-            // object-fit: cover behaviour into the circular ring — the
-            // photo is drawn at its own full resolution scaled down (not
-            // up) into the now much larger circle, so it stays sharp.
-            var scale = Math.max((r * 2) / photoImg.naturalWidth, (r * 2) / photoImg.naturalHeight);
+            // object-fit: cover behaviour into the frame — the photo is
+            // drawn at its own full resolution scaled down (not up) into
+            // the now much larger frame, so it stays sharp.
+            var scale = Math.max(w / photoImg.naturalWidth, h / photoImg.naturalHeight) * PHOTO_OVERSCAN;
             var dw = photoImg.naturalWidth * scale;
             var dh = photoImg.naturalHeight * scale;
-            ctx.drawImage(photoImg, cx - dw / 2, cy - dh / 2, dw, dh);
+            ctx.drawImage(photoImg, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
             ctx.restore();
 
+            drawNameCity();
             resolve(canvas);
           };
-          photoImg.onerror = function () { resolve(canvas); }; // fall back to badge-only
+          photoImg.onerror = function () { drawNameCity(); resolve(canvas); }; // fall back to badge-only
           photoImg.src = photoUrl;
         };
         badgeImg.onerror = reject;

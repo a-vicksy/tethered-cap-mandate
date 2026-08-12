@@ -345,7 +345,12 @@
 .attach-cards {
   position: relative;
   width: var(--card-w);
-  aspect-ratio: 461 / 576;
+  aspect-ratio: 479 / 599;
+  /* Which colour is currently on top — set alongside the dot click handler
+     in the page script, defaults to the initial front card (green). Reused
+     by .attach-card-text below so its cover-background always matches
+     whichever badge is actually showing. */
+  --card-color: var(--color-sage-light);
 }
 
 .attach-card {
@@ -377,25 +382,99 @@
   z-index: 3;
 }
 
-/* Uploaded photo preview — pixel-measured against attach-card-front.png's
-   own inner ring (center at 50%/32.7% of the card box, ring hole ≈36.2% of
-   the card's width) so it drops in exactly where the ring's cutout is.
+/* Uploaded photo preview — pixel-measured against attach-card-front-v2.png's
+   own white frame (left 5.01% / top 3.84% / 90.61% wide / 62.60% tall of
+   the card box) so it drops in exactly where the frame's cutout is.
    Transparent (no background) until a file is chosen, see main.js/page
    script; sits above every card (z-index 3 max) so it always shows on
-   whichever colour is currently front. */
+   whichever colour is currently front. Fades out during a colour swap
+   (.is-swapping, toggled by the dot click handler) so it never reads as
+   floating separately from the cards shuffling underneath it. */
 .attach-card-photo {
   position: absolute;
-  left: 50%;
-  top: 32.7%;
-  width: 36.2%;
-  aspect-ratio: 1 / 1;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
+  left: 5.01%;
+  top: 3.84%;
+  width: 90.61%;
+  height: 62.60%;
+  border-radius: 4%;
   overflow: hidden;
-  background-size: cover;
-  background-position: center;
   z-index: 4;
   pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.attach-card-photo__fill {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  /* A deliberate ~12% overscan — crops a thin margin off every edge,
+     which quietly absorbs borders/padding baked into whatever photo
+     someone uploads (a common screenshot artifact) instead of showing a
+     sliver of it inside the frame. A transform (rather than a bigger
+     background-size number) scales evenly no matter the photo's own
+     aspect ratio. */
+  transform: scale(1.25);
+}
+
+@keyframes attach-photo-pop {
+  0% { opacity: 0; transform: scale(1.25) scale(0.85); }
+  100% { opacity: 1; transform: scale(1.25) scale(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Re-triggered (class removed/re-added) on every new upload — reads as
+     the photo "dropping into" the frame rather than just appearing. */
+  .attach-card-photo__fill--pop {
+    animation: attach-photo-pop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+.attach-cards.is-swapping .attach-card-photo,
+.attach-cards.is-swapping .attach-card-text {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* "Your Name" / "Your City" — pixel-measured against the same source image
+   (left starts 5.64% in both; name band y 90.5-92.6%, city band y
+   94.2-96.5%). Sits on its own colour-matched cover so it fully replaces
+   the placeholder text baked into the card art, in both the empty state
+   (falls back to the same "Your Name"/"Your City" copy, just muted) and
+   once real text is typed. */
+.attach-card-text {
+  position: absolute;
+  left: 5.64%;
+  width: 46%;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  background: var(--card-color);
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--color-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.attach-card-text--name {
+  top: 89.3%;
+  height: 4%;
+  font-size: clamp(9px, calc(13 / 1920 * 100vw), 14px);
+}
+
+.attach-card-text--city {
+  top: 93.3%;
+  height: 4%;
+  font-size: clamp(9px, calc(13 / 1920 * 100vw), 14px);
+  color: rgba(44, 44, 44, 0.75);
+}
+
+.attach-card-text--is-placeholder {
+  color: rgba(44, 44, 44, 0.55);
 }
 
 /* Colour dots + Download/Share — a normal flex sibling of .attach-cards-wrap
@@ -555,7 +634,13 @@
     grid-template-columns: 1fr;
     /* Stacked single-column now — the min-height above exists purely to
        keep the two side-by-side columns from fighting, moot once they're
-       not side by side. */
+       not side by side. row-gap (not the shorthand — no second column left
+       to column-gap) is sized to clear the fanned .attach-card--back's own
+       overshoot above .attach-cards-wrap's layout box: translate(13%,-9%)
+       rotate(16deg) paints its top edge ~18% of the card's own height
+       above that box, which at the default 40px gap poked up into the
+       "Attach Yourself" submit button sitting right above it. */
+    row-gap: clamp(64px, 18vw, 96px);
     min-height: 0;
   }
 
@@ -571,9 +656,12 @@
 
 @media (max-width: 560px) {
   /* Cards + side controls no longer reliably fit on one row once the
-     column itself is this narrow — wrap instead of clipping/overflowing. */
+     column itself is this narrow — wrap instead of clipping/overflowing.
+     The gap gives the wrapped row (dots/Download/Share) clean breathing
+     room below the front card instead of sitting flush against it. */
   .attach-hero__right {
     flex-wrap: wrap;
+    gap: 20px;
   }
 }
 
@@ -584,9 +672,14 @@
   }
 
   .stats-col {
+    /* No padding-right:0 override here — that zeroed only one side of the
+       base rule's symmetric left/right padding, so the flex/text centering
+       below centered content within that lopsided box instead of the
+       column's true width, reading as "shifted right." The divider looked
+       fine regardless since its left:50% + translateX(-50%) centers
+       against the column's full width, unaffected by padding asymmetry. */
     align-items: center;
     text-align: center;
-    padding-right: 0;
     padding-bottom: 32px;
   }
 

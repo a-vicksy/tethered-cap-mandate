@@ -53,28 +53,10 @@
   flex-shrink: 0;
 }
 
-.header-wordmark {
-  position: relative;
-  display: inline-block;
-  font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  font-size: clamp(18px, 2vw, 28px);
-  color: var(--color-sage-light);
-  white-space: nowrap;
-}
-
-/* Positioned to match the source lockup: the brush-and-line mark sits above
-   the wordmark, overlapping its cap-height, starting roughly mid-way across
-   "TETHERED". Percentages are relative to the wordmark's own rendered width
-   (icon left/width) and em to its font-size (icon top), so the lockup holds
-   its proportions at any header size. */
-.header-logo {
-  position: absolute;
-  left: 53.5%;
-  top: -0.46em;
-  width: 18.5%;
-  height: auto;
+.header-logo-lockup {
+  display: block;
+  height: clamp(32px, 3.6vw, 48px);
+  width: auto;
 }
 
 /* Navigation lives only behind the hamburger overlay — no inline desktop
@@ -97,19 +79,16 @@
   background: transparent;
   cursor: pointer;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .header-toggle-bar {
   display: block;
   width: 100%;
-  height: 3px;
+  height: 4px;
   border-radius: 2px;
-  background: var(--color-sage-light);
+  background: var(--color-sage-dark);
   transition: transform 0.25s ease, opacity 0.25s ease, width 0.25s ease;
-}
-
-.header-toggle-bar:nth-child(2) {
-  width: 70%;
 }
 
 .nav-open .header-toggle-bar:nth-child(1) {
@@ -265,9 +244,15 @@
   width: auto;
   height: clamp(220px, 60vh, 620px);
   max-width: 72vw;
-  /* Nudged right — its own glyph reads visually off-center within the
-     centered headline/column otherwise. */
-  transform: translateX(clamp(6px, 1.4vw, 18px));
+  /* Nudged right — the "YOUR SELF" lettering sits well left-of-center
+     within the PNG's own transparent canvas (measured directly off the
+     source pixels: ~11.5% of the image's own rendered width), so centering
+     the image's box doesn't center the visible glyph. A percentage value
+     scales with the image itself (unlike a vw-based nudge, which scales
+     with the viewport — the two don't move together, so vw drifted out of
+     sync on mobile) and keeps the glyph reading centered under the
+     headline text at every size. */
+  transform: translateX(11.5%);
 }
 
 /* Bottle + headline hold off-screen until ~1.6s into the bg video, right
@@ -340,7 +325,7 @@
   0% {
     opacity: 0;
     filter: blur(18px);
-    transform: translateX(clamp(6px, 1.4vw, 18px)) translateY(52px) scale(0.86);
+    transform: translateX(11.5%) translateY(52px) scale(0.86);
   }
   55% {
     filter: blur(3px);
@@ -348,7 +333,7 @@
   100% {
     opacity: 1;
     filter: blur(0);
-    transform: translateX(clamp(6px, 1.4vw, 18px)) translateY(0) scale(1);
+    transform: translateX(11.5%) translateY(0) scale(1);
   }
 }
 
@@ -383,37 +368,41 @@
   }
 }
 
-/* ---------- Header social icons ---------- */
-/* Lives in .header-inner, right after the brand and before the hamburger —
-   its own margin-left:auto pushes both itself and the toggle after it flush
-   to the right edge, so the two form one right-aligned group. */
-.header-social {
+/* ---------- Hero social icons ---------- */
+/* Vertical rail pinned to the hero's bottom-right corner, over the video —
+   faded white so it reads against the photo/video background without
+   competing with the headline. */
+.hero-social {
+  position: absolute;
+  z-index: 2;
+  right: var(--container-padding);
+  bottom: clamp(64px, 14vh, 160px);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: clamp(12px, 1.4vw, 18px);
-  margin-left: auto;
+  gap: clamp(14px, 1.8vw, 22px);
 }
 
-.header-social__link {
+.hero-social__link {
   display: flex;
-  color: var(--color-sage-light);
+  color: rgba(255, 255, 255, 0.75);
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.header-social__link svg {
-  width: clamp(16px, 1.4vw, 20px);
-  height: clamp(16px, 1.4vw, 20px);
+.hero-social__link svg {
+  width: clamp(20px, 1.8vw, 26px);
+  height: clamp(20px, 1.8vw, 26px);
 }
 
-.header-social__link:hover,
-.header-social__link:focus-visible {
-  color: var(--color-sage-dark);
+.hero-social__link:hover,
+.hero-social__link:focus-visible {
+  color: rgba(255, 255, 255, 1);
   transform: scale(1.12);
 }
 
-@media (max-width: 560px) {
-  .header-social {
-    display: none;
+@media (max-width: 480px) {
+  .hero-social {
+    bottom: clamp(48px, 10vh, 100px);
   }
 }
 
