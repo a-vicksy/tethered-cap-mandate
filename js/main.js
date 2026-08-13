@@ -37,6 +37,23 @@
   var header = document.getElementById('site-header');
   if (!header) return;
 
+  // header-bar-reveal (its one-shot entrance slide-in, see
+  // 01-header-hero-intro.css) uses fill-mode:both, which holds
+  // transform:translateY(0) forever once the animation ends — a CSS
+  // animation's held fill-mode state overrides normal class-based rules on
+  // the same property regardless of specificity, so it was silently
+  // blocking the .is-hidden scroll-away transform below until cleared.
+  // Timeout-based (matching the intro-lock timing above) rather than an
+  // animationend listener, since that event isn't reliably observed here.
+  // No-op for prefers-reduced-motion visitors: the animation never runs
+  // for them (see the same media query in the CSS), so there's nothing to
+  // clear, and .is-hidden works untouched from the very first scroll.
+  if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    setTimeout(function () {
+      header.style.animation = 'none';
+    }, 4200);
+  }
+
   var toggle = header.querySelector('[data-nav-toggle]');
   // The overlay/scrim are siblings of <header>, not descendants (see the
   // HTML comment above them) — .header-bar's own transform would otherwise
