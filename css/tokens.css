@@ -14,11 +14,32 @@
   --font-body: "Poppins", system-ui, sans-serif;       /* everything else */
 
   /* Layout */
-  --container-max: 1600px;
+  /* calc(960px + 40vw) == 1600px exactly at a 1600px viewport (today's old
+     flat cap), then keeps growing past it instead of staying frozen — so
+     the container actually widens out on 2K/4K screens instead of sitting
+     as a fixed-width island in a sea of empty margin. */
+  --container-max: calc(960px + 40vw);
   --container-padding: clamp(20px, 5vw, 96px);
 
   /* Reference design width, used only for proportional clamp() math */
   --design-width: 1920;
+
+  /* Every clamp(min, calc(designPx / 1920 * 100vw), designPx) across the
+     section stylesheets freezes at exactly its designPx size once the
+     viewport passes 1920px — correct up to a 1080p screen (the actual
+     design reference), but it means 2K/4K renders pixel-identical to
+     1080p, just with more blank margin around it. --fluid-vw stands in for
+     100vw inside those calc()s: below 1920px it IS 100vw (zero change to
+     any existing mobile/tablet/laptop sizing), above 1920px it grows at
+     40% of the real rate instead of 0%, so large screens get proportionally
+     bigger content without ballooning text/spacing to match the full
+     viewport ratio (which would look absurd at 3840px). */
+  --fluid-vw: min(100vw, calc(1152px + 40vw));
+
+  /* Same trick as --fluid-vw, for the handful of height-driven clamps (the
+     hero, mainly) — soft-caps growth past a 1080px-tall viewport (the
+     1080p reference height) instead of freezing outright. */
+  --fluid-vh: min(100vh, calc(648px + 40vh));
 }
 
 * {

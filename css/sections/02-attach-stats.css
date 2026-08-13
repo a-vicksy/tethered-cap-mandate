@@ -5,7 +5,7 @@
    ========================================================================== */
 
 /* ---- shared fluid-scale helper values -----------------------------------
-   Elements below use clamp(min, calc(designPx / 1920 * 100vw), designPx)
+   Elements below use clamp(min, calc(designPx / 1920 * var(--fluid-vw)), designPx)
    to track the Figma proportions on large screens while staying readable
    on small ones (see --design-width in tokens.css).
    -------------------------------------------------------------------- */
@@ -17,7 +17,7 @@
   width: 100%;
   overflow: hidden;
   background-color: var(--color-sage-light);
-  padding: clamp(14px, calc(26 / 1920 * 100vw), 26px) 0;
+  padding: clamp(14px, calc(26 / 1920 * var(--fluid-vw)), calc(26px * 1.5)) 0;
 }
 
 .attach-marquee__track {
@@ -40,7 +40,7 @@
 .attach-marquee__item {
   display: inline-flex;
   align-items: center;
-  padding: 0 clamp(20px, calc(40 / 1920 * 100vw), 40px);
+  padding: 0 clamp(20px, calc(40 / 1920 * var(--fluid-vw)), calc(40px * 1.5));
 }
 
 /* The whole "ATTACH YOURSELF ↗" lockup as one flattened asset (assets/
@@ -50,7 +50,7 @@
    same 1920px reference width the rest of this section's clamp()s use. */
 .attach-marquee__label {
   width: auto;
-  height: clamp(58px, calc(230 / 1920 * 100vw), 230px);
+  height: clamp(58px, calc(230 / 1920 * var(--fluid-vw)), calc(230px * 1.5));
 }
 
 @keyframes attach-marquee-scroll {
@@ -70,7 +70,7 @@
 .attach-hero {
   position: relative;
   background-color: var(--color-placeholder);
-  padding: clamp(56px, calc(140 / 1920 * 100vw), 140px) 0 clamp(56px, calc(160 / 1920 * 100vw), 160px);
+  padding: clamp(56px, calc(140 / 1920 * var(--fluid-vw)), calc(140px * 1.5)) 0 clamp(56px, calc(160 / 1920 * var(--fluid-vw)), calc(160px * 1.5));
   overflow: hidden;
 }
 
@@ -89,7 +89,7 @@
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: clamp(40px, 6vw, 96px);
+  gap: clamp(40px, max(min(6vw, 96px), calc(96 / 1920 * var(--fluid-vw))), 144px);
   align-items: center;
   /* Reserves enough height for the LEFT column's fully expanded state (the
      photo/email row open) up front, so toggling it never changes this
@@ -104,20 +104,20 @@
 .attach-hero__heading {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(28px, calc(52 / 1920 * 100vw), 52px);
+  font-size: clamp(28px, calc(52 / 1920 * var(--fluid-vw)), calc(52px * 1.5));
   line-height: 1.15;
   color: var(--color-white);
-  margin: 0 0 clamp(8px, calc(14 / 1920 * 100vw), 14px);
+  margin: 0 0 clamp(8px, calc(14 / 1920 * var(--fluid-vw)), calc(14px * 1.5));
 }
 
 .attach-hero__intro {
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: clamp(16px, calc(22 / 1920 * 100vw), 22px);
+  font-size: clamp(16px, calc(22 / 1920 * var(--fluid-vw)), calc(22px * 1.5));
   line-height: 1.5;
   color: var(--color-white);
   max-width: 46ch;
-  margin: 0 0 clamp(24px, calc(64 / 1920 * 100vw), 64px);
+  margin: 0 0 clamp(24px, calc(64 / 1920 * var(--fluid-vw)), calc(64px * 1.5));
 }
 
 /* -------------------------------------------------------------------------
@@ -126,13 +126,13 @@
 .attach-form {
   display: flex;
   flex-direction: column;
-  gap: clamp(20px, calc(36 / 1920 * 100vw), 36px);
+  gap: clamp(20px, calc(36 / 1920 * var(--fluid-vw)), calc(36px * 1.5));
 }
 
 .attach-form__statement {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(28px, calc(65 / 1920 * 100vw), 65px);
+  font-size: clamp(28px, calc(65 / 1920 * var(--fluid-vw)), calc(65px * 1.5));
   line-height: 1.2;
   color: var(--color-white);
   margin: 0;
@@ -228,7 +228,7 @@
   gap: 10px;
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: clamp(14px, calc(20 / 1920 * 100vw), 20px);
+  font-size: clamp(14px, calc(20 / 1920 * var(--fluid-vw)), calc(20px * 1.5));
   color: var(--color-white);
   background: none;
   border: none;
@@ -284,12 +284,12 @@
   align-self: flex-start;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(18px, calc(35 / 1920 * 100vw), 35px);
+  font-size: clamp(18px, calc(35 / 1920 * var(--fluid-vw)), calc(35px * 1.5));
   color: var(--color-white);
   background-color: var(--color-sage-light);
   border: none;
   border-radius: 64px;
-  padding: clamp(16px, calc(22 / 1920 * 100vw), 22px) clamp(28px, calc(46 / 1920 * 100vw), 46px);
+  padding: clamp(16px, calc(22 / 1920 * var(--fluid-vw)), calc(22px * 1.5)) clamp(28px, calc(46 / 1920 * var(--fluid-vw)), calc(46px * 1.5));
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
@@ -463,13 +463,13 @@
 .attach-card-text--name {
   top: 89.3%;
   height: 4%;
-  font-size: clamp(9px, calc(13 / 1920 * 100vw), 14px);
+  font-size: clamp(9px, calc(13 / 1920 * var(--fluid-vw)), calc(14px * 1.5));
 }
 
 .attach-card-text--city {
   top: 93.3%;
   height: 4%;
-  font-size: clamp(9px, calc(13 / 1920 * 100vw), 14px);
+  font-size: clamp(9px, calc(13 / 1920 * var(--fluid-vw)), calc(14px * 1.5));
   color: rgba(44, 44, 44, 0.75);
 }
 
@@ -569,13 +569,13 @@
    ------------------------------------------------------------------------- */
 .stats-section {
   background-color: var(--color-white);
-  padding: clamp(56px, calc(160 / 1920 * 100vw), 160px) 0;
+  padding: clamp(56px, calc(160 / 1920 * var(--fluid-vw)), calc(160px * 1.5)) 0;
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(32px, 4vw, 80px);
+  gap: clamp(32px, max(min(4vw, 80px), calc(80 / 1920 * var(--fluid-vw))), 120px);
 }
 
 .stats-col {
@@ -584,7 +584,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0 clamp(24px, 3vw, 48px);
+  padding: 0 clamp(24px, max(min(3vw, 48px), calc(48 / 1920 * var(--fluid-vw))), 72px);
 }
 
 .stats-col:not(:last-child)::after {
@@ -600,7 +600,7 @@
 .stats-number {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(64px, calc(235 / 1920 * 100vw), 235px);
+  font-size: clamp(64px, calc(235 / 1920 * var(--fluid-vw)), calc(235px * 1.5));
   line-height: 1.05;
   color: var(--color-sage-light);
   margin: 0;
@@ -609,7 +609,7 @@
 .stats-label {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(18px, calc(33 / 1920 * 100vw), 33px);
+  font-size: clamp(18px, calc(33 / 1920 * var(--fluid-vw)), calc(33px * 1.5));
   line-height: 1.2;
   color: var(--color-black);
   margin: 8px 0 20px;

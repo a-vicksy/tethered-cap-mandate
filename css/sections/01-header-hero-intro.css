@@ -216,9 +216,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(16px, 3vh, 40px);
+  gap: clamp(16px, max(min(3vh, 40px), calc(40 / 1080 * var(--fluid-vh))), 60px);
   height: 100%;
-  padding: clamp(16px, 3vh, 40px) var(--container-padding);
+  padding: clamp(16px, max(min(3vh, 40px), calc(40 / 1080 * var(--fluid-vh))), 60px) var(--container-padding);
   text-align: center;
   max-width: 1000px;
   margin: 0 auto;
@@ -231,7 +231,7 @@
   margin: 0;
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: clamp(13px, 1.15vw, 16px);
+  font-size: clamp(13px, max(min(1.15vw, 16px), calc(16 / 1920 * var(--fluid-vw))), 24px);
   line-height: 1.5;
 }
 
@@ -242,7 +242,7 @@
      with its bottom edge intact, even on short/laptop viewports, instead
      of being cropped by .hero. */
   width: auto;
-  height: clamp(220px, 60vh, 620px);
+  height: clamp(220px, max(min(60vh, 620px), calc(620 / 1080 * var(--fluid-vh))), 930px);
   max-width: 72vw;
   /* Nudged right — the "YOUR SELF" lettering sits well left-of-center
      within the PNG's own transparent canvas (measured directly off the
@@ -396,7 +396,7 @@
   position: absolute;
   z-index: 2;
   right: var(--container-padding);
-  bottom: clamp(48px, 10.3vh, 115px);
+  bottom: clamp(48px, max(min(10.3vh, 115px), calc(115 / 1080 * var(--fluid-vh))), 172.5px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -654,13 +654,13 @@
 
 .mission {
   background: var(--color-white);
-  padding: clamp(56px, 8vw, 140px) 0;
+  padding: clamp(56px, max(min(8vw, 140px), calc(140 / 1920 * var(--fluid-vw))), 210px) 0;
 }
 
 .mission-inner {
   display: flex;
   flex-direction: column;
-  gap: clamp(28px, 3.5vw, 52px);
+  gap: clamp(28px, max(min(3.5vw, 52px), calc(52 / 1920 * var(--fluid-vw))), 78px);
 }
 
 /* Gap/arrow-height/alignment below are measured off the reference asset
@@ -678,7 +678,7 @@
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  font-size: clamp(40px, 8vw, 120px);
+  font-size: clamp(40px, max(min(8vw, 120px), calc(120 / 1920 * var(--fluid-vw))), 180px);
   line-height: 1;
   color: var(--color-sage-light);
   text-align: left;
@@ -694,10 +694,10 @@
 .mission-copy {
   display: flex;
   flex-direction: column;
-  gap: clamp(28px, 3.5vw, 52px);
+  gap: clamp(28px, max(min(3.5vw, 52px), calc(52 / 1920 * var(--fluid-vw))), 78px);
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: clamp(18px, 2vw, 29px);
+  font-size: clamp(18px, max(min(2vw, 29px), calc(29 / 1920 * var(--fluid-vw))), 43.5px);
   line-height: 1.5;
   color: var(--color-black);
   max-width: 1250px;
