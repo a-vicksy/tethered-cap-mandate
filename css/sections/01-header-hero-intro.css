@@ -13,14 +13,29 @@
 /* ---------- Header ---------- */
 
 .header-bar {
-  position: sticky;
+  /* fixed (not sticky) — it needs to be OUT of normal flow permanently so
+     .hero can extend up underneath it (see .hero-bg/.hero-scrim below);
+     sticky still reserves its own flow space until the sticking point,
+     which would leave a solid gap above the hero instead of showing video
+     through the now-transparent bar. */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  background: var(--color-white);
+  background: transparent;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0);
-  transition: box-shadow 0.25s ease, transform 0.3s ease;
+  transition: box-shadow 0.25s ease, transform 0.3s ease, background-color 0.2s ease;
+}
+
+/* While the nav panel is open, the header sits directly above that panel's
+   own solid white background — leaving the header transparent there made
+   the transparent top strip / solid white panel below it read as two
+   mismatched pieces instead of one connected menu. Matching backgrounds
+   (plus the dark logo/icon swap above) makes it read as a single
+   continuous surface, header included, rather than a seam. */
+.nav-open .header-bar {
+  background: var(--color-white);
 }
 
 /* Slides fully out of view on scroll-down, back in on scroll-up (see
@@ -59,6 +74,26 @@
   width: auto;
 }
 
+/* White logo shown by default (header floats transparently over the dark
+   hero video); .header-bar--dark (toggled in main.js once scrolled past
+   the hero) swaps to the dark-green version instead, so the logo stays
+   legible against the plain white sections that follow. Two stacked
+   <img>s rather than one swapped via JS — the hidden one is display:none
+   so it never affects .header-brand's layout width. */
+.header-logo-lockup--green {
+  display: none;
+}
+
+.header-bar--dark .header-logo-lockup--white,
+.nav-open .header-logo-lockup--white {
+  display: none;
+}
+
+.header-bar--dark .header-logo-lockup--green,
+.nav-open .header-logo-lockup--green {
+  display: block;
+}
+
 /* Navigation lives only behind the hamburger overlay — no inline desktop
    nav and no persistent hero rail, so the header stays a plain brand bar
    with a menu toggle at every screen size. */
@@ -87,8 +122,16 @@
   width: 100%;
   height: 4px;
   border-radius: 2px;
+  background: var(--color-white);
+  transition: transform 0.25s ease, opacity 0.25s ease, width 0.25s ease, background-color 0.2s ease;
+}
+
+/* Same dark-green swap as the logo, once scrolled past the hero — also
+   applied while the nav panel is open (see .header-bar background below),
+   so the X icon stays legible against the now-solid header. */
+.header-bar--dark .header-toggle-bar,
+.nav-open .header-toggle-bar {
   background: var(--color-sage-dark);
-  transition: transform 0.25s ease, opacity 0.25s ease, width 0.25s ease;
 }
 
 .nav-open .header-toggle-bar:nth-child(1) {
@@ -172,37 +215,42 @@
 
 .hero {
   position: relative;
-  /* Fills exactly what's left of the viewport once the sticky header and
-     the fixed bottom ticker bar are accounted for, so the whole hero —
-     headline and bottle mark included — lands fully in view on load with
-     nothing hidden behind either bar. Unchanged from before; .hero-bg and
-     .hero-scrim below bleed past this box's own edges instead (absolutely
-     positioned children don't affect their container's size), so the
-     video/scrim reach true viewport-edge-to-edge without growing .hero
-     itself and disturbing the rest of the page's flow. */
-  min-height: calc(100vh - var(--header-h) - var(--ticker-h));
+  /* Only the fixed bottom ticker bar is subtracted now — the header is
+     fixed/transparent and floats OVER the hero rather than pushing it
+     down, so the hero itself must fill the header's share of the
+     viewport too (see .hero-bg/.hero-scrim below, which bleed up under
+     the header so the video shows through it instead of blank space). */
+  min-height: calc(100vh - var(--ticker-h));
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-white);
 }
 
-/* Base (settled) state: flush with .hero's own box — this is what's active
-   permanently for prefers-reduced-motion users (no bar entrance animation,
-   so no gap ever opens up), and what everyone else settles into once the
-   entrance sequence below finishes. */
+/* Bleeds past .hero's own top edge by exactly the header's height so the
+   video/scrim extend underneath the fixed, transparent header bar instead
+   of showing blank page background there. Permanent (not just during the
+   entrance sequence) since the header stays transparent at every scroll
+   position. */
 .hero-bg {
   position: absolute;
-  inset: 0;
+  top: calc(-1 * var(--header-h));
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100% + var(--header-h));
   width: 100%;
-  height: 100%;
   object-fit: cover;
   object-position: center;
 }
 
 .hero-scrim {
   position: absolute;
-  inset: 0;
+  top: calc(-1 * var(--header-h));
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100% + var(--header-h));
   /* The video (bright sand + white foam) needs more darkening than the old
      photo did to keep the white headline/bottle/social icons legible —
      heavier throughout, darkest at the bottom where the social column sits. */
@@ -284,47 +332,38 @@
     animation: ticker-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 3.35s both;
   }
 
-  /* Icons used to be visible from first paint, appearing well before the
-     bottle/headline/bars finished their choreographed entrance. Synced to
-     land alongside the header bar + ticker instead. */
-  .hero-social {
-    animation: hero-social-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 3.2s both;
-  }
-
-  /* While the bars above are off-canvas, .hero-bg/.hero-scrim bleed past
-     .hero's own (shorter) box by exactly the bar heights, so the gap each
-     bar would otherwise leave reads as more video rather than "a white bar
-     is already there, waiting for its text". The bleed can't stay
-     permanent, though — it's normal document flow, so once the page is
-     scrolled it would drift away from the (fixed/sticky, viewport-anchored)
-     bars meant to sit over it and show up as a stray strip of video on top
-     of whatever content follows. So it settles back to flush with .hero
-     (matching the base rules above) right after both bars finish revealing
-     — invisible, since they're fully opaque over that exact area by then. */
+  /* The header's own top bleed is permanent (base rules above, since the
+     header stays transparent always). The ticker is still translated
+     off-canvas at this point in the sequence, though, so .hero-bg/.hero-
+     scrim ALSO bleed past .hero's bottom edge by the ticker's height for
+     now — otherwise the gap the ticker leaves while animating in would
+     show whatever follows .hero in the flow instead of reading as more
+     video. That extra bottom bleed settles away once the ticker finishes
+     revealing (the top bleed is untouched by this settle). */
   .hero-bg {
-    top: calc(-1 * var(--header-h));
+    bottom: calc(-1 * var(--ticker-h));
     height: calc(100% + var(--header-h) + var(--ticker-h));
     animation: hero-bg-settle 0.3s linear 4.3s forwards;
   }
 
   .hero-scrim {
-    top: calc(-1 * var(--header-h));
     bottom: calc(-1 * var(--ticker-h));
+    height: calc(100% + var(--header-h) + var(--ticker-h));
     animation: hero-scrim-settle 0.3s linear 4.3s forwards;
   }
 }
 
 @keyframes hero-bg-settle {
   to {
-    top: 0;
-    height: 100%;
+    bottom: 0;
+    height: calc(100% + var(--header-h));
   }
 }
 
 @keyframes hero-scrim-settle {
   to {
-    top: 0;
     bottom: 0;
+    height: calc(100% + var(--header-h));
   }
 }
 
@@ -373,51 +412,6 @@
   to {
     transform: translateY(0);
   }
-}
-
-@keyframes hero-social-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ---------- Hero social icons ---------- */
-/* Vertical rail pinned to the hero's bottom-right corner, over the video —
-   faded white so it reads against the photo/video background without
-   competing with the headline. Bottom offset tuned (measured at the 1920px
-   reference width) so the column's own bottom edge lines up with the
-   bottom of the headline's last line ("Sign the pledge..."). */
-.hero-social {
-  position: absolute;
-  z-index: 2;
-  right: var(--container-padding);
-  bottom: clamp(48px, max(min(10.3vh, 115px), calc(115 / 1080 * var(--fluid-vh))), 172.5px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(14px, 1.8vw, 22px);
-}
-
-.hero-social__link {
-  display: flex;
-  color: rgba(255, 255, 255, 0.75);
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.hero-social__link svg {
-  width: clamp(20px, 1.8vw, 26px);
-  height: clamp(20px, 1.8vw, 26px);
-}
-
-.hero-social__link:hover,
-.hero-social__link:focus-visible {
-  color: rgba(255, 255, 255, 1);
-  transform: scale(1.12);
 }
 
 /* ---------- Name-scroll ticker (fixed bottom bar) ---------- */

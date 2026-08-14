@@ -59,19 +59,20 @@
           </p>
 
           <div class="attach-form__fields">
-            <button type="button" class="attach-form__optional-toggle" id="attach-optional-toggle" aria-expanded="false" aria-controls="attach-optional-row">
-              <svg class="attach-form__optional-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l10-5.5-10-5.5Z" fill="currentColor"/></svg>
-              Add a photo, email, number(optional)
-            </button>
-
-            <div class="attach-form__optional-row" id="attach-optional-row" hidden>
-              <label class="attach-file-label" for="attach-photo">
-                Choose photo
-                <input type="file" id="attach-photo" name="photo" accept="image/*">
-              </label>
-              <label class="visually-hidden" for="attach-contact">Email or phone number</label>
-              <input class="attach-input" type="text" id="attach-contact" name="contact" placeholder="Email or phone number">
+            <div class="attach-form__row">
+              <label class="attach-form__row-label" for="attach-email">Email<span class="attach-form__required" aria-hidden="true">*</span>:</label>
+              <input class="attach-form__row-input" type="email" id="attach-email" name="email" placeholder="xyz@email.com" required>
             </div>
+            <div class="attach-form__row">
+              <label class="attach-form__row-label" for="attach-mobile">Mobile:</label>
+              <input class="attach-form__row-input" type="tel" id="attach-mobile" name="mobile" placeholder="+91 98765 43210">
+            </div>
+            <p class="attach-form__error" id="attach-form-error" role="alert" hidden></p>
+
+            <label class="attach-file-label" for="attach-photo">
+              <span class="attach-file-label__text">Add your picture</span>
+              <input type="file" id="attach-photo" name="photo" accept="image/*">
+            </label>
           </div>
 
           <button type="submit" class="attach-btn-submit">Attach Yourself</button>
@@ -95,20 +96,65 @@
 
         <!-- Sibling of .attach-cards-wrap (not nested inside it) — the two
              are independent flex items in .attach-hero__right, which is
-             what actually lets the dots/Download/Share sit beside the
-             cards instead of stacking under them. -->
+             what actually lets the dots sit beside the cards instead of
+             stacking under them. Download/Share used to live here too, but
+             sitting next to the card the whole time made them easy to miss
+             as "the next step" once someone actually finished the pledge —
+             they've moved into the success step of the verification modal
+             below, right where completing the pledge lands you. -->
         <div class="attach-side-controls">
           <div class="attach-dots" id="attach-dots" role="radiogroup" aria-label="Badge colour">
             <button type="button" class="attach-dot attach-dot--blue" data-color="blue" role="radio" aria-checked="false" aria-label="Blue"></button>
             <button type="button" class="attach-dot attach-dot--cream" data-color="cream" role="radio" aria-checked="false" aria-label="Cream"></button>
             <button type="button" class="attach-dot attach-dot--green attach-dot--active" data-color="green" role="radio" aria-checked="true" aria-label="Green"></button>
           </div>
-          <div class="attach-actions">
-            <button type="button" class="attach-btn-ghost attach-btn-download">Download</button>
-            <button type="button" class="attach-btn-ghost attach-btn-share">Share</button>
-          </div>
-          <p class="attach-share-status" id="attach-share-status" role="status" aria-live="polite" hidden></p>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email-OTP verification modal — opens on "Attach Yourself" once the
+       required fields (name, city, email) pass validation. Dummy: any
+       non-empty code is accepted (no real OTP backend yet). Two steps,
+       only one visible at a time — .attach-verify-step (OTP entry) swaps
+       for .attach-success-step (celebration + download/share) once "Take
+       a Pledge" is clicked, rather than closing the modal. -->
+  <div class="attach-verify-overlay" id="attach-verify-overlay" hidden>
+    <div class="attach-verify-modal" role="dialog" aria-modal="true" aria-labelledby="attach-verify-heading">
+      <button type="button" class="attach-verify-close" id="attach-verify-close" aria-label="Close">&times;</button>
+
+      <div class="attach-verify-step" id="attach-verify-step">
+        <h4 class="attach-verify-heading" id="attach-verify-heading">Verify your email</h4>
+        <p class="attach-verify-copy">We've sent a 6-digit code to <strong id="attach-verify-email">you@email.com</strong>. Enter it below to verify your email.</p>
+
+        <label class="visually-hidden" for="attach-verify-otp">One-time verification code</label>
+        <input class="attach-verify-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" id="attach-verify-otp" placeholder="Enter OTP">
+        <p class="attach-verify-success" id="attach-verify-success" role="status" hidden>Email verified.</p>
+
+        <p class="attach-verify-consent">By continuing, you agree to our <a href="#" target="_blank" rel="noopener">Privacy Policy</a> and Terms.</p>
+
+        <button type="button" class="attach-btn-submit attach-verify-action" id="attach-verify-action" disabled>Verify</button>
+      </div>
+
+      <div class="attach-success-step" id="attach-success-step" hidden>
+        <div class="attach-success-confetti" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="attach-success-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+
+        <h4 class="attach-verify-heading">You're Attached!</h4>
+        <p class="attach-verify-copy">Thanks for standing behind the mandate. Download your badge to share the news on your story or socials.</p>
+
+        <div class="attach-actions">
+          <button type="button" class="attach-btn-ghost attach-btn-download">Download</button>
+          <button type="button" class="attach-btn-ghost attach-btn-share">Share</button>
+        </div>
+        <p class="attach-share-status" id="attach-share-status" role="status" aria-live="polite" hidden></p>
+
+        <button type="button" class="attach-btn-submit" id="attach-success-done">Done</button>
       </div>
     </div>
   </div>
@@ -184,19 +230,8 @@
     mirrorToCard(nameInput, cardName, 'Your Name');
     mirrorToCard(cityInput, cardCity, 'Your City');
 
-    // "Add a photo, email, number(optional)" is collapsed by default — the
-    // photo/contact row only appears once this is clicked.
-    var optionalToggle = document.getElementById('attach-optional-toggle');
-    var optionalRow = document.getElementById('attach-optional-row');
-    if (optionalToggle && optionalRow) {
-      optionalToggle.addEventListener('click', function () {
-        var isOpen = optionalRow.hidden;
-        optionalRow.hidden = !isOpen;
-        optionalToggle.setAttribute('aria-expanded', String(isOpen));
-      });
-    }
-
     if (photoInput && fileLabel) {
+      var fileLabelText = fileLabel.querySelector('.attach-file-label__text');
       // iPhone/Mac photos are often .HEIC by default, which almost no
       // browser can decode as an <img>/background-image — the file read
       // itself "succeeds" so nothing errors, it just silently renders
@@ -237,24 +272,24 @@
 
       photoInput.addEventListener('change', function () {
         var file = photoInput.files && photoInput.files[0] ? photoInput.files[0] : null;
-        fileLabel.firstChild.textContent = file ? file.name : 'Choose photo';
+        if (fileLabelText) fileLabelText.textContent = file ? file.name : 'Add your picture';
 
         var cardPhotoFill = document.getElementById('attach-card-photo-fill');
         if (!cardPhotoFill || !file) return;
 
         if (isHeic(file)) {
-          fileLabel.firstChild.textContent = 'Converting photo…';
+          if (fileLabelText) fileLabelText.textContent = 'Converting photo…';
           loadHeic2Any()
             .then(function () {
               return window.heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 });
             })
             .then(function (converted) {
               previewBlob(cardPhotoFill, Array.isArray(converted) ? converted[0] : converted);
-              fileLabel.firstChild.textContent = file.name;
+              if (fileLabelText) fileLabelText.textContent = file.name;
             })
             .catch(function (err) {
               console.error('HEIC conversion failed:', err);
-              fileLabel.firstChild.textContent = file.name + ' (preview unsupported)';
+              if (fileLabelText) fileLabelText.textContent = file.name + ' (preview unsupported)';
             });
         } else {
           previewBlob(cardPhotoFill, file);
@@ -322,11 +357,135 @@
       });
     }
 
+    // Validation + email-OTP verification modal, opened by "Attach
+    // Yourself" once name/city/email pass. No real backend yet — OTP
+    // verification is a dummy (any non-empty code is accepted); the
+    // modal's own button relabels to "Take a Pledge" once "verified",
+    // and that second click is what actually finalizes the pledge.
+    var emailInput = document.getElementById('attach-email');
+    var formError = document.getElementById('attach-form-error');
+    var verifyOverlay = document.getElementById('attach-verify-overlay');
+    var verifyClose = document.getElementById('attach-verify-close');
+    var verifyEmailEl = document.getElementById('attach-verify-email');
+    var verifyOtp = document.getElementById('attach-verify-otp');
+    var verifyAction = document.getElementById('attach-verify-action');
+    var verifySuccess = document.getElementById('attach-verify-success');
+    var verifyStep = document.getElementById('attach-verify-step');
+    var successStep = document.getElementById('attach-success-step');
+    var successDone = document.getElementById('attach-success-done');
+    var isVerified = false;
+
+    function validateForm() {
+      var name = nameInput ? nameInput.textContent.trim() : '';
+      var city = cityInput ? cityInput.textContent.trim() : '';
+      var emailOk = !!(emailInput && emailInput.checkValidity() && emailInput.value.trim());
+
+      if (emailInput) emailInput.classList.toggle('attach-form__row-input--error', !emailOk);
+
+      var missing = [];
+      if (!name) missing.push('your name');
+      if (!city) missing.push('your city');
+      if (!emailOk) missing.push('a valid email');
+
+      if (formError) {
+        formError.hidden = !missing.length;
+        formError.textContent = missing.length ? 'Please fill in ' + missing.join(', ') + '.' : '';
+      }
+      return !missing.length;
+    }
+
+    if (emailInput) {
+      emailInput.addEventListener('input', function () {
+        emailInput.classList.remove('attach-form__row-input--error');
+      });
+    }
+
+    function openVerifyModal() {
+      if (!verifyOverlay) return;
+      isVerified = false;
+      if (verifyOtp) { verifyOtp.value = ''; verifyOtp.disabled = false; }
+      if (verifySuccess) verifySuccess.hidden = true;
+      if (verifyAction) { verifyAction.textContent = 'Verify'; verifyAction.disabled = true; }
+      if (verifyEmailEl) verifyEmailEl.textContent = emailInput.value.trim();
+      // Always reopen on the OTP step, even if a previous visit reached
+      // the success step — re-triggers the confetti/badge animation too
+      // (class re-add below), since a plain [hidden] toggle wouldn't.
+      if (verifyStep) verifyStep.hidden = false;
+      if (successStep) successStep.hidden = true;
+      verifyOverlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+      if (verifyOtp) verifyOtp.focus();
+    }
+
+    function showSuccessStep() {
+      if (!successStep || !verifyStep) return;
+      verifyStep.hidden = true;
+      successStep.hidden = false;
+      // Re-trigger the pop/confetti animations (classes were already
+      // present from the markup — remove/reflow/re-add forces them to
+      // play again on every pledge, not just the first).
+      var badge = successStep.querySelector('.attach-success-badge');
+      var confettiSpans = successStep.querySelectorAll('.attach-success-confetti span');
+      [badge].concat(Array.prototype.slice.call(confettiSpans)).forEach(function (el) {
+        if (!el) return;
+        el.style.animation = 'none';
+        // eslint-disable-next-line no-unused-expressions
+        el.offsetWidth;
+        el.style.animation = '';
+      });
+    }
+
+    function closeVerifyModal() {
+      if (!verifyOverlay) return;
+      verifyOverlay.hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    if (verifyClose) verifyClose.addEventListener('click', closeVerifyModal);
+    if (verifyOverlay) {
+      verifyOverlay.addEventListener('click', function (event) {
+        if (event.target === verifyOverlay) closeVerifyModal();
+      });
+    }
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && verifyOverlay && !verifyOverlay.hidden) closeVerifyModal();
+    });
+
+    if (verifyOtp && verifyAction) {
+      verifyOtp.addEventListener('input', function () {
+        if (isVerified) return; // locked once verified — this field is done
+        verifyAction.disabled = !verifyOtp.value.trim();
+      });
+
+      verifyAction.addEventListener('click', function () {
+        if (!isVerified) {
+          // Dummy verification: any non-empty code is accepted — there's
+          // no real OTP backend to check against yet.
+          if (!verifyOtp.value.trim()) return;
+          isVerified = true;
+          verifyOtp.disabled = true;
+          verifySuccess.hidden = false;
+          verifyAction.textContent = 'Take a Pledge';
+          return;
+        }
+
+        // Second click on the same button — this is the actual pledge
+        // submission, now that the email is "verified". Stays in the same
+        // modal (swaps to the success step) rather than closing it, so the
+        // celebration — and the Download/Share buttons right below it —
+        // land exactly where the user's attention already is.
+        showSuccessStep();
+        confirmMsg.hidden = false;
+        confirmMsg.textContent = 'Thanks for attaching yourself!';
+      });
+    }
+
+    if (successDone) successDone.addEventListener('click', closeVerifyModal);
+
     form.addEventListener('submit', function (event) {
       event.preventDefault();
-      // Static placeholder — no backend wired up yet.
-      confirmMsg.hidden = false;
-      confirmMsg.textContent = 'Thanks for attaching yourself!';
+      if (!validateForm()) return;
+      openVerifyModal();
     });
 
     // Download / Share: composite the currently-front badge PNG with the
@@ -411,11 +570,12 @@
 
           var cardPhotoFill = document.getElementById('attach-card-photo-fill');
           var bgImage = cardPhotoFill ? cardPhotoFill.style.backgroundImage : '';
+          // Falls back to the same grey placeholder shown in the live
+          // preview when no photo was uploaded, so the exported image
+          // matches what's on screen instead of leaving that area blank.
           var photoUrl = bgImage && bgImage !== 'none'
             ? bgImage.replace(/^url\((['"]?)(.*)\1\)$/, '$2')
-            : null;
-
-          if (!photoUrl) { drawNameCity(); resolve(canvas); return; }
+            : 'assets/images/attach-card-avatar-placeholder.png';
 
           // Matches .attach-card-photo__fill's CSS transform: scale(1.25) —
           // the same deliberate overscan, so a border/margin baked into the

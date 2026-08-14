@@ -98,9 +98,19 @@
   // while the mobile nav is open so its own close control stays reachable.
   var scrollThreshold = 8;
   var lastScrollY = window.scrollY;
+  var heroEl = document.getElementById('hero');
   function onScroll() {
     var currentY = window.scrollY;
     header.classList.toggle('is-scrolled', currentY > scrollThreshold);
+
+    // The header is transparent and floats over the hero video (white
+    // logo/hamburger read fine there), but every section after the hero
+    // is plain white — white-on-white would be invisible, so switch to
+    // the dark-green logo/hamburger the moment the hero scrolls fully
+    // behind the (fixed) header.
+    if (heroEl) {
+      header.classList.toggle('header-bar--dark', heroEl.getBoundingClientRect().bottom <= header.offsetHeight);
+    }
 
     if (!body.classList.contains('nav-open')) {
       var headerHeight = header.offsetHeight;

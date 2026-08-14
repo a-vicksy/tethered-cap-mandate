@@ -204,61 +204,77 @@
   max-width: 480px;
 }
 
-.attach-input {
-  flex: 1 1 200px;
+/* Email/Mobile — inline label + underlined input, matching the same
+   dashed-underline treatment as the name/city .attach-form__fill spans
+   above so the whole form reads as one consistent style. */
+.attach-form__row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.attach-form__row + .attach-form__row {
+  margin-top: 10px;
+}
+
+.attach-form__row-label {
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--color-white);
+}
+
+.attach-form__required {
+  color: var(--color-sage-light);
+}
+
+.attach-form__row-input {
+  /* Capped rather than flex-growing to fill the row — stretching all the
+     way to .attach-form__fields' 480px max-width looked hideous for
+     content this short (an email address, a phone number). */
+  flex: 0 1 220px;
   min-width: 0;
   font-family: var(--font-body);
-  font-size: 16px;
-  color: var(--color-dark);
-  background: var(--color-white);
+  font-size: 15px;
+  color: var(--color-white);
+  background: transparent;
   border: none;
-  border-radius: 10px;
-  padding: 14px 18px;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
+  padding: 4px 2px;
+  outline: none;
+  transition: background-color 0.2s ease, border-bottom-color 0.2s ease;
 }
 
-.attach-input::placeholder {
-  color: #8a8a8a;
+.attach-form__row-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Real <button> now (was a <label>) — it toggles .attach-form__optional-row
-   open/closed instead of just pointing focus at the contact field. */
-.attach-form__optional-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
+.attach-form__row-input:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-bottom-color: rgba(255, 255, 255, 0.8);
+}
+
+.attach-form__row-input:focus {
+  border-bottom-style: solid;
+  border-bottom-color: var(--color-sage-light);
+}
+
+/* Toggled by JS on submit, not :invalid — :invalid would flag the empty
+   required email field red before the user has even had a chance to
+   type anything. */
+.attach-form__row-input--error {
+  border-bottom-color: #ff9c9c;
+}
+
+.attach-form__error {
+  margin: 6px 0 0;
   font-family: var(--font-body);
-  font-weight: 400;
-  font-size: clamp(14px, calc(20 / 1920 * var(--fluid-vw)), calc(20px * 1.5));
-  color: var(--color-white);
-  background: none;
-  border: none;
-  padding: 8px 0 0;
-  margin: 0;
-  cursor: pointer;
-  text-align: left;
+  font-size: 13px;
+  color: #ffb4b4;
 }
 
-.attach-form__optional-icon {
-  flex-shrink: 0;
-  width: 0.6em;
-  height: 0.6em;
-  color: var(--color-white);
-  transition: transform 0.2s ease;
-}
-
-.attach-form__optional-toggle[aria-expanded="true"] .attach-form__optional-icon {
-  transform: rotate(90deg);
-}
-
-.attach-form__optional-row {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-top: 14px;
-}
-
-.attach-form__optional-row[hidden] {
+.attach-form__error[hidden] {
   display: none;
 }
 
@@ -266,6 +282,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  max-width: 100%;
+  margin-top: 14px;
   font-family: var(--font-body);
   font-size: 14px;
   color: var(--color-white);
@@ -274,6 +292,16 @@
   padding: 10px 18px;
   cursor: pointer;
   flex-shrink: 0;
+}
+
+/* Long filenames (once a photo's chosen) truncate with an ellipsis rather
+   than stretching the pill button or wrapping. */
+.attach-file-label__text {
+  display: block;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .attach-file-label input[type="file"] {
@@ -309,6 +337,255 @@
 
 .attach-form__confirm[hidden] {
   display: none;
+}
+
+/* -------------------------------------------------------------------------
+   Email-OTP verification modal
+   ------------------------------------------------------------------------- */
+.attach-verify-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(20, 24, 20, 0.6);
+}
+
+.attach-verify-overlay[hidden] {
+  display: none;
+}
+
+.attach-verify-modal {
+  position: relative;
+  width: min(420px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--color-white);
+  border-radius: 16px;
+  padding: clamp(28px, 4vw, 40px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+
+.attach-verify-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--color-dark);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.attach-verify-close:hover {
+  background-color: var(--color-placeholder);
+}
+
+.attach-verify-heading {
+  margin: 0 0 12px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--color-dark);
+}
+
+.attach-verify-copy {
+  margin: 0 0 20px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-dark);
+}
+
+.attach-verify-otp {
+  display: block;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 20px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  color: var(--color-dark);
+  background: var(--color-white);
+  border: 2px solid var(--color-placeholder);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 0 0 10px;
+  transition: border-color 0.2s ease;
+}
+
+.attach-verify-otp:focus {
+  outline: none;
+  border-color: var(--color-sage-light);
+}
+
+.attach-verify-otp:disabled {
+  background: var(--color-placeholder);
+  color: #6b6b6b;
+}
+
+.attach-verify-success {
+  margin: 0 0 14px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-sage-dark);
+}
+
+.attach-verify-success[hidden] {
+  display: none;
+}
+
+.attach-verify-consent {
+  margin: 0 0 22px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b6b6b;
+}
+
+.attach-verify-consent a {
+  color: var(--color-sage-dark);
+  text-decoration: underline;
+}
+
+.attach-verify-action {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.attach-verify-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Only one modal step visible at a time — swapped via JS, not CSS, but
+   [hidden] needs the usual reinforcement since it's on a flex/block child. */
+.attach-verify-step[hidden],
+.attach-success-step[hidden] {
+  display: none;
+}
+
+.attach-success-step {
+  text-align: center;
+}
+
+.attach-success-step .attach-verify-heading {
+  margin-bottom: 8px;
+}
+
+.attach-success-step .attach-verify-copy {
+  margin-bottom: 24px;
+}
+
+.attach-success-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--color-sage-light);
+  color: var(--color-white);
+}
+
+.attach-success-badge svg {
+  width: 28px;
+  height: 28px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .attach-success-badge {
+    animation: attach-success-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+}
+
+@keyframes attach-success-pop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* A handful of small rects flung outward from centre and fading — a light
+   confetti burst behind the checkmark badge. Decorative only, so it's
+   simply absent (opacity never leaves 0) for prefers-reduced-motion
+   rather than needing its own static fallback. */
+.attach-success-confetti {
+  position: relative;
+  height: 0;
+}
+
+.attach-success-confetti span {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 8px;
+  height: 14px;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .attach-success-confetti span {
+    animation: attach-confetti-burst 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+.attach-success-confetti span:nth-child(1) { background: var(--color-sage-light); animation-delay: 0.02s; --tx: -70px; --ty: -55px; }
+.attach-success-confetti span:nth-child(2) { background: var(--color-sage-dark); animation-delay: 0.05s; --tx: -42px; --ty: -75px; }
+.attach-success-confetti span:nth-child(3) { background: var(--color-cream); animation-delay: 0s; --tx: -12px; --ty: -85px; }
+.attach-success-confetti span:nth-child(4) { background: #bed3eb; animation-delay: 0.06s; --tx: 16px; --ty: -83px; }
+.attach-success-confetti span:nth-child(5) { background: var(--color-sage-light); animation-delay: 0.03s; --tx: 44px; --ty: -70px; }
+.attach-success-confetti span:nth-child(6) { background: var(--color-sage-dark); animation-delay: 0.07s; --tx: 72px; --ty: -48px; }
+.attach-success-confetti span:nth-child(7) { background: #bed3eb; animation-delay: 0.01s; --tx: -55px; --ty: -18px; }
+.attach-success-confetti span:nth-child(8) { background: var(--color-cream); animation-delay: 0.04s; --tx: 55px; --ty: -14px; }
+
+@keyframes attach-confetti-burst {
+  0% { opacity: 1; transform: translate(-50%, 0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), var(--ty)) rotate(180deg) scale(0.6); }
+}
+
+/* Download/Share — reused from their old spot beside the card, now inside
+   the success step. That context is a white modal instead of the dark
+   photo backdrop they were designed for, so both need a legible-on-white
+   recolor here. */
+.attach-success-step .attach-actions {
+  flex-direction: row;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.attach-success-step .attach-btn-ghost {
+  color: var(--color-dark);
+  border-color: var(--color-sage-dark);
+}
+
+.attach-success-step .attach-btn-ghost:hover {
+  background-color: var(--color-sage-dark);
+  color: var(--color-white);
+}
+
+.attach-success-step .attach-share-status {
+  max-width: none;
+  margin-bottom: 16px;
+  color: #6b6b6b;
+}
+
+#attach-success-done {
+  display: block;
+  width: 100%;
+  text-align: center;
 }
 
 /* -------------------------------------------------------------------------
@@ -406,6 +683,12 @@
 .attach-card-photo__fill {
   width: 100%;
   height: 100%;
+  /* Default (no upload yet) — a generic grey silhouette instead of blank
+     white space, matching the typical "no photo" social-avatar look.
+     Overwritten by an inline background-image once a real photo is
+     chosen (see previewBlob() below), so this rule only ever shows
+     before the first upload. */
+  background-image: url("../../assets/images/attach-card-avatar-placeholder.png");
   background-size: cover;
   background-position: center;
   /* A deliberate ~12% overscan — crops a thin margin off every edge,
