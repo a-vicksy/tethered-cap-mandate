@@ -259,6 +259,10 @@
         var reader = new FileReader();
         reader.onload = function () {
           cardPhotoFill.style.backgroundImage = 'url(' + reader.result + ')';
+          // Switches on the border-cropping overscan (see the CSS) — the
+          // default placeholder skips it, since it has no border to crop
+          // and the extra zoom just distorted it.
+          cardPhotoFill.classList.add('attach-card-photo__fill--has-photo');
           // "Drops into" the frame rather than just appearing — same beat
           // as the colour-swap fade, so uploading a photo for the first
           // time reads as the same kind of "settling into the card" motion.
@@ -569,6 +573,7 @@
           }
 
           var cardPhotoFill = document.getElementById('attach-card-photo-fill');
+          var hasRealPhoto = !!(cardPhotoFill && cardPhotoFill.classList.contains('attach-card-photo__fill--has-photo'));
           var bgImage = cardPhotoFill ? cardPhotoFill.style.backgroundImage : '';
           // Falls back to the same grey placeholder shown in the live
           // preview when no photo was uploaded, so the exported image
@@ -577,9 +582,9 @@
             ? bgImage.replace(/^url\((['"]?)(.*)\1\)$/, '$2')
             : 'assets/images/attach-card-avatar-placeholder.png';
 
-          // Matches .attach-card-photo__fill's CSS transform: scale(1.25) —
-          // the same deliberate overscan, so a border/margin baked into the
-          // uploaded photo gets cropped out of the download/share image
+          // Matches .attach-card-photo__fill's CSS transform — the same
+          // deliberate overscan on real uploads, so a border/margin baked
+          // into the photo gets cropped out of the download/share image
           // exactly as it is in the live preview.
           var PHOTO_OVERSCAN = 1.25;
 
@@ -595,13 +600,27 @@
             roundRectPath(ctx, x, y, w, h, r);
             ctx.clip();
 
-            // object-fit: cover behaviour into the frame — the photo is
-            // drawn at its own full resolution scaled down (not up) into
-            // the now much larger frame, so it stays sharp.
-            var scale = Math.max(w / photoImg.naturalWidth, h / photoImg.naturalHeight) * PHOTO_OVERSCAN;
-            var dw = photoImg.naturalWidth * scale;
-            var dh = photoImg.naturalHeight * scale;
-            ctx.drawImage(photoImg, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+            if (hasRealPhoto) {
+              // object-fit: cover behaviour into the frame — the photo is
+              // drawn at its own full resolution scaled down (not up) into
+              // the now much larger frame, so it stays sharp.
+              var scale = Math.max(w / photoImg.naturalWidth, h / photoImg.naturalHeight) * PHOTO_OVERSCAN;
+              var dw = photoImg.naturalWidth * scale;
+              var dh = photoImg.naturalHeight * scale;
+              ctx.drawImage(photoImg, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+            } else {
+              // Matches the CSS placeholder fix — object-fit: contain (not
+              // cover) so the whole icon shows with no cropping, on a
+              // white backdrop filling the frame like the card art around
+              // it, instead of the same top/bottom crop the live preview
+              // used to have.
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(x, y, w, h);
+              var containScale = Math.min(w / photoImg.naturalWidth, h / photoImg.naturalHeight);
+              var cdw = photoImg.naturalWidth * containScale;
+              var cdh = photoImg.naturalHeight * containScale;
+              ctx.drawImage(photoImg, x + (w - cdw) / 2, y + (h - cdh) / 2, cdw, cdh);
+            }
             ctx.restore();
 
             drawNameCity();

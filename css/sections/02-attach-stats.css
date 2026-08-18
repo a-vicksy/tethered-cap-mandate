@@ -687,16 +687,32 @@
      white space, matching the typical "no photo" social-avatar look.
      Overwritten by an inline background-image once a real photo is
      chosen (see previewBlob() below), so this rule only ever shows
-     before the first upload. */
+     before the first upload.
+
+     contain (not cover) + a white backdrop — the placeholder's own
+     source image is roughly square while this frame is noticeably
+     wider, so cover was scaling it up to fill the width and cropping a
+     visible slice off the top of the head and bottom of the shoulders
+     to make the height fit. contain shows the whole icon with no
+     cropping; the white backdrop fills the resulting side letterboxing
+     seamlessly, since the frame around this box is white too. */
   background-image: url("../../assets/images/attach-card-avatar-placeholder.png");
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
-  /* A deliberate ~12% overscan — crops a thin margin off every edge,
-     which quietly absorbs borders/padding baked into whatever photo
-     someone uploads (a common screenshot artifact) instead of showing a
-     sliver of it inside the frame. A transform (rather than a bigger
-     background-size number) scales evenly no matter the photo's own
-     aspect ratio. */
+  background-color: var(--color-white);
+}
+
+/* A deliberate ~12% overscan — crops a thin margin off every edge, which
+   quietly absorbs borders/padding baked into whatever photo someone
+   uploads (a common screenshot artifact) instead of showing a sliver of
+   it inside the frame. A transform (rather than a bigger background-size
+   number) scales evenly no matter the photo's own aspect ratio. Scoped to
+   real uploads only (class added in previewBlob() below) — real photos
+   should fill the frame edge-to-edge (cover), unlike the placeholder
+   above. */
+.attach-card-photo__fill--has-photo {
+  background-size: cover;
   transform: scale(1.25);
 }
 
