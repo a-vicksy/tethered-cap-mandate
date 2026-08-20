@@ -1,0 +1,386 @@
+/* ==========================================================================
+   The Cap Story — standalone tap-through illustrated story
+   Companion to js/cap-story.js. Uses tokens.css for color/font vars but is
+   otherwise self-contained (not part of the section-css/index.html sync
+   pattern the rest of the site follows, since this is its own page).
+   ========================================================================== */
+
+.capstory-body {
+  background: var(--color-dark);
+  overscroll-behavior: none;
+}
+
+.capstory {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--color-dark);
+  font-family: var(--font-body);
+  color: var(--color-white);
+  user-select: none;
+}
+
+/* ---- exit link ----------------------------------------------------- */
+.capstory-exit {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(16px, env(safe-area-inset-left));
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(44, 44, 44, 0.45);
+  backdrop-filter: blur(6px);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-white);
+  transition: background 0.2s ease;
+}
+
+.capstory-exit:hover,
+.capstory-exit:focus-visible {
+  background: rgba(44, 44, 44, 0.7);
+}
+
+/* ---- progress bar ---------------------------------------------------- */
+.capstory-progress {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  gap: 5px;
+  width: min(70vw, 320px);
+}
+
+.capstory-progress__seg {
+  flex: 1 1 0;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.capstory-progress__seg::after {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--color-white);
+  transition: width 0.25s ease;
+}
+
+.capstory-progress__seg--done::after {
+  width: 100%;
+}
+
+/* ---- scene stage ------------------------------------------------------- */
+.capstory-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.capstory-scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease;
+}
+
+.capstory-scene--active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capstory-scene {
+    transition: none;
+  }
+}
+
+.capstory-scene__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.capstory-scene__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1);
+  transform-origin: center;
+}
+
+/* Slow ambient drift — a still painting reading as "alive" rather than a
+   static photo, the same trick as a Ken Burns pan. Direction alternates
+   by scene so a run of scenes doesn't all breathe the same way. Runs only
+   while the scene is on screen (scoped to --active) so it never animates
+   off-screen scenes wastefully. */
+@media (prefers-reduced-motion: no-preference) {
+  .capstory-scene--active .capstory-scene__img {
+    animation: capstory-drift 14s ease-in-out infinite alternate;
+  }
+
+  .capstory-scene:nth-child(even).capstory-scene--active .capstory-scene__img {
+    animation-name: capstory-drift-alt;
+  }
+}
+
+@keyframes capstory-drift {
+  0% { transform: scale(1.02) translate(0, 0); }
+  100% { transform: scale(1.09) translate(-1.5%, -1%); }
+}
+
+@keyframes capstory-drift-alt {
+  0% { transform: scale(1.02) translate(0, 0); }
+  100% { transform: scale(1.09) translate(1.5%, 1%); }
+}
+
+.capstory-scene__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(20, 24, 20, 0.78) 100%);
+  pointer-events: none;
+}
+
+/* ---- optional per-scene weather/water overlays -------------------------- */
+.capstory-scene__fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Individual falling streaks rather than one sliding hatch pattern — a
+   repeating-gradient block reads as a mechanical screen-door overlay the
+   moment it moves as a single rigid unit. Real drops fall at slightly
+   different speeds, lengths and timing, which is what actually sells it. */
+.capstory-raindrop {
+  position: absolute;
+  top: -12%;
+  width: 2px;
+  height: 5%;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.55));
+  border-radius: 2px;
+  opacity: 0;
+  animation-name: capstory-raindrop-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes capstory-raindrop-fall {
+  0% { transform: translate(0, 0); opacity: 0; }
+  8% { opacity: 0.8; }
+  85% { opacity: 0.5; }
+  100% { transform: translate(-9%, 128%); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capstory-raindrop {
+    display: none;
+  }
+}
+
+.capstory-scene__fx--shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.16) 50%, transparent 60%);
+  background-size: 260% 100%;
+  animation: capstory-shimmer 6s ease-in-out infinite;
+}
+
+@keyframes capstory-shimmer {
+  0% { background-position: 120% 0; }
+  100% { background-position: -20% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capstory-scene__fx--shimmer::before {
+    animation: none;
+  }
+}
+
+.capstory-scene__caption {
+  position: absolute;
+  left: 50%;
+  /* Hugs the bottom control bar closely rather than floating higher up
+     the frame — the higher it sits, the more likely it lands on top of
+     whatever the illustration placed at center (the cap, the bottle),
+     since scene compositions aren't guaranteed to leave a clear band. */
+  bottom: clamp(60px, 11vh, 108px);
+  transform: translate(-50%, 12px);
+  width: min(86vw, 400px);
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(238, 231, 220, 0.96);
+  color: var(--color-dark);
+  font-size: clamp(14px, 3.6vw, 17px);
+  line-height: 1.4;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+}
+
+.capstory-scene--active .capstory-scene__caption {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capstory-scene__caption {
+    transition: none;
+  }
+}
+
+/* Final scene gets a CTA instead of body copy styling emphasis */
+.capstory-scene__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: var(--color-sage-dark);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.capstory-scene__cta:hover,
+.capstory-scene__cta:focus-visible {
+  background: var(--color-dark);
+  transform: translateY(-1px);
+}
+
+/* ---- invisible tap zones (mobile-comic-style advance) ------------------ */
+.capstory-tapzone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32%;
+  z-index: 10;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.capstory-tapzone--prev {
+  left: 0;
+}
+
+.capstory-tapzone--next {
+  right: 0;
+}
+
+/* ---- bottom control bar ------------------------------------------------ */
+.capstory-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 20px;
+}
+
+.capstory-dot-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--color-white);
+  font-size: 20px;
+  line-height: 1;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.capstory-dot-nav:hover,
+.capstory-dot-nav:focus-visible {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.capstory-dot-nav[hidden] {
+  display: none;
+}
+
+.capstory-dots {
+  display: flex;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.capstory-dots__item {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.capstory-dots__item--active {
+  background: var(--color-white);
+  transform: scale(1.3);
+}
+
+.capstory-next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-dark);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.capstory-next-btn:hover,
+.capstory-next-btn:focus-visible {
+  transform: translateY(-1px);
+}
+
+.capstory-next-btn[hidden] {
+  display: none;
+}
+
+/* ---- desktop / wide-viewport layout ------------------------------------
+   Below 860px the <picture> in js/cap-story.js serves the 9:16 portrait
+   painting; at/above it, a separately-composed 16:9 landscape painting
+   (not a stretched or center-cropped portrait one). Both fill the screen
+   full-bleed the same way — object-fit:cover, dark bottom scrim, caption
+   card overlaid near the bottom — so no separate desktop layout is needed
+   here; only the caption card gets a little more breathing room since a
+   16:9 frame has far more width to spare than a phone screen. */
+@media (min-width: 860px) {
+  .capstory-scene__caption {
+    width: min(36vw, 440px);
+    bottom: clamp(72px, 10vh, 96px);
+  }
+}

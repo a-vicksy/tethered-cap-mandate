@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>The Cap Story — The Tethered Cap Mandate</title>
+  <meta name="description" content="Follow one bottle cap's journey — from a bottle, to the gutter, to the ocean — and why a tethered cap never has to make that trip again.">
+  <meta name="apple-mobile-web-app-title" content="The Cap Story">
+  <link rel="icon" href="assets/images/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/favicon-192.png">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/cap-story.css">
+</head>
+<body class="capstory-body">
+
+<main class="capstory" id="capstory" aria-label="The Cap Story">
+
+  <a class="capstory-exit" href="index.html#tethered-timeline" aria-label="Back to The Tethered Cap Mandate">
+    <span aria-hidden="true">&larr;</span> Tethered Cap Mandate
+  </a>
+
+  <div class="capstory-progress" id="capstory-progress" role="progressbar" aria-label="Story progress" aria-valuemin="1"></div>
+
+  <div class="capstory-stage" id="capstory-stage">
+    <!-- Scenes are rendered here by js/cap-story.js from the SCENES data array -->
+  </div>
+
+  <button type="button" class="capstory-tapzone capstory-tapzone--prev" id="capstory-prev" aria-label="Previous"></button>
+  <button type="button" class="capstory-tapzone capstory-tapzone--next" id="capstory-next" aria-label="Next"></button>
+
+  <div class="capstory-controls">
+    <button type="button" class="capstory-dot-nav" id="capstory-back-btn" aria-label="Previous scene">
+      <span aria-hidden="true">&lsaquo;</span>
+    </button>
+    <ol class="capstory-dots" id="capstory-dots" aria-hidden="true"></ol>
+    <button type="button" class="capstory-next-btn" id="capstory-next-btn">
+      Next <span aria-hidden="true">&rsaquo;</span>
+    </button>
+  </div>
+
+</main>
+
+<script src="js/cap-story.js"></script>
+</body>
+</html>
