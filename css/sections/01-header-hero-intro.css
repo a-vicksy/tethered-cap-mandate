@@ -28,12 +28,20 @@
   transition: box-shadow 0.25s ease, transform 0.3s ease, background-color 0.2s ease;
 }
 
-/* While the nav panel is open, the header sits directly above that panel's
-   own solid white background — leaving the header transparent there made
-   the transparent top strip / solid white panel below it read as two
-   mismatched pieces instead of one connected menu. Matching backgrounds
-   (plus the dark logo/icon swap above) makes it read as a single
-   continuous surface, header included, rather than a seam. */
+/* Solid white background whenever the header isn't floating over the hero
+   video — both once scrolled past it (.header-bar--dark) and while the
+   mobile nav panel is open (which can happen at any scroll position).
+   Transparent + just a dark logo wasn't enough: the header is
+   position:fixed, so once scrolled past the hero it can still end up
+   over OTHER dark sections further down the page (e.g. Attach Yourself's
+   own video backdrop), where a dark logo on a transparent bar would be
+   just as hard to read as the original white-on-white problem this was
+   meant to fix. A solid backing guarantees the logo/icon are legible
+   against a known, controlled background instead of whatever happens to
+   be scrolling underneath. While the nav panel is open, this also keeps
+   the header visually continuous with the panel's own white background
+   directly below it, rather than reading as two mismatched pieces. */
+.header-bar--dark,
 .nav-open .header-bar {
   background: var(--color-white);
 }
