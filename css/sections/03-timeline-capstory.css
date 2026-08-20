@@ -59,6 +59,37 @@
   color: var(--color-white);
 }
 
+/* Standalone "See the Journey" line — set apart from the intro sentence
+   and in the accent green so it reads as a call-to-action, not just more
+   body copy, since the whole band is already a link. */
+.timeline-cta {
+  margin: clamp(12px, calc(18 / 1920 * var(--fluid-vw)), calc(18px * 1.5)) auto 0;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(16px, calc(23 / 1920 * var(--fluid-vw)), calc(23px * 1.5));
+  color: var(--color-sage-light);
+}
+
+.timeline-cta__arrow {
+  display: inline-block;
+  margin-left: 0.2em;
+}
+
+/* A small, continuous nudge — rather than a one-off hover state — so the
+   arrow itself reads as an invitation to click before the visitor's
+   cursor ever reaches it. */
+@media (prefers-reduced-motion: no-preference) {
+  .timeline-cta__arrow {
+    animation: timeline-cta-nudge 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes timeline-cta-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
 .timeline-heading-wrap {
   text-align: center;
   padding-top: clamp(36px, calc(80 / 1920 * var(--fluid-vw)), calc(80px * 1.5));
