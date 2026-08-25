@@ -1,0 +1,263 @@
+/* ————— The Cap Story · cinematic scroll film ————— */
+
+:root{
+  --cream:#f3ebdf;
+  --forest:#153824;
+  --deep:#061e13;
+  --green:#2ab574;
+  --moss:#bece9f;
+  --powder:#bed2eb;
+  --ink:#10271b;
+  --line:rgba(21,56,36,.24);
+  --shell:1760px;
+  --col:1200px;
+  --pad:clamp(22px,5vw,112px);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{
+  background:#e3d7c3; /* letterbox ground on very wide screens */
+  color:var(--ink);
+  font-family:"Poppins",system-ui,sans-serif;
+  font-weight:300;
+  font-size:clamp(16px,1.15vw,21px);
+  line-height:1.5;
+}
+.shell{
+  max-width:var(--shell);
+  margin:0 auto;
+  background:var(--cream);
+  box-shadow:-1px 0 0 var(--line),1px 0 0 var(--line);
+  overflow-x:clip;
+  position:relative;
+}
+.shell::after{ /* riso paper grain over everything, under nothing interactive */
+  content:"";position:absolute;inset:0;z-index:40;pointer-events:none;
+  background:url("../assets/images/the-cap-story-film/grain-web.jpg") repeat;
+  background-size:340px;
+  opacity:.05;mix-blend-mode:multiply;
+}
+.display{
+  font-family:"Bebas Neue",system-ui,sans-serif;
+  font-weight:400;
+  letter-spacing:-.01em;
+  line-height:.92;
+  text-wrap:balance;
+}
+.col{max-width:var(--col);margin:0 auto;padding-inline:var(--pad)}
+a{color:inherit}
+sup{font-size:.55em;opacity:.65}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--green);outline-offset:3px;border-radius:6px}
+
+/* ————— exit link back to the main site ————— */
+.filmstory-exit{
+  position:fixed;top:20px;left:20px;z-index:50;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;
+  font-family:"Poppins",system-ui,sans-serif;font-weight:500;font-size:13.5px;
+  color:var(--cream);background:rgba(6,30,19,.55);
+  border-radius:999px;text-decoration:none;
+  backdrop-filter:blur(6px);
+  transition:background .3s;
+}
+.filmstory-exit:hover{background:rgba(6,30,19,.8)}
+
+/* ————— hero ————— */
+.scene{position:relative}
+.hero{
+  height:100vh;height:100svh;
+  overflow:hidden;
+  background:var(--cream); /* animated by the story timeline: cream → water → deep */
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:var(--pad);
+}
+.hero .kicker,.hero .hero-stage{position:relative;z-index:2}
+.hero .scroll-cue{z-index:2} /* keeps its absolute centring */
+.kicker{
+  font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--forest);opacity:.75;margin-bottom:4vh;
+}
+.hero-stage{position:relative;width:min(640px,88vw);flex:0 1 auto}
+.hero-line{
+  font-size:clamp(46px,8.2vw,148px);
+  color:var(--forest);
+  position:relative;z-index:2;
+}
+#line2{position:absolute;inset:0;opacity:0;z-index:2}
+.bottle-rig{
+  position:relative;
+  height:min(52vh,620px);aspect-ratio:582/1893;
+  margin:clamp(6px,1vw,14px) auto 0;
+  filter:drop-shadow(0 34px 44px rgba(21,56,36,.22));
+}
+.rig-bottle{position:absolute;inset:0;width:100%;height:100%;display:block}
+.rig-cap{position:absolute;width:53%;left:23.2%;top:-2.7%;display:block}
+.hero-note{
+  position:absolute;left:0;right:0;bottom:-6px;
+  font-size:clamp(14px,1.4vw,18px);opacity:0;color:var(--ink);
+}
+.scroll-cue{
+  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  font-weight:600;font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:.55;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.cue-line{width:1.5px;height:34px;background:var(--forest);animation:cue 1.6s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ————— the passing world (inside the one continuous story scene) ————— */
+.fall-world{position:absolute;inset:0;pointer-events:none;z-index:1}
+.layer{position:absolute;left:50%;transform:translateX(-50%);width:min(1500px,118%)}
+.layer-img{display:block;width:100%;height:auto;
+  -webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);
+  mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
+.layer.street{top:106vh;height:34vh}
+.layer.drain{top:216vh;height:22vh}
+.layer.river{top:330vh;height:36vh}
+.layer.sea{top:452vh;height:82vh}
+.beat{
+  position:absolute;z-index:4;opacity:0;pointer-events:none;
+  max-width:min(46ch,74vw);
+  font-size:clamp(18px,2vw,32px);line-height:1.4;
+}
+.beat strong{font-weight:600}
+.beat-big{font-size:clamp(40px,6.4vw,116px);line-height:.92}
+.b1{top:16vh;left:var(--pad);text-align:left}
+.b2{top:14vh;right:var(--pad);text-align:right;color:var(--forest)}
+.b3{top:60vh;left:var(--pad)}
+.b4{top:16vh;left:var(--pad)}
+.b5{top:58vh;right:var(--pad);text-align:right}
+/* beat colours follow the water darkening beneath them */
+.b1{color:var(--ink)}
+.b2{color:var(--cream);text-shadow:0 2px 34px rgba(6,30,19,.65)}
+.b3,.b4,.b5{color:var(--cream)}
+/* beats that pass over artwork sit on a scrim so they always read */
+.b3 p,.b4 p,.b5 p{
+  display:inline-block;
+  background:rgba(6,30,19,.62);
+  padding:16px 22px;border-radius:16px;
+  box-shadow:0 12px 40px -12px rgba(6,30,19,.5);
+}
+
+/* ————— the deep ————— */
+.deep{
+  background:var(--deep) url("../assets/images/the-cap-story-film/underwater-photo.webp") center top / cover no-repeat;
+  color:var(--cream);
+  padding:22vh 0 18vh;
+  position:relative;
+}
+.deep .col{position:relative;z-index:1}
+.deep::after{ /* keep copy readable over the light rays */
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg, rgba(6,30,19,.82) 0%, rgba(6,30,19,.35) 55%, rgba(6,30,19,.15) 100%);
+  pointer-events:none;
+}
+.deep::before{ /* surface glow fading down from the fall scene */
+  content:"";position:absolute;top:0;left:0;right:0;height:200px;
+  background:linear-gradient(var(--forest),transparent);opacity:.55;pointer-events:none;
+}
+.deep-huge{
+  font-size:clamp(88px,15vw,300px);
+  color:var(--green);
+}
+.deep-lede{
+  font-size:clamp(20px,2.3vw,36px);line-height:1.35;max-width:34ch;
+  margin-top:18px;
+}
+.deep-lede em{font-style:normal;border-bottom:3px solid var(--green)}
+.deep-facts{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px);
+  margin-top:9vh;padding-top:5vh;border-top:1px solid rgba(243,235,223,.22);
+  font-size:clamp(14.5px,1.25vw,18px);
+}
+.deep-facts strong{font-weight:600;color:var(--powder)}
+
+/* ————— the fix / rewind ————— */
+.fix{
+  background:var(--cream);
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:14vh 0;
+}
+.fix-stage{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,72px);
+  align-items:center;max-width:var(--col);margin:0 auto;padding-inline:var(--pad);
+}
+.fix-line{font-size:clamp(44px,6.6vw,120px);color:var(--forest);grid-column:1;align-self:end}
+.tbottle{grid-column:2;grid-row:1 / span 2;width:min(400px,80vw);margin:0 auto;overflow:visible}
+.fix-diagram{padding:0}
+.fix-diagram img{display:block;width:100%;height:auto;border-radius:24px;
+  border:1px solid var(--line);transform:rotate(-1.6deg);
+  box-shadow:0 24px 60px -30px rgba(6,30,19,.35)}
+.fix-copy{grid-column:1;font-size:clamp(16.5px,1.5vw,21px);max-width:44ch;display:grid;gap:14px;margin-top:20px}
+.fix-copy strong{font-weight:600}
+.fix-kicker{font-size:clamp(30px,3.6vw,64px);color:var(--green);margin-top:14px}
+
+/* ————— india ————— */
+.india{background:var(--forest);color:var(--cream);padding:16vh 0}
+.india-number{
+  font-size:clamp(40px,7.8vw,150px);
+  color:var(--green);
+  overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+.india-lede{font-size:clamp(20px,2.3vw,36px);max-width:34ch;margin-top:16px}
+.india-lede strong{font-weight:600;border-bottom:3px solid var(--green)}
+.india-court{
+  margin-top:8vh;padding:26px 30px;
+  border:1px solid rgba(243,235,223,.35);border-radius:20px;
+  max-width:62ch;font-size:clamp(15.5px,1.35vw,19px);
+}
+.court-meta{margin-top:10px;font-weight:500;font-size:.86em;opacity:.85}
+.stickers{display:flex;gap:clamp(14px,2.4vw,34px);margin-top:9vh;flex-wrap:wrap}
+.sticker{
+  position:relative;
+  width:clamp(150px,15vw,196px);aspect-ratio:1;border-radius:50%;
+  border:1.5px solid rgba(190,206,159,.6);
+  background:rgba(190,206,159,.12);
+  color:var(--cream);
+  padding:18px;text-align:center;
+  font-size:clamp(13px,1vw,15.5px);line-height:1.35;
+  transition:transform .45s var(--ease),background .45s;
+}
+.sticker:nth-child(1){transform:rotate(-5deg)}
+.sticker:nth-child(2){transform:rotate(3deg)}
+.sticker:nth-child(3){transform:rotate(-2deg)}
+.sticker .s-front{font-family:"Bebas Neue",system-ui,sans-serif;font-size:1.16em;display:flex;align-items:center;justify-content:center;height:100%}
+.sticker .s-back{display:none}
+.sticker.is-flipped{background:var(--green);border-style:solid;border-color:var(--green);color:var(--deep);transform:rotate(0)}
+.sticker.is-flipped .s-front{display:none}
+.sticker.is-flipped .s-back{display:flex;align-items:center;justify-content:center;height:100%}
+
+/* ————— responsive ————— */
+@media (max-width:880px){
+  .fix-stage{grid-template-columns:1fr}
+  .fix-line{grid-column:1}
+  .tbottle{grid-column:1;grid-row:auto;width:min(300px,70vw)}
+  .fix-copy{grid-column:1}
+  .deep-facts{grid-template-columns:1fr;gap:26px}
+  .beat{max-width:80vw}
+  .b2,.b5{right:var(--pad)}
+  .layer.street{top:8vh}
+}
+@media (max-width:520px){
+  .hero-line{font-size:clamp(42px,12vw,64px)}
+  .stickers{gap:10px}
+  .sticker{width:calc(50% - 10px)}
+}
+
+/* ————— reduced motion / no-js: everything readable, nothing pinned ————— */
+.static-flow .hero{height:auto;min-height:0;padding-bottom:8vh}
+.static-flow .fall-world,.static-flow .scroll-cue{display:none}
+.static-flow .beat{position:static;opacity:1;margin:5vh 0 0;max-width:60ch;color:var(--ink);text-align:center;pointer-events:auto}
+.static-flow .beat.b2{color:var(--forest)}
+.static-flow .b3,.static-flow .b4,.static-flow .b5{color:var(--ink)}
+.static-flow #line2{display:none}
+.static-flow .hero-note{opacity:1;position:static;margin-top:20px}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .cue-line{animation:none}
+  .sticker{transition:none}
+}
