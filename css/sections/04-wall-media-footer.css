@@ -66,7 +66,7 @@
   padding: 0;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
   gap: clamp(10px, calc(24 / 1920 * var(--fluid-vw)), calc(24px * 1.5));
 }
 
@@ -148,7 +148,7 @@
 
 @media (max-width: 768px) {
   .wall-grid {
-    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
     gap: 10px;
   }
 }
@@ -159,7 +159,7 @@
 .social-section {
   position: relative;
   background-color: var(--color-sage-light);
-  padding: clamp(64px, calc(160 / 1920 * var(--fluid-vw)), calc(160px * 1.5)) 0 clamp(72px, calc(180 / 1920 * var(--fluid-vw)), calc(180px * 1.5));
+  padding: clamp(48px, calc(110 / 1920 * var(--fluid-vw)), calc(110px * 1.5)) 0 clamp(72px, calc(180 / 1920 * var(--fluid-vw)), calc(180px * 1.5));
   overflow: hidden;
 }
 
@@ -174,15 +174,26 @@
   display: block;
   height: clamp(36px, calc(80 / 1920 * var(--fluid-vw)), calc(80px * 1.5));
   width: auto;
-  margin: 0 0 clamp(40px, calc(72 / 1920 * var(--fluid-vw)), calc(72px * 1.5));
+  margin: 0 0 clamp(56px, calc(100 / 1920 * var(--fluid-vw)), calc(100px * 1.5));
 }
 
 .social-cards {
-  display: flex;
+  width: 100%;
+}
+
+/* One trio of cards per page, only the active one shown — see js/main.js.
+   Same flex layout .social-cards used to carry directly, just moved down a
+   level now that there are 3 pages of it instead of one fixed set. */
+.social-page {
+  display: none;
   align-items: center;
   justify-content: center;
   gap: clamp(16px, calc(28 / 1920 * var(--fluid-vw)), calc(28px * 1.5));
   width: 100%;
+}
+
+.social-page--active {
+  display: flex;
 }
 
 .social-card {
@@ -233,9 +244,17 @@
 .social-dot {
   width: clamp(10px, calc(16 / 1920 * var(--fluid-vw)), calc(16px * 1.5));
   height: clamp(10px, calc(16 / 1920 * var(--fluid-vw)), calc(16px * 1.5));
+  padding: 0;
   border-radius: 50%;
   border: 2px solid var(--color-white);
   background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.social-dot:hover,
+.social-dot:focus-visible {
+  opacity: 0.7;
 }
 
 .social-dot--active {
@@ -269,7 +288,7 @@
 }
 
 @media (max-width: 900px) {
-  .social-cards {
+  .social-page {
     flex-wrap: wrap;
   }
   .social-card--b {
@@ -282,73 +301,104 @@
    MEDIA FEATURES
    ========================================================================== */
 .media-section {
-  background-color: var(--color-cream);
+  background-color: var(--color-sage-light);
+  padding-top: clamp(36px, calc(72 / 1920 * var(--fluid-vw)), calc(72px * 1.5));
+  padding-bottom: clamp(36px, calc(72 / 1920 * var(--fluid-vw)), calc(72px * 1.5));
 }
 
 .media-inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: clamp(24px, max(min(4vw, 64px), calc(64 / 1920 * var(--fluid-vw))), 96px);
-  padding-top: clamp(28px, calc(60 / 1920 * var(--fluid-vw)), calc(60px * 1.5));
-  padding-bottom: clamp(28px, calc(60 / 1920 * var(--fluid-vw)), calc(60px * 1.5));
+  gap: clamp(24px, calc(48 / 1920 * var(--fluid-vw)), calc(48px * 1.5));
 }
 
 .media-heading-text {
   margin: 0;
   flex: 0 0 auto;
-  font-family: var(--font-body);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-weight: 400;
   text-transform: uppercase;
-  font-size: clamp(24px, calc(44 / 1920 * var(--fluid-vw)), calc(44px * 1.5));
-  line-height: 1.15;
+  font-size: clamp(42px, calc(84 / 1920 * var(--fluid-vw)), calc(84px * 1.4));
+  line-height: 0.95;
+  letter-spacing: 0.01em;
   color: var(--color-dark);
 }
 
-.media-logos {
+.media-card {
+  flex: 1 1 480px;
+  background: var(--color-white);
+  border-radius: clamp(20px, calc(36 / 1920 * var(--fluid-vw)), calc(36px * 1.4));
+  padding: clamp(18px, calc(36 / 1920 * var(--fluid-vw)), calc(36px * 1.4)) clamp(26px, calc(52 / 1920 * var(--fluid-vw)), calc(52px * 1.4));
+}
+
+/* Each row is its own flex line with natural (not stretched) logo widths,
+   distributed with space-between — matches the reference layout where
+   columns don't line up strictly between the two rows. */
+/* flex-start (not space-between): row 1 has 4 logos, row 2 has 3, and
+   stretching each independently to fill the card width would make their
+   item spacing inconsistent with each other. A fixed start-anchored gap
+   keeps logo spacing uniform between the two rows instead. */
+.media-row {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: clamp(14px, calc(26 / 1920 * var(--fluid-vw)), calc(26px * 1.4)) 0;
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
-  flex: 1 1 auto;
-  gap: 0;
-  border-top: 1px solid rgba(44, 44, 44, 0.7);
-  border-bottom: 1px solid rgba(44, 44, 44, 0.7);
-}
-
-.media-logos li {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  flex: 1 1 0;
-  padding: clamp(16px, 2.5vw, 28px) clamp(12px, 1.5vw, 24px);
-  border-left: 1px solid rgba(44, 44, 44, 0.7);
+  justify-content: flex-start;
+  gap: clamp(36px, calc(84 / 1920 * var(--fluid-vw)), calc(84px * 1.4));
 }
 
-.media-logos li:last-child {
-  border-right: 1px solid rgba(44, 44, 44, 0.7);
+.media-row:first-child {
+  padding-top: 0;
+}
+
+.media-row:last-child {
+  padding-bottom: 0;
+}
+
+/* Row 2 has fewer, larger logos than row 1 (ANI/Hindustan Times/Inshorts vs
+   Times of India/Hindu/Express/PTI) — a tighter gap here lines up Inshorts'
+   right edge with PTI's above it instead of overshooting past it. */
+.media-row--2 {
+  gap: clamp(18px, calc(50 / 1920 * var(--fluid-vw)), calc(50px * 1.4));
+}
+
+/* Only a horizontal rule between the two rows (4 logos, then 3) — no
+   vertical dividers between individual logos. */
+.media-row + .media-row {
+  border-top: 1px solid rgba(44, 44, 44, 0.15);
 }
 
 .media-logo {
-  flex-shrink: 0;
-  color: var(--color-dark);
-}
-
-.media-logo--photo {
-  height: clamp(36px, calc(70 / 1920 * var(--fluid-vw)), calc(70px * 1.5));
+  display: block;
+  max-height: clamp(48px, calc(94 / 1920 * var(--fluid-vw)), calc(94px * 1.4));
+  max-width: clamp(120px, calc(290 / 1920 * var(--fluid-vw)), calc(290px * 1.4));
   width: auto;
+  height: auto;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
-.media-logo--mark {
-  height: clamp(40px, calc(76 / 1920 * var(--fluid-vw)), calc(76px * 1.5));
-  width: auto;
+/* Times of India / The Hindu / Inshorts render visually smaller than PTI
+   and ANI at the shared cap because their marks carry more internal
+   whitespace — give them a taller ceiling so their visual weight matches. */
+.media-logo--lg {
+  max-height: clamp(60px, calc(120 / 1920 * var(--fluid-vw)), calc(120px * 1.4));
+  max-width: clamp(160px, calc(340 / 1920 * var(--fluid-vw)), calc(340px * 1.4));
 }
 
-.media-logo--tall {
-  height: clamp(46px, calc(90 / 1920 * var(--fluid-vw)), calc(90px * 1.5));
+/* Hindustan Times' wordmark is an especially wide/short aspect ratio, so it
+   also needs a wider ceiling (not just taller) to grow before width-capping. */
+.media-logo--wide {
+  max-width: clamp(220px, calc(460 / 1920 * var(--fluid-vw)), calc(460px * 1.4));
+}
+
+/* The Hindu's crest mark still reads smaller than its row-mates even at
+   --lg, so it gets its own taller ceiling on top of that. */
+.media-logo--xl {
+  max-height: clamp(64px, calc(160 / 1920 * var(--fluid-vw)), calc(160px * 1.4));
 }
 
 /* ==========================================================================
@@ -532,7 +582,7 @@
 
 .footer-brand__lockup {
   display: block;
-  height: clamp(56px, calc(100 / 1920 * var(--fluid-vw)), calc(100px * 1.5));
+  height: clamp(78px, calc(140 / 1920 * var(--fluid-vw)), calc(140px * 1.4));
   width: auto;
 }
 
@@ -659,12 +709,19 @@
     align-self: auto;
   }
 
-  .media-logos li {
-    flex: 1 1 40%;
-    padding: 8px 16px;
+  .media-inner {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .media-logos li:nth-child(2n) {
-    border-right: 1px solid rgba(44, 44, 44, 0.7);
+  .media-card {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .media-row,
+  .media-row--2 {
+    justify-content: center;
+    gap: clamp(18px, 5vw, 28px) clamp(24px, 8vw, 40px);
   }
 }

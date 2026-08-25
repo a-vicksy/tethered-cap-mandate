@@ -344,4 +344,69 @@
 
     scheduleTick();
   }
+
+  // Social Media section — pages through the 3-card fan layout, 3 posts
+  // (one page) at a time, via the prev/next arrows and dots.
+  var socialCards = document.getElementById('social-cards');
+  if (socialCards) {
+    var socialPages = Array.prototype.slice.call(socialCards.querySelectorAll('.social-page'));
+    var socialDots = Array.prototype.slice.call(document.querySelectorAll('.social-dots .social-dot'));
+    var socialPrev = document.querySelector('.social-arrow--prev');
+    var socialNext = document.querySelector('.social-arrow--next');
+    var socialPage = 0;
+
+    function showSocialPage(index) {
+      socialPage = (index + socialPages.length) % socialPages.length;
+      socialPages.forEach(function (page, i) {
+        page.classList.toggle('social-page--active', i === socialPage);
+      });
+      socialDots.forEach(function (dot, i) {
+        var active = i === socialPage;
+        dot.classList.toggle('social-dot--active', active);
+        dot.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    // Autoplay — advances one page every 3s. Paused on hover/focus (so a
+    // visitor mid-look at a card doesn't have it swapped out from under
+    // them) and restarted (from a full 3s) after any manual arrow/dot
+    // click, so autoplay never fights a visitor who's actively steering.
+    // Skipped entirely for prefers-reduced-motion, same convention as the
+    // hero entrance sequence above and the Cap Story scene drift.
+    var SOCIAL_AUTOPLAY_MS = 3000;
+    var socialAutoplayTimer = null;
+    var socialAutoplayEnabled = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+    function startSocialAutoplay() {
+      if (!socialAutoplayEnabled) return;
+      stopSocialAutoplay();
+      socialAutoplayTimer = setInterval(function () {
+        showSocialPage(socialPage + 1);
+      }, SOCIAL_AUTOPLAY_MS);
+    }
+
+    function stopSocialAutoplay() {
+      if (socialAutoplayTimer) {
+        clearInterval(socialAutoplayTimer);
+        socialAutoplayTimer = null;
+      }
+    }
+
+    function goToSocialPageManually() {
+      startSocialAutoplay();
+    }
+
+    if (socialPrev) socialPrev.addEventListener('click', function () { showSocialPage(socialPage - 1); goToSocialPageManually(); });
+    if (socialNext) socialNext.addEventListener('click', function () { showSocialPage(socialPage + 1); goToSocialPageManually(); });
+    socialDots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { showSocialPage(i); goToSocialPageManually(); });
+    });
+
+    socialCards.addEventListener('mouseenter', stopSocialAutoplay);
+    socialCards.addEventListener('mouseleave', startSocialAutoplay);
+    socialCards.addEventListener('focusin', stopSocialAutoplay);
+    socialCards.addEventListener('focusout', startSocialAutoplay);
+
+    startSocialAutoplay();
+  }
 })();

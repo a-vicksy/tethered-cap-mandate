@@ -335,6 +335,20 @@
   font-weight: 700;
 }
 
+/* Legal clarifier — shared by both the desktop bars and mobile list
+   layouts (sits after both in the DOM, only one of which is ever
+   visible), so it doesn't need to be duplicated per layout. */
+.timeline-footnote {
+  margin: clamp(20px, calc(32 / 1920 * var(--fluid-vw)), calc(32px * 1.5)) auto clamp(40px, calc(80 / 1920 * var(--fluid-vw)), calc(80px * 1.5));
+  max-width: 72ch;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(11px, calc(14 / 1920 * var(--fluid-vw)), calc(14px * 1.5));
+  line-height: 1.6;
+  color: rgba(44, 44, 44, 0.7);
+  text-align: center;
+}
+
 /* -------------------------------------------------------------------------
    THE CAP STORY
    ------------------------------------------------------------------------- */
@@ -451,71 +465,99 @@
 
 .capstory-partners__inner {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: clamp(24px, calc(44 / 1920 * var(--fluid-vw)), calc(44px * 1.5));
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(24px, calc(48 / 1920 * var(--fluid-vw)), calc(48px * 1.5));
   padding-top: clamp(36px, calc(72 / 1920 * var(--fluid-vw)), calc(72px * 1.5));
   padding-bottom: clamp(36px, calc(72 / 1920 * var(--fluid-vw)), calc(72px * 1.5));
 }
 
 .capstory-partners__heading {
   margin: 0;
-  font-family: var(--font-body);
-  font-weight: 700;
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-weight: 400;
   text-transform: uppercase;
-  font-size: clamp(24px, calc(44 / 1920 * var(--fluid-vw)), calc(44px * 1.5));
-  line-height: 1.15;
+  font-size: clamp(42px, calc(84 / 1920 * var(--fluid-vw)), calc(84px * 1.4));
+  line-height: 0.95;
+  letter-spacing: 0.01em;
   color: var(--color-dark);
 }
 
-.capstory-partners__list {
+.capstory-partners__card {
+  flex: 1 1 480px;
+  background: var(--color-white);
+  border-radius: clamp(20px, calc(36 / 1920 * var(--fluid-vw)), calc(36px * 1.4));
+  padding: clamp(18px, calc(36 / 1920 * var(--fluid-vw)), calc(36px * 1.4)) clamp(26px, calc(52 / 1920 * var(--fluid-vw)), calc(52px * 1.4));
+}
+
+/* Each row is its own flex line with natural (not stretched) logo widths,
+   distributed with space-between — matches the reference layout where
+   columns don't line up strictly between the two rows. */
+.capstory-partners__row {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: clamp(14px, calc(26 / 1920 * var(--fluid-vw)), calc(26px * 1.4)) 0;
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
-  width: 100%;
-  gap: 0;
-  border-top: 1px solid rgba(44, 44, 44, 0.7);
-  border-bottom: 1px solid rgba(44, 44, 44, 0.7);
-}
-
-.capstory-partner {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  flex: 1 1 0;
-  padding: clamp(16px, 2.5vw, 28px) clamp(12px, 1.5vw, 24px);
-  border-left: 1px solid rgba(44, 44, 44, 0.7);
+  justify-content: space-between;
+  gap: clamp(16px, calc(30 / 1920 * var(--fluid-vw)), calc(30px * 1.4));
 }
 
-.capstory-partner:last-child {
-  border-right: 1px solid rgba(44, 44, 44, 0.7);
+.capstory-partners__row:first-child {
+  padding-top: 0;
 }
 
-.capstory-partner svg {
-  width: clamp(72px, calc(172 / 1920 * var(--fluid-vw)), calc(172px * 1.5));
-  height: auto;
-  fill: var(--color-dark);
+.capstory-partners__row:last-child {
+  padding-bottom: 0;
 }
 
-.capstory-partner--img img {
-  width: clamp(64px, calc(155 / 1920 * var(--fluid-vw)), calc(155px * 1.5));
+/* Only a horizontal rule between the two rows — no vertical dividers
+   between individual logos. */
+.capstory-partners__row + .capstory-partners__row {
+  border-top: 1px solid rgba(44, 44, 44, 0.15);
+}
+
+.capstory-partners__row img {
+  display: block;
+  max-height: clamp(36px, calc(68 / 1920 * var(--fluid-vw)), calc(68px * 1.4));
+  max-width: clamp(90px, calc(210 / 1920 * var(--fluid-vw)), calc(210px * 1.4));
+  width: auto;
   height: auto;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
-@media (max-width: 700px) {
-  .capstory-partner {
-    flex: 1 1 40%;
-    padding: 8px 16px;
+/* MuSo / Purpose / Conscious Collective read visually smaller than their
+   row-mates at the shared cap — give them a taller ceiling. */
+.capstory-partner--lg {
+  max-height: clamp(60px, calc(120 / 1920 * var(--fluid-vw)), calc(120px * 1.4));
+  max-width: clamp(160px, calc(340 / 1920 * var(--fluid-vw)), calc(340px * 1.4));
+}
+
+/* Purpose and Conscious Collective are especially wide/short wordmarks, so
+   they also need a wider ceiling (not just taller) to grow before
+   width-capping. */
+.capstory-partner--wide {
+  max-width: clamp(220px, calc(460 / 1920 * var(--fluid-vw)), calc(460px * 1.4));
+}
+
+@media (max-width: 900px) {
+  .capstory-partners__inner {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  /* At 2-per-row, every right-hand cell needs its own closing edge —
-     :last-child alone (the single-row desktop assumption) only closes
-     the final row. */
-  .capstory-partner:nth-child(2n) {
-    border-right: 1px solid rgba(44, 44, 44, 0.7);
+  .capstory-partners__card {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .capstory-partners__row {
+    justify-content: center;
+    gap: clamp(18px, 5vw, 28px) clamp(24px, 8vw, 40px);
   }
 }
