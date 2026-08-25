@@ -310,6 +310,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   gap: clamp(24px, calc(48 / 1920 * var(--fluid-vw)), calc(48px * 1.5));
 }
 
@@ -326,7 +327,12 @@
 }
 
 .media-card {
-  flex: 1 1 480px;
+  /* Hugs its logo content instead of stretching to fill the row's
+     remaining width — a shorter heading (vs. Strategic Partnerships')
+     was otherwise handing the card far more width than 7 logos need,
+     leaving a dead gap on the right. */
+  flex: 0 1 auto;
+  min-width: 0;
   background: var(--color-white);
   border-radius: clamp(20px, calc(36 / 1920 * var(--fluid-vw)), calc(36px * 1.4));
   padding: clamp(18px, calc(36 / 1920 * var(--fluid-vw)), calc(36px * 1.4)) clamp(26px, calc(52 / 1920 * var(--fluid-vw)), calc(52px * 1.4));
@@ -347,7 +353,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
-  gap: clamp(36px, calc(84 / 1920 * var(--fluid-vw)), calc(84px * 1.4));
+  gap: clamp(64px, calc(128 / 1920 * var(--fluid-vw)), calc(128px * 1.4));
 }
 
 .media-row:first-child {
@@ -362,7 +368,7 @@
    Times of India/Hindu/Express/PTI) — a tighter gap here lines up Inshorts'
    right edge with PTI's above it instead of overshooting past it. */
 .media-row--2 {
-  gap: clamp(18px, calc(50 / 1920 * var(--fluid-vw)), calc(50px * 1.4));
+  gap: clamp(20px, calc(40 / 1920 * var(--fluid-vw)), calc(40px * 1.4));
 }
 
 /* Only a horizontal rule between the two rows (4 logos, then 3) — no
@@ -373,8 +379,8 @@
 
 .media-logo {
   display: block;
-  max-height: clamp(48px, calc(94 / 1920 * var(--fluid-vw)), calc(94px * 1.4));
-  max-width: clamp(120px, calc(290 / 1920 * var(--fluid-vw)), calc(290px * 1.4));
+  max-height: clamp(36px, calc(68 / 1920 * var(--fluid-vw)), calc(68px * 1.4));
+  max-width: clamp(90px, calc(210 / 1920 * var(--fluid-vw)), calc(210px * 1.4));
   width: auto;
   height: auto;
   object-fit: contain;
@@ -385,8 +391,8 @@
    and ANI at the shared cap because their marks carry more internal
    whitespace — give them a taller ceiling so their visual weight matches. */
 .media-logo--lg {
-  max-height: clamp(60px, calc(120 / 1920 * var(--fluid-vw)), calc(120px * 1.4));
-  max-width: clamp(160px, calc(340 / 1920 * var(--fluid-vw)), calc(340px * 1.4));
+  max-height: clamp(46px, calc(78 / 1920 * var(--fluid-vw)), calc(78px * 1.4));
+  max-width: clamp(140px, calc(300 / 1920 * var(--fluid-vw)), calc(300px * 1.4));
 }
 
 /* Hindustan Times' wordmark is an especially wide/short aspect ratio, so it
@@ -395,10 +401,11 @@
   max-width: clamp(220px, calc(460 / 1920 * var(--fluid-vw)), calc(460px * 1.4));
 }
 
-/* The Hindu's crest mark still reads smaller than its row-mates even at
-   --lg, so it gets its own taller ceiling on top of that. */
+/* The Hindu's crest mark and the Inshorts icon+wordmark still read smaller
+   than their row-mates even at --lg (compact, low-area marks), so they get
+   an extra height bump on top of it. */
 .media-logo--xl {
-  max-height: clamp(64px, calc(160 / 1920 * var(--fluid-vw)), calc(160px * 1.4));
+  max-height: clamp(58px, calc(104 / 1920 * var(--fluid-vw)), calc(104px * 1.4));
 }
 
 /* ==========================================================================

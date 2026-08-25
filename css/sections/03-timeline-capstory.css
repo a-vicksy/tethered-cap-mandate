@@ -340,13 +340,20 @@
    visible), so it doesn't need to be duplicated per layout. */
 .timeline-footnote {
   margin: clamp(20px, calc(32 / 1920 * var(--fluid-vw)), calc(32px * 1.5)) auto clamp(40px, calc(80 / 1920 * var(--fluid-vw)), calc(80px * 1.5));
-  max-width: 72ch;
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: clamp(11px, calc(14 / 1920 * var(--fluid-vw)), calc(14px * 1.5));
+  font-size: clamp(10px, calc(13 / 1920 * var(--fluid-vw)), calc(13px * 1.5));
   line-height: 1.6;
   color: rgba(44, 44, 44, 0.7);
   text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .timeline-footnote {
+    white-space: normal;
+    max-width: 60ch;
+  }
 }
 
 /* -------------------------------------------------------------------------
