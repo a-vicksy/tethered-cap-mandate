@@ -210,8 +210,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   border:1px solid rgba(243,235,223,.35);border-radius:20px;
   max-width:62ch;font-size:clamp(15.5px,1.35vw,19px);
 }
-.court-meta{margin-top:10px;font-weight:500;font-size:.86em;opacity:.85}
-.stickers{display:flex;gap:clamp(14px,2.4vw,34px);margin-top:9vh;flex-wrap:wrap}
+.india-label{
+  margin-top:9vh;
+  font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cream);opacity:.7;
+}
+.stickers{display:flex;gap:clamp(14px,2.4vw,34px);margin-top:3vh;flex-wrap:wrap}
 .sticker{
   position:relative;
   width:clamp(150px,15vw,196px);aspect-ratio:1;border-radius:50%;
@@ -222,6 +226,21 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   font-size:clamp(13px,1vw,15.5px);line-height:1.35;
   transition:transform .45s var(--ease),background .45s;
 }
+/* crimped bottle-cap edge — a ring of ridges just outside the circle,
+   matching the site's "signature shape" motif */
+.sticker::before{
+  content:"";
+  position:absolute;inset:-9px;
+  border-radius:50%;
+  background:repeating-conic-gradient(rgba(190,206,159,.75) 0deg 4deg, transparent 4deg 9deg);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 9px));
+  mask:radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 9px));
+  pointer-events:none;
+  transition:background .45s;
+}
+.sticker.is-flipped::before{
+  background:repeating-conic-gradient(var(--green) 0deg 4deg, transparent 4deg 9deg);
+}
 .sticker:nth-child(1){transform:rotate(-5deg)}
 .sticker:nth-child(2){transform:rotate(3deg)}
 .sticker:nth-child(3){transform:rotate(-2deg)}
@@ -230,6 +249,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sticker.is-flipped{background:var(--green);border-style:solid;border-color:var(--green);color:var(--deep);transform:rotate(0)}
 .sticker.is-flipped .s-front{display:none}
 .sticker.is-flipped .s-back{display:flex;align-items:center;justify-content:center;height:100%}
+
+.india-outro{
+  margin-top:12vh;
+  font-size:clamp(28px,3.4vw,56px);
+  color:var(--cream);
+  max-width:20ch;
+}
+.india-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:4vh;min-height:52px;padding:12px 28px;
+  background:var(--green);color:var(--deep);
+  border-radius:999px;font-weight:600;font-size:16px;
+  text-decoration:none;
+  transition:transform .3s var(--ease),background .3s;
+}
+.india-cta:hover{transform:translateY(-2px);background:#4cc58d}
 
 /* ————— responsive ————— */
 @media (max-width:880px){
@@ -245,6 +280,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .hero-line{font-size:clamp(42px,12vw,64px)}
   .stickers{gap:10px}
   .sticker{width:calc(50% - 10px)}
+  /* at 2-per-row, the 3rd sticker wraps alone — centre it on its own line */
+  .sticker:nth-child(3){margin-inline:auto}
 }
 
 /* ————— reduced motion / no-js: everything readable, nothing pinned ————— */
