@@ -660,9 +660,11 @@
   z-index: 3;
 }
 
-/* Uploaded photo preview — pixel-measured against attach-card-front-v2.png's
-   own white frame (left 5.01% / top 3.84% / 90.61% wide / 62.60% tall of
-   the card box) so it drops in exactly where the frame's cutout is.
+/* Uploaded photo preview — pixel-measured against the current card art
+   (left 5.01% / top 3.84% / 90.61% wide / 52% tall of the card box) so it
+   sits in the blank area above the "I'm / Attached" headline, which the
+   updated artwork set on two lines starting around 60% down the card
+   (was a single line lower down, hence the shorter height here vs before).
    Transparent (no background) until a file is chosen, see main.js/page
    script; sits above every card (z-index 3 max) so it always shows on
    whichever colour is currently front. Fades out during a colour swap
@@ -673,7 +675,7 @@
   left: 5.01%;
   top: 3.84%;
   width: 90.61%;
-  height: 62.60%;
+  height: 52%;
   border-radius: 4%;
   overflow: hidden;
   z-index: 4;
