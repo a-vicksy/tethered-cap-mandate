@@ -229,6 +229,7 @@
      viewport too (see .hero-bg/.hero-scrim below, which bleed up under
      the header so the video shows through it instead of blank space). */
   min-height: calc(100vh - var(--ticker-h));
+  min-height: calc(100svh - var(--ticker-h));
   display: flex;
   align-items: center;
   justify-content: center;
