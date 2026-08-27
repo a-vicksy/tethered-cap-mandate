@@ -738,16 +738,17 @@
   transform: scale(0.9);
 }
 
-/* "Your Name" / "Your City" — pixel-measured against the same source image
-   (left starts 5.64% in both; name band y 90.5-92.6%, city band y
-   94.2-96.5%). Sits on its own colour-matched cover so it fully replaces
+/* "Your Name" / "Your City" — pixel-measured against the current card art
+   (left starts 4.4% in both; name band y 89.3-93.3%, city band y
+   93.3-97.3%). Sits on its own colour-matched cover so it fully replaces
    the placeholder text baked into the card art, in both the empty state
    (falls back to the same "Your Name"/"Your City" copy, just muted) and
-   once real text is typed. */
+   once real text is typed. Width extended to match (was 46% from a 5.64%
+   left) so the cover's right edge stays put despite starting further left. */
 .attach-card-text {
   position: absolute;
-  left: 5.64%;
-  width: 46%;
+  left: 4.4%;
+  width: 47.2%;
   z-index: 4;
   display: flex;
   align-items: center;
@@ -765,13 +766,13 @@
 .attach-card-text--name {
   top: 89.3%;
   height: 4%;
-  font-size: clamp(9px, calc(13 / 1920 * var(--fluid-vw)), calc(14px * 1.5));
+  font-size: clamp(12px, calc(17 / 1920 * var(--fluid-vw)), calc(18px * 1.5));
 }
 
 .attach-card-text--city {
   top: 93.3%;
   height: 4%;
-  font-size: clamp(9px, calc(13 / 1920 * var(--fluid-vw)), calc(14px * 1.5));
+  font-size: clamp(12px, calc(17 / 1920 * var(--fluid-vw)), calc(18px * 1.5));
   color: rgba(44, 44, 44, 0.75);
 }
 
