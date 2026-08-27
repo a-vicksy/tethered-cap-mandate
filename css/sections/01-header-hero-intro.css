@@ -567,6 +567,14 @@
   .ticker-divider {
     display: none;
   }
+
+  /* Wrap onto two lines instead of one long nowrap line, which ate most of
+     the ticker's width on narrow screens and left no room for the
+     scrolling names track. */
+  .ticker-count-label {
+    white-space: normal;
+    max-width: 90px;
+  }
 }
 
 .ticker-track-wrap {
