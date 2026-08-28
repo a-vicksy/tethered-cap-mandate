@@ -131,7 +131,7 @@
 
 .attach-form__statement {
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 800;
   font-size: clamp(28px, calc(65 / 1920 * var(--fluid-vw)), calc(65px * 1.5));
   line-height: 1.2;
   color: var(--color-white);
