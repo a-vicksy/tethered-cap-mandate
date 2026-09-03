@@ -303,13 +303,13 @@
   max-width: 72vw;
   /* Nudged right — the "YOUR SELF" lettering sits well left-of-center
      within the PNG's own transparent canvas (measured directly off the
-     source pixels: ~11.5% of the image's own rendered width), so centering
+     source pixels: ~8.7% of the image's own rendered width), so centering
      the image's box doesn't center the visible glyph. A percentage value
      scales with the image itself (unlike a vw-based nudge, which scales
      with the viewport — the two don't move together, so vw drifted out of
      sync on mobile) and keeps the glyph reading centered under the
      headline text at every size. */
-  transform: translateX(11.5%);
+  transform: translateX(8.7%);
 }
 
 /* Bottle + headline hold off-screen until ~1.6s into the bg video, right
@@ -380,7 +380,7 @@
   0% {
     opacity: 0;
     filter: blur(18px);
-    transform: translateX(11.5%) translateY(52px) scale(0.86);
+    transform: translateX(8.7%) translateY(52px) scale(0.86);
   }
   55% {
     filter: blur(3px);
@@ -388,7 +388,7 @@
   100% {
     opacity: 1;
     filter: blur(0);
-    transform: translateX(11.5%) translateY(0) scale(1);
+    transform: translateX(8.7%) translateY(0) scale(1);
   }
 }
 
